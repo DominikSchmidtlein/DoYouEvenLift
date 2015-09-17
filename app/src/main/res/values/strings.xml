@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Do you even lift?</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="congratulations">Congratulations!</string>
+    <string name="action_settings">Settings</string>
+    <string name="game_description">Trace the image below without lifting your finger</string>
+    <string name="next_shape_button" >next shape</string>
+    <string name="next_level_title">Congratulations</string>
+    <string name="next_level_next">Next</string>
+    <string name="next_level_retry">Retry</string>
+</resources>

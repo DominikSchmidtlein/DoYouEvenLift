@@ -1,0 +1,22 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppBaseTheme" parent="">
+        <!-- Customize your theme here. -->
+    </style>
+
+    <style name="NoActionBar" parent="@android:style/Theme.Holo.Light" >
+        <item name="android:windowActionBar" >false</item>
+        <item name="android:windowNoTitle" >true</item>
+    </style>
+
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    </style>
+
+    <color name="TitleColour">#FFFF9600</color>
+    <color name="DescriptionColour">#FF888888</color>
+    <color name="WinScreenColour">#ffcccccc</color>
+    <color name="NextShapeButtonColour">#FF444444</color>
+
+</resources>
