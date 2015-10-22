@@ -1,17 +1,22 @@
 package com.domkick1.doyouevenlift;
 
+import android.util.Log;
 import android.view.MotionEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 
 /**
  * Created by dominikschmidtlein on 10/21/2015.
  */
 public class DoYouEvenLift {
     public static final int RADIUS = 80;
+    public static final String tag = "DoYouEvenLift";
+
     private HashMap<Line,ArrayList<Line>> hashMap;
     private MainActivity mainActivity;
     private CustomView drawView;
@@ -19,14 +24,18 @@ public class DoYouEvenLift {
     private ArrayList<Line> trace;
 
     private int currentLevel;
-    public static ArrayList<float[]> levels = Levels.getLevels();
+    public static ArrayList<float[]> levels;
 
     public DoYouEvenLift(){
+        levels = Levels.getLevels();
+        currentLevel = 0;
+        setupLevel(currentLevel);
 
     }
     public void addListener(MainActivity mainActivity){
         this.mainActivity = mainActivity;
         drawView = this.mainActivity.getDrawView();
+        drawView.updateCanvas();
     }
 
     public boolean click(MotionEvent event){
@@ -90,11 +99,19 @@ public class DoYouEvenLift {
     }
 
     public boolean incrementCurrentLevel(){
-        if(currentLevel < levels.size() - 1){
-            currentLevel ++;
-            return true;
-        }
-        return false;
+        if(currentLevel >= levels.size() - 1)
+            return false;
+        currentLevel ++;
+        setupLevel(currentLevel);
+        drawView.updateCanvas();
+        return true;
+    }
+
+    private void setupLevel(int currentLevel){
+        shape = floatsAsLines(levels.get(currentLevel));
+        Log.d(tag, "setuplevel->shape.size");
+        trace = new ArrayList<>(shape.size());
+        hashMap = generateMap(shape);
     }
 
     public void setCurrentLevel(int currentLevel) {
@@ -112,6 +129,13 @@ public class DoYouEvenLift {
             i += 4;
         }
         return floats;
+    }
+
+    public ArrayList<Line> floatsAsLines(float[] floats){
+        ArrayList<Line> lines = new ArrayList<>(floats.length/4);
+        for(int i = 0; i < floats.length; i += 4)
+            lines.add(new Line(floats[i], floats[i + 1], floats[i + 2], floats[i + 3]));
+        return lines;
     }
 
     public ArrayList<Line> getShape() {
@@ -167,15 +191,6 @@ public class DoYouEvenLift {
         return p1.size() == p2.size();
     }
 
-
-    private ArrayList<Float> toList(float[] a){
-        ArrayList<Float> b = new ArrayList<Float>();
-        for(float f:a){
-            b.add(f);
-        }
-        return b;
-    }
-
     /*//returns the line segment that starts at the same point has the same direction
     //returns null if no such line exists
     private ArrayList<Line> isCompoundLine(ArrayList<Line> set, Line line){
@@ -208,13 +223,14 @@ public class DoYouEvenLift {
             ls2.add(line.getOpposite());
             map.put(line.getOpposite(), ls2);
         }
-        generateMapForCompoundLines(map, shape, new LinkedList<>(set));
+        generateMapForCompoundLines(map, new LinkedList<>(set));
         return map;
     }
 
-    private void generateMapForCompoundLines(HashMap<Line, ArrayList<Line>> map, ArrayList<Line> set, Queue<Line> queue){
+    private void generateMapForCompoundLines(HashMap<Line, ArrayList<Line>> map, Queue<Line> queue){
         while(!queue.isEmpty()) {
             Line baseLine = queue.poll();
+            ArrayList<Line> set = new ArrayList<Line>(map.keySet());
             for (Line line : set) {
                 Point commonPoint = baseLine.isTouching(line);
                 if (commonPoint == null)
@@ -237,6 +253,7 @@ public class DoYouEvenLift {
                 map.put(compoundLine2, subLines2);
                 queue.add(compoundLine1);
                 queue.add(compoundLine2);
+                Log.d("DoYouEvenLift", "added to queue, length: " + queue.size());
             }
         }
     }

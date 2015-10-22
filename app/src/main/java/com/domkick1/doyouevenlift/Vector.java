@@ -4,7 +4,7 @@ package com.domkick1.doyouevenlift;
  * Created by dominik on 10/08/15.
  */
 public class Vector {
-    public static final double EPSILON = 0.0001;
+    public static final double EPSILON = 0.01;
 
     private double x;
     private double y;
@@ -31,11 +31,7 @@ public class Vector {
         if(!(o instanceof Vector))
             return false;
         Vector v = (Vector) o;
-        if(this.x - v.getX() > EPSILON)
-            return false;
-        if(this.y - v.getY() > EPSILON)
-            return false;
-        return true;
+        return (Math.abs(this.x - v.getX()) < EPSILON) && (Math.abs(this.y - v.getY()) < EPSILON);
     }
 
     public Vector getUnitVector(){

@@ -27,7 +27,6 @@ public class MainActivity extends Activity implements NextLevelDialogFragment.Ne
         drawView = (CustomView) findViewById(R.id.draw_view);
         drawView.addModel(doYouEvenLift);
         doYouEvenLift.addListener(this);
-        updateCanvas();
 
         drawView.setOnTouchListener(new View.OnTouchListener() {
 
@@ -37,7 +36,6 @@ public class MainActivity extends Activity implements NextLevelDialogFragment.Ne
                 return doYouEvenLift.click(event);
             }
         });
-
     }
 
     @Override
@@ -66,25 +64,12 @@ public class MainActivity extends Activity implements NextLevelDialogFragment.Ne
 
     //clicks next level
     public void onDialogNextLevelClick(DialogFragment dialogFragment){
-        if(!doYouEvenLift.incrementCurrentLevel()){
-            //no more level
-        }
-        shape = toList(levels.get(currentLevel));
-        hashMap = generateMap(shape);
-        for(int i = 0; i < shape.size(); i+= 4){
-            generateMapForCompoundLines(hashMap,shape,new Line(shape.get(i),shape.get(i+1),shape.get(i+2),shape.get(i+3)));
-        }
-        updateCanvas();
+        if(!doYouEvenLift.incrementCurrentLevel()){}//no more levels
     }
     //clicks retry level
     public void onDialogRetryClick(DialogFragment dialogFragment){
-        updateCanvas();
-    }
-
-    private void updateCanvas(){
         drawView.updateCanvas();
     }
-
 
     public CustomView getDrawView() {
         return drawView;
