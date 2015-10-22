@@ -14,6 +14,11 @@ public class Line {
         this.p2 = p2;
     }
 
+    public Line(Line line){
+        this.p1 = new Point(line.getP1());
+        this.p2 = new Point(line.getP2());
+    }
+
     public Line(float p1x,float p1y,float p2x, float p2y){
         this(new Point(p1x,p1y),new Point(p2x,p2y));
     }
@@ -65,6 +70,10 @@ public class Line {
     @Override
     public int hashCode() {
         return Math.round(p1.getX() * p1.getY() * p2.getX() * p2.getY()/1000000-2147483647);
+    }
+
+    public Line getOpposite(){
+        return new Line(new Point(p2), new Point(p1));
     }
 
     public Point getP1() {

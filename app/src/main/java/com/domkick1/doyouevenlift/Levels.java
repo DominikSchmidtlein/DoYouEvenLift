@@ -6,6 +6,14 @@ import java.util.ArrayList;
  * Created by dominik on 28/07/15.
  */
 public class Levels {
+    public static final float[] rightup= new float[]{800,620,700,446,700,446,600,620,600,620,500,446,500,446,400,620,400,620,600,620,600,620,800,620};
+
+    public static final float[] rightdown= new float[]{800,620,600,620,600,620,400,620,400,620,500,793,500,793,600,620,600,620,700,793,700,793,800,620};
+
+    public static final float[] leftup = new float[]{400,620,600,620,600,620,800,620,800,620,700,446,700,446,600,620,600,620,500,446,500,446,400,620};
+
+    public static final float[] leftdown= new float[]{400,620,600,620,600,620,800,620,800,620,700,446,700,446,600,620,600,620,500,446,500,446,400,620};
+
     public static final float[] level0 = new float[]{100,793,300,446,300,446,500,793,500,793,600,966,600,966,700,1139,700,1139,900,793,900,793,800,620,800,620,700,793,700,793,600,966,600,966,500,1139,500,1139,300,793,300,793,200,966,200,966,100,793,100,793,300,793,300,793,500,793,500,793,700,793,700,793,900,793,};
     public static final float[] level1 = new float[]{100,100,500,500,500,500,100,500,100,500,100,100};
     public static final float[] level2 = new float[]{100,1100,300,1100,300,1100,900,1100,900,1100,500,300,500,300,100,1100,100,1100,300,900,300,900,700,900,700,900,500,700,500,700,300,900,300,900,300,1100,};
@@ -86,6 +94,10 @@ public class Levels {
 
     public static ArrayList<float[]> getLevels() {
         ArrayList<float[]> levels = new ArrayList<float[]>();
+        levels.add(rightup);
+        levels.add(rightdown);
+        levels.add(leftup);
+        levels.add(leftdown);
         levels.add(level0);
         levels.add(level1);
         levels.add(level2);
