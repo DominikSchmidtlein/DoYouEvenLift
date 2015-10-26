@@ -8,4 +8,6 @@
     <string name="next_level_title">Congratulations</string>
     <string name="next_level_next">Next</string>
     <string name="next_level_retry">Retry</string>
+    <string name="open_drawer">Open</string>
+    <string name="close_drawer">Closed</string>
 </resources>

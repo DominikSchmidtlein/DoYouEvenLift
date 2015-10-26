@@ -116,6 +116,8 @@ public class DoYouEvenLift {
 
     public void setCurrentLevel(int currentLevel) {
         this.currentLevel = currentLevel;
+        setupLevel(currentLevel);
+        drawView.updateCanvas();
     }
 
     public float[] linesAsFloats(ArrayList<Line> lines){
