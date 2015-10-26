@@ -53,11 +53,11 @@ public class MainActivity extends Activity
         };
         drawerLayout.setDrawerListener(drawerToggle);
 
-
         doYouEvenLift = new DoYouEvenLift();
         drawView = (CustomView) findViewById(R.id.draw_view);
         drawView.addModel(doYouEvenLift);
         doYouEvenLift.addListener(this);
+        doYouEvenLift.setCurrentLevel(0);
 
         drawView.setOnTouchListener(new View.OnTouchListener() {
             @Override

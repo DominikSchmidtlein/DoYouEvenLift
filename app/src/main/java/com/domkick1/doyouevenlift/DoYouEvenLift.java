@@ -29,8 +29,6 @@ public class DoYouEvenLift {
     public DoYouEvenLift(){
         levels = Levels.getLevels();
         currentLevel = 0;
-        setupLevel(currentLevel);
-
     }
     public void addListener(MainActivity mainActivity){
         this.mainActivity = mainActivity;
@@ -39,6 +37,8 @@ public class DoYouEvenLift {
     }
 
     public boolean click(MotionEvent event){
+        if (event.getPointerCount() > 1)
+            return false;
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             Point touchPoint = isNearVertex(new Point(event.getX(),event.getY()));
             if (touchPoint != null) {
@@ -101,15 +101,12 @@ public class DoYouEvenLift {
     public boolean incrementCurrentLevel(){
         if(currentLevel >= levels.size() - 1)
             return false;
-        currentLevel ++;
-        setupLevel(currentLevel);
-        drawView.updateCanvas();
+        setCurrentLevel(currentLevel + 1);
         return true;
     }
 
     private void setupLevel(int currentLevel){
-        shape = floatsAsLines(levels.get(currentLevel));
-        Log.d(tag, "setuplevel->shape.size");
+        shape = floatsAsLines(centerShape(levels.get(currentLevel)));
         trace = new ArrayList<>(shape.size());
         hashMap = generateMap(shape);
     }
@@ -118,6 +115,31 @@ public class DoYouEvenLift {
         this.currentLevel = currentLevel;
         setupLevel(currentLevel);
         drawView.updateCanvas();
+    }
+
+    private float[] centerShape(float[] shape){
+        android.graphics.Point size = new android.graphics.Point();
+        mainActivity.getWindowManager().getDefaultDisplay().getSize(size);
+        float left = size.x;
+        float top = size.y;
+        float right = 0;
+        float bot = 0;
+
+        for(int i = 0; i < shape.length; i+=2){
+            left = (shape[i] < left)? shape[i]:left;
+            right = (shape[i] > right)? shape[i]:right;
+            top = (shape[i + 1] < top)? shape[i + 1]:top;
+            bot = (shape[i + 1] > bot)? shape[i + 1]:bot;
+        }
+
+        float x = (size.x - right - left)/2;
+        float y = (size.y - top - bot)/2;
+
+        for(int i = 0; i < shape.length; i += 2){
+            shape[i] = shape[i] + x;
+            shape[i + 1] = shape[i + 1] + y;
+        }
+        return shape;
     }
 
     public float[] linesAsFloats(ArrayList<Line> lines){

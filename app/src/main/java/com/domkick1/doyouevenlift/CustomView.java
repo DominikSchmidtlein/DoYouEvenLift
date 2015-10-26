@@ -5,12 +5,15 @@ package com.domkick1.doyouevenlift;
         import android.graphics.Color;
         import android.graphics.Paint;
         import android.util.AttributeSet;
+        import android.util.Log;
         import android.view.View;
 
         import java.util.ArrayList;
 
 public class CustomView extends View {
     private DoYouEvenLift doYouEvenLift;
+    private float x;
+    private float y;
 
     Paint shapeLines = new Paint(Paint.ANTI_ALIAS_FLAG);
     Paint traceLines = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -35,8 +38,22 @@ public class CustomView extends View {
         super.onDraw(canvas);
         setUpPaint();
 
-        canvas.drawLines(doYouEvenLift.getShapeAsFloats(), shapeLines);
-        canvas.drawLines(doYouEvenLift.getTraceAsFloats(), traceLines);
+        float[] shape = doYouEvenLift.getShapeAsFloats();
+        float[] trace = doYouEvenLift.getTraceAsFloats();
+
+        for(int i = 0; i < (shape.length > trace.length? shape.length : trace.length); i += 2){
+            if(i < shape.length) {
+                shape[i] = shape[i] + x;
+                shape[i + 1] = shape[i + 1] + y;
+            }
+            if(i < trace.length){
+                trace[i] = trace[i] + x;
+                trace[i + 1] = trace[i + 1] + y;
+            }
+        }
+
+        canvas.drawLines(shape, shapeLines);
+        canvas.drawLines(trace, traceLines);
     }
 
     private void setUpPaint() {
@@ -51,7 +68,11 @@ public class CustomView extends View {
         this.invalidate();
     }
 
+
+
     public void addModel(DoYouEvenLift doYouEvenLift){
         this.doYouEvenLift =  doYouEvenLift;
     }
+
+
 }
