@@ -237,6 +237,20 @@ public class DoYouEvenLift {
         return lines;
     }*/
 
+
+    /* Set is a list of the lines that make up the drawing on screen. In generateMap,
+    * just add each line to the hashmap.
+    *
+    * The hashmap will be used to check if any line, which the user is attempting to draw,
+    * is valid. The hashmap will return a list of all the lines that make up the attempted line.
+    *
+    * If the line is invalid: hashmap return null
+    *
+    * If the line is valid: returns all the lines that make up this line, min 1.
+    *
+    * Therefore all lines that make up the shape need to be included (generateMap), plus compound
+    * lines (generateMapForCompoundLines())*/
+
     private HashMap<Line,ArrayList<Line>> generateMap(ArrayList<Line> set){
         HashMap<Line,ArrayList<Line>> map = new HashMap<Line,ArrayList<Line>>();
         for(Line line: set){
