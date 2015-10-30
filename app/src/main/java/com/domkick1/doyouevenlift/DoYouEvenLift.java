@@ -24,10 +24,10 @@ public class DoYouEvenLift {
     private ArrayList<Line> trace;
 
     private int currentLevel;
-    public static ArrayList<float[]> levels;
+    public static float[][] levels;
 
     public DoYouEvenLift(){
-        levels = Levels.getLevels();
+        levels = Levels.levels;
         currentLevel = 0;
     }
     public void addListener(MainActivity mainActivity){
@@ -99,14 +99,14 @@ public class DoYouEvenLift {
     }
 
     public boolean incrementCurrentLevel(){
-        if(currentLevel >= levels.size() - 1)
+        if(currentLevel >= levels.length - 1)
             return false;
         setCurrentLevel(currentLevel + 1);
         return true;
     }
 
     private void setupLevel(int currentLevel){
-        shape = floatsAsLines(centerShape(levels.get(currentLevel)));
+        shape = floatsAsLines(centerShape(levels[currentLevel]));
         trace = new ArrayList<>(shape.size());
         hashMap = generateMap(shape);
     }
@@ -291,7 +291,6 @@ public class DoYouEvenLift {
                 map.put(compoundLine2, subLines2);
                 queue.add(compoundLine1);
                 queue.add(compoundLine2);
-                Log.d("DoYouEvenLift", "added to queue, length: " + queue.size());
             }
         }
     }

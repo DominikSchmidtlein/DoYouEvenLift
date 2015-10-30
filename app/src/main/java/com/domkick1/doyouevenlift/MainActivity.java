@@ -2,6 +2,7 @@ package com.domkick1.doyouevenlift;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -30,13 +31,14 @@ public class MainActivity extends Activity
         setContentView(R.layout.activity_main);
 
         //LevelDatabaseOperations levelDatabaseOperations = new LevelDatabaseOperations(this);
-        listViewTitles = new String[Levels.getLevels().size()];
-        for(int i = 0; i < listViewTitles.length; i++)
+        listViewTitles = new String[Levels.levels.length + 1];
+        listViewTitles[0] = "Instructions";
+        for(int i = 1; i < listViewTitles.length; i++)
             listViewTitles[i] = "Level: " + i;
 
         drawerLayout = (DrawerLayout) findViewById(R.id.main_layout);
         drawerList = (ListView) findViewById(R.id.left_drawer);
-        drawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item,listViewTitles));
+        drawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, listViewTitles));
         drawerList.setOnItemClickListener(this);
 
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, null, R.string.open_drawer, R.string.close_drawer){
@@ -52,6 +54,7 @@ public class MainActivity extends Activity
             }
         };
         drawerLayout.setDrawerListener(drawerToggle);
+        drawerLayout.openDrawer(drawerList);
 
         doYouEvenLift = new DoYouEvenLift();
         drawView = (CustomView) findViewById(R.id.draw_view);
@@ -114,7 +117,12 @@ public class MainActivity extends Activity
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        doYouEvenLift.setCurrentLevel(position);
+        if(position == 0){
+            Intent intent = new Intent(MainActivity.this, InstructionsActivity.class);
+            startActivity(intent);
+            return;
+        }
+        doYouEvenLift.setCurrentLevel(position - 1);
         if(drawerLayout.isDrawerOpen(drawerList))
             drawerLayout.closeDrawer(drawerList);
         else

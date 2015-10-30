@@ -10,4 +10,6 @@
     <string name="next_level_retry">Retry</string>
     <string name="open_drawer">Open</string>
     <string name="close_drawer">Closed</string>
+    <string name="game_instructions_text"><big><b>Welcome to Do You Even Lift</b></big>\n\n<u>How to play:</u>\n\nTrace the image on screen without lifting you finger!\n\nGood Luck</string>
+    <string name="title_activity_instructions">InstructionsActivity</string>
 </resources>
