@@ -1,25 +1,24 @@
 package com.domkick1.doyouevenlift;
 
-import android.util.Log;
 import android.view.MotionEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
-import java.util.Set;
 
 /**
  * Created by dominikschmidtlein on 10/21/2015.
  */
 public class DoYouEvenLift {
     public static final int RADIUS = 80;
+    public static final String NAME = "Do You Even Lift";
     public static final String tag = "DoYouEvenLift";
+
 
     private HashMap<Line,ArrayList<Line>> hashMap;
     private MainActivity mainActivity;
-    private CustomView drawView;
+    private DrawerView drawView;
     private ArrayList<Line> shape;
     private ArrayList<Line> trace;
 
@@ -133,7 +132,7 @@ public class DoYouEvenLift {
         }
 
         float x = (size.x - right - left)/2;
-        float y = (size.y - top - bot)/2;
+        float y = (size.y - mainActivity.ACTION_BAR_HEIGHT - top - bot)/2;
 
         for(int i = 0; i < shape.length; i += 2){
             shape[i] = shape[i] + x;

@@ -6,6 +6,7 @@ import java.util.ArrayList;
  * Created by dominik on 28/07/15.
  */
 public class Levels {
+    public static final String NAME = "Levels";
     public static final float[][] levels = new float[][]{
     new float[]{400,620,600,620,600,620,800,620,800,620,700,446,700,446,600,620,600,620,500,446,500,446,400,620},
 

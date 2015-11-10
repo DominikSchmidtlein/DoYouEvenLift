@@ -1,11 +1,13 @@
 package com.domkick1.doyouevenlift;
 
-import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -15,26 +17,33 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 
-public class MainActivity extends Activity
+public class MainActivity extends AppCompatActivity
         implements NextLevelDialogFragment.NextLevelDialogListener, ListView.OnItemClickListener {
 
-    private CustomView drawView;
+    private DrawerView drawView;
     private DoYouEvenLift doYouEvenLift;
     private DrawerLayout drawerLayout;
     private ListView drawerList;
     private String[] listViewTitles;
     private ActionBarDrawerToggle drawerToggle;
+    private Toolbar myToolbar;
+
+    public int ACTION_BAR_HEIGHT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ACTION_BAR_HEIGHT = (int) getApplicationContext().getTheme().obtainStyledAttributes(new int[]{ android.R.attr.actionBarSize }).getDimension(0,0);
+
+        myToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(myToolbar);
+
         //LevelDatabaseOperations levelDatabaseOperations = new LevelDatabaseOperations(this);
-        listViewTitles = new String[Levels.levels.length + 1];
-        listViewTitles[0] = "Instructions";
-        for(int i = 1; i < listViewTitles.length; i++)
-            listViewTitles[i] = "Level: " + i;
+        listViewTitles = new String[Levels.levels.length];
+        for(int i = 1; i <= listViewTitles.length; i++)
+            listViewTitles[i - 1] = "Level: " + i;
 
         drawerLayout = (DrawerLayout) findViewById(R.id.main_layout);
         drawerList = (ListView) findViewById(R.id.left_drawer);
@@ -45,19 +54,22 @@ public class MainActivity extends Activity
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
+                getSupportActionBar().setTitle(DoYouEvenLift.NAME);
                 invalidateOptionsMenu();
             }
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+                getSupportActionBar().setTitle(Levels.NAME);
                 invalidateOptionsMenu();
             }
         };
         drawerLayout.setDrawerListener(drawerToggle);
-        drawerLayout.openDrawer(drawerList);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         doYouEvenLift = new DoYouEvenLift();
-        drawView = (CustomView) findViewById(R.id.draw_view);
+        drawView = (DrawerView) findViewById(R.id.draw_view);
         drawView.addModel(doYouEvenLift);
         doYouEvenLift.addListener(this);
         doYouEvenLift.setCurrentLevel(0);
@@ -82,14 +94,25 @@ public class MainActivity extends Activity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        if(drawerToggle.onOptionsItemSelected(item))
+            return true;
+
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(MainActivity.this, InstructionsActivity.class);
+            startActivity(intent);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        drawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -106,7 +129,7 @@ public class MainActivity extends Activity
         drawView.updateCanvas();
     }
 
-    public CustomView getDrawView() {
+    public DrawerView getDrawView() {
         return drawView;
     }
 
@@ -117,15 +140,21 @@ public class MainActivity extends Activity
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if(position == 0){
-            Intent intent = new Intent(MainActivity.this, InstructionsActivity.class);
-            startActivity(intent);
-            return;
-        }
+
         doYouEvenLift.setCurrentLevel(position - 1);
         if(drawerLayout.isDrawerOpen(drawerList))
             drawerLayout.closeDrawer(drawerList);
         else
             drawerLayout.openDrawer(drawerList);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
+    }
+
+    public Toolbar getMyToolbar() {
+        return myToolbar;
     }
 }

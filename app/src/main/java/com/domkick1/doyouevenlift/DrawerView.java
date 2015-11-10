@@ -10,7 +10,7 @@ package com.domkick1.doyouevenlift;
 
         import java.util.ArrayList;
 
-public class CustomView extends View {
+public class DrawerView extends View {
     private DoYouEvenLift doYouEvenLift;
     private float x;
     private float y;
@@ -18,17 +18,17 @@ public class CustomView extends View {
     Paint shapeLines = new Paint(Paint.ANTI_ALIAS_FLAG);
     Paint traceLines = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-    public CustomView(Context context) {
+    public DrawerView(Context context) {
         super(context);
         // TODO Auto-generated constructor stub
     }
 
-    public CustomView(Context context, AttributeSet attrs) {
+    public DrawerView(Context context, AttributeSet attrs) {
         super(context, attrs);
         // TODO Auto-generated constructor stub
     }
 
-    public CustomView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public DrawerView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         // TODO Auto-generated constructor stub
     }
