@@ -21,7 +21,11 @@
         <activity
             android:name=".InstructionsActivity"
             android:label="@string/title_activity_instructions"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".MainActivity">
+                <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value=".MainActivity"/>
         </activity>
     </application>
 

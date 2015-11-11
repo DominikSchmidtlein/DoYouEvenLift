@@ -26,7 +26,7 @@ public class DoYouEvenLift {
     public static float[][] levels;
 
     public DoYouEvenLift(){
-        levels = Levels.levels;
+        levels = Levels.LEVELS;
         currentLevel = 0;
     }
     public void addListener(MainActivity mainActivity){

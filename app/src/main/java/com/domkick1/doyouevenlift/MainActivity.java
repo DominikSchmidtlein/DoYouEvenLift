@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity
     private DoYouEvenLift doYouEvenLift;
     private DrawerLayout drawerLayout;
     private ListView drawerList;
-    private String[] listViewTitles;
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar myToolbar;
 
@@ -41,13 +40,10 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(myToolbar);
 
         //LevelDatabaseOperations levelDatabaseOperations = new LevelDatabaseOperations(this);
-        listViewTitles = new String[Levels.levels.length];
-        for(int i = 1; i <= listViewTitles.length; i++)
-            listViewTitles[i - 1] = "Level: " + i;
 
         drawerLayout = (DrawerLayout) findViewById(R.id.main_layout);
         drawerList = (ListView) findViewById(R.id.left_drawer);
-        drawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, listViewTitles));
+        drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, Levels.getLevelNames()));
         drawerList.setOnItemClickListener(this);
 
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, null, R.string.open_drawer, R.string.close_drawer){
@@ -122,7 +118,7 @@ public class MainActivity extends AppCompatActivity
 
     //clicks next level
     public void onDialogNextLevelClick(DialogFragment dialogFragment){
-        if(!doYouEvenLift.incrementCurrentLevel()){}//no more levels
+        if(!doYouEvenLift.incrementCurrentLevel()){}//no more LEVELS
     }
     //clicks retry level
     public void onDialogRetryClick(DialogFragment dialogFragment){
@@ -141,7 +137,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        doYouEvenLift.setCurrentLevel(position - 1);
+        doYouEvenLift.setCurrentLevel(position);
         if(drawerLayout.isDrawerOpen(drawerList))
             drawerLayout.closeDrawer(drawerList);
         else
