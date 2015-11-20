@@ -1,42 +1,38 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
+    <include
         android:id="@+id/main_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:theme="@style/ActionBarTheme" />
+        layout="@layout/toolbar" />
 
     <android.support.v4.widget.DrawerLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/main_layout"
-        tools:context="com.domkick1.doyouevenlift.MainActivity" >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <com.domkick1.doyouevenlift.DrawerView
+
+            <com.domkick1.doyouevenlift.DrawView
                 android:id="@+id/draw_view"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
         </FrameLayout>
 
         <ListView
             android:id="@+id/left_drawer"
-            android:layout_width="180dp"
+            android:layout_width="240dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:choiceMode="singleChoice"
             android:divider="#E3E9E3"
             android:dividerHeight="1dp"
-            android:background="#ffffffff"/>
+            style="@style/Widget.AppCompat.ListView"/>
 
     </android.support.v4.widget.DrawerLayout>
 </LinearLayout>

@@ -20,7 +20,7 @@ import android.widget.ListView;
 public class MainActivity extends AppCompatActivity
         implements NextLevelDialogFragment.NextLevelDialogListener, ListView.OnItemClickListener {
 
-    private DrawerView drawView;
+    private DrawView drawView;
     private DoYouEvenLift doYouEvenLift;
     private DrawerLayout drawerLayout;
     private ListView drawerList;
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().setHomeButtonEnabled(true);
 
         doYouEvenLift = new DoYouEvenLift();
-        drawView = (DrawerView) findViewById(R.id.draw_view);
+        drawView = (DrawView) findViewById(R.id.draw_view);
         drawView.addModel(doYouEvenLift);
         doYouEvenLift.addListener(this);
         doYouEvenLift.setCurrentLevel(0);
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity
         drawView.updateCanvas();
     }
 
-    public DrawerView getDrawView() {
+    public DrawView getDrawView() {
         return drawView;
     }
 

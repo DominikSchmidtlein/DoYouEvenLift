@@ -18,7 +18,7 @@ public class DoYouEvenLift {
 
     private HashMap<Line,ArrayList<Line>> hashMap;
     private MainActivity mainActivity;
-    private DrawerView drawView;
+    private DrawView drawView;
     private ArrayList<Line> shape;
     private ArrayList<Line> trace;
 

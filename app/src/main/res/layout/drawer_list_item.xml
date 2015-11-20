@@ -2,8 +2,10 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FFFFFF"
     android:id="@+id/drawer_list_item"
-    android:layout_gravity="center_horizontal"
+    android:textAlignment="gravity"
+    android:gravity="start"
+    android:background="@android:color/white"
     android:padding="10dp"
-    android:textSize="20sp"/>
+    style="@style/TextAppearance.AppCompat.Large"
+    android:text="ok" />

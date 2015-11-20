@@ -1,23 +1,9 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-    </style>
-
-    <style name="ActionBarTheme" parent="ThemeOverlay.AppCompat.Dark" >
-        <item name="android:background">@android:color/holo_blue_light</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:colorPrimaryDark">@android:color/holo_blue_dark</item>
-    </style>
-
-    <style name="AppTheme" parent="AppBaseTheme">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+        <item name="android:colorPrimary">@color/ColorPrimary</item>
+        <item name="android:colorPrimaryDark">@color/ColorPrimaryDark</item>
     </style>
-
-    <color name="TitleColour">#FFFF9600</color>
-    <color name="DescriptionColour">#FF888888</color>
-    <color name="WinScreenColour">#ffcccccc</color>
-    <color name="NextShapeButtonColour">#FF444444</color>
 
 </resources>
