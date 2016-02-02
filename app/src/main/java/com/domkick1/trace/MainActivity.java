@@ -15,17 +15,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 
 public class MainActivity extends AppCompatActivity
-        implements NextLevelDialogFragment.NextLevelDialogListener, ListView.OnItemClickListener, View.OnTouchListener {
+        implements NextLevelDialogFragment.NextLevelDialogListener, ListView.OnItemClickListener, View.OnTouchListener, WinEventListener {
 
     private DrawView drawView;
-    private TraceGame trace;
+    private TraceGame traceGame;
     private DrawerLayout drawerLayout;
     private ListView drawerList;
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar myToolbar;
+
+    public static MainActivity mainActivity;
 
 
 
@@ -33,6 +36,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mainActivity = this;
 
         myToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(myToolbar);
@@ -68,9 +73,11 @@ public class MainActivity extends AppCompatActivity
 
         int actionBarHeight = (int) getApplicationContext().getTheme().obtainStyledAttributes(new int[]{android.R.attr.actionBarSize}).getDimension(0, 0);
 
-        trace = new TraceGame(size, actionBarHeight);
+        traceGame = new TraceGame(size, actionBarHeight, 0);
+        traceGame.setWinEventListener(this);
+
         drawView = (DrawView) findViewById(R.id.draw_view);
-        drawView.addModel(trace);
+        drawView.addModel(traceGame);
 
         drawView.setOnTouchListener(this);
     }
@@ -103,8 +110,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void onWin(WinEvent winEvent) {
+        launchNextLevelDialog();
+    }
+
+    @Override
     public boolean onTouch(View v, MotionEvent event) {
-        return trace.onTouch(v, event);
+        return traceGame.onTouch(v, event);
     }
 
     @Override
@@ -120,8 +132,7 @@ public class MainActivity extends AppCompatActivity
 
     //clicks next level
     public void onDialogNextLevelClick(DialogFragment dialogFragment) {
-        if (!trace.incrementCurrentLevel()) {
-        }//no more LEVELS
+        traceGame.incrementCurrentLevel();
     }
 
     //clicks retry level
@@ -138,7 +149,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        trace.setCurrentLevel(position);
+        traceGame.setCurrentLevel(position);
         if (drawerLayout.isDrawerOpen(drawerList))
             drawerLayout.closeDrawer(drawerList);
         else
@@ -149,5 +160,9 @@ public class MainActivity extends AppCompatActivity
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         drawerToggle.syncState();
+    }
+
+    public void displayToast(String s){
+        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
     }
 }

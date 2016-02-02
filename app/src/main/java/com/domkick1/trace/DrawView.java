@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -26,33 +27,24 @@ public class DrawView extends View implements Observer {
     public DrawView(Context context, AttributeSet attrs) {
         super(context, attrs);
         // TODO Auto-generated constructor stub
+        setUpPaint();
     }
 
     public DrawView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         // TODO Auto-generated constructor stub
+        setUpPaint();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-//        float[] shape = this.trace.getShapeAsFloats();
-//        float[] trace = this.trace.getTraceAsFloats();
+        if(trace.getShape() == null || trace.getTrace() == null)
+            return;
 
-//        for (int i = 0; i < (shape.length > trace.length ? shape.length : trace.length); i += 2) {
-//            if (i < shape.length) {
-//                shape[i] = shape[i];
-//                shape[i + 1] = shape[i + 1];
-//            }
-//            if (i < trace.length) {
-//                trace[i] = trace[i];
-//                trace[i + 1] = trace[i + 1];
-//            }
-//        }
-
-        canvas.drawLines(trace.getShapeAsFloats(), shapeLines);
-        canvas.drawLines(trace.getTraceAsFloats(), traceLines);
+        canvas.drawLines(linesAsFloats(trace.getShape()), shapeLines);
+        canvas.drawLines(linesAsFloats(trace.getTrace()), traceLines);
     }
 
     private void setUpPaint() {
@@ -68,6 +60,19 @@ public class DrawView extends View implements Observer {
     public void addModel(TraceGame trace) {
         this.trace = trace;
         trace.addObserver(this);
+    }
+
+    public float[] linesAsFloats(ArrayList<Line> lines) {
+        float[] floats = new float[lines.size() * 4];
+        int i = 0;
+        for (Line line : lines) {
+            floats[i] = line.getP1().getX();
+            floats[i + 1] = line.getP1().getY();
+            floats[i + 2] = line.getP2().getX();
+            floats[i + 3] = line.getP2().getY();
+            i += 4;
+        }
+        return floats;
     }
 
     @Override

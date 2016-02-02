@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.domkick1.com.domkick1.trace.MainActivity"
+            android:name="com.domkick1.trace.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" >
@@ -19,13 +19,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.domkick1.com.domkick1.trace.InstructionsActivity"
+            android:name="com.domkick1.trace.InstructionsActivity"
             android:label="@string/title_activity_instructions"
             android:theme="@style/AppTheme"
-            android:parentActivityName="com.domkick1.com.domkick1.trace.MainActivity">
+            android:parentActivityName="com.domkick1.trace.MainActivity">
                 <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value="com.domkick1.com.domkick1.trace.MainActivity"/>
+                    android:value="com.domkick1.trace.MainActivity"/>
         </activity>
     </application>
 

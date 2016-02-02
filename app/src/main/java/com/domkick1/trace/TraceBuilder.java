@@ -36,8 +36,6 @@ public class TraceBuilder extends Trace {
         if(event.getPointerCount() > 1)
             return false;
 
-        setChanged();
-
         Point touchPoint = new Point(event.getX(), event.getY());
         Point nearPoint = isNearVertexInPoints(touchPoint, points, RADIUS);
 

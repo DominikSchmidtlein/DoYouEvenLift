@@ -23,6 +23,7 @@ public abstract class Trace extends Observable {
 
     public boolean onTouch(View v, MotionEvent event) {
         boolean ret = handleTouch(v, event);
+        setChanged();
         notifyObservers();
         return ret;
     }
@@ -62,19 +63,6 @@ public abstract class Trace extends Observable {
 
     protected void replaceLastPoint(Point point, ArrayList<Line> lines){
         lines.set(lines.size()-1, new Line(lines.get(lines.size()-1).getP1(), point));
-    }
-
-    public float[] linesAsFloats(ArrayList<Line> lines){
-        float[] floats = new float[lines.size() * 4];
-        int i = 0;
-        for(Line line: lines){
-            floats[i] = line.getP1().getX();
-            floats[i + 1] = line.getP1().getY();
-            floats[i + 2] = line.getP2().getX();
-            floats[i + 3] = line.getP2().getY();
-            i += 4;
-        }
-        return floats;
     }
 
     public ArrayList<Line> floatsAsLines(float[] floats){
