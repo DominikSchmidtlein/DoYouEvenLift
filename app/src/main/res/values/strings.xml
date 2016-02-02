@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Do you even lift?</string>
+    <string name="app_name">Trace</string>
     <string name="hello_world">Hello world!</string>
     <string name="congratulations">Congratulations!</string>
     <string name="action_settings">Settings</string>
@@ -10,6 +10,6 @@
     <string name="next_level_retry">Retry</string>
     <string name="open_drawer">Open</string>
     <string name="close_drawer">Closed</string>
-    <string name="game_instructions_text"><big><b>Welcome to Do You Even Lift</b></big>\n\nHow to play:\n\nTrace the image on screen without lifting you finger!\n\nGood Luck</string>
+    <string name="game_instructions_text"><big><b>Welcome to Trace</b></big>\n\nHow to play:\n\nTrace the image on screen without lifting you finger!\n\nGood Luck</string>
     <string name="title_activity_instructions">How to Play</string>
 </resources>

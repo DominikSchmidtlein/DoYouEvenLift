@@ -1,4 +1,4 @@
-package com.domkick1.doyouevenlift;
+package com.domkick1.trace;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

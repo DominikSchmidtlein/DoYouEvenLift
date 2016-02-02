@@ -1,8 +1,6 @@
-package com.domkick1.doyouevenlift;
+package com.domkick1.trace;
 
 import android.provider.BaseColumns;
-
-import java.util.ArrayList;
 
 /**
  * Created by dominikschmidtlein on 10/26/2015.

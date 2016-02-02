@@ -3,7 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.domkick1.doyouevenlift.InstructionsActivity">
+    tools:context="com.domkick1.trace.InstructionsActivity">
 
     <include
         android:id="@+id/instruction_toolbar"

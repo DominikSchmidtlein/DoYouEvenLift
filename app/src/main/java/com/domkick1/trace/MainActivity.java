@@ -1,4 +1,4 @@
-package com.domkick1.doyouevenlift;
+package com.domkick1.trace;
 
 import android.app.DialogFragment;
 import android.content.Intent;
@@ -18,23 +18,21 @@ import android.widget.ListView;
 
 
 public class MainActivity extends AppCompatActivity
-        implements NextLevelDialogFragment.NextLevelDialogListener, ListView.OnItemClickListener {
+        implements NextLevelDialogFragment.NextLevelDialogListener, ListView.OnItemClickListener, View.OnTouchListener {
 
     private DrawView drawView;
-    private DoYouEvenLift doYouEvenLift;
+    private TraceGame trace;
     private DrawerLayout drawerLayout;
     private ListView drawerList;
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar myToolbar;
 
-    public int ACTION_BAR_HEIGHT;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        ACTION_BAR_HEIGHT = (int) getApplicationContext().getTheme().obtainStyledAttributes(new int[]{ android.R.attr.actionBarSize }).getDimension(0,0);
 
         myToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(myToolbar);
@@ -46,13 +44,14 @@ public class MainActivity extends AppCompatActivity
         drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, Levels.getLevelNames()));
         drawerList.setOnItemClickListener(this);
 
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, null, R.string.open_drawer, R.string.close_drawer){
+        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, null, R.string.open_drawer, R.string.close_drawer) {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                getSupportActionBar().setTitle(DoYouEvenLift.NAME);
+                getSupportActionBar().setTitle(TraceGame.NAME);
                 invalidateOptionsMenu();
             }
+
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
@@ -64,18 +63,16 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        doYouEvenLift = new DoYouEvenLift();
-        drawView = (DrawView) findViewById(R.id.draw_view);
-        drawView.addModel(doYouEvenLift);
-        doYouEvenLift.addListener(this);
-        doYouEvenLift.setCurrentLevel(0);
+        android.graphics.Point size = new android.graphics.Point();
+        getWindowManager().getDefaultDisplay().getSize(size);
 
-        drawView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return doYouEvenLift.click(event);
-            }
-        });
+        int actionBarHeight = (int) getApplicationContext().getTheme().obtainStyledAttributes(new int[]{android.R.attr.actionBarSize}).getDimension(0, 0);
+
+        trace = new TraceGame(size, actionBarHeight);
+        drawView = (DrawView) findViewById(R.id.draw_view);
+        drawView.addModel(trace);
+
+        drawView.setOnTouchListener(this);
     }
 
     @Override
@@ -90,7 +87,7 @@ public class MainActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        if(drawerToggle.onOptionsItemSelected(item))
+        if (drawerToggle.onOptionsItemSelected(item))
             return true;
 
         int id = item.getItemId();
@@ -106,6 +103,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        return trace.onTouch(v, event);
+    }
+
+    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
@@ -117,17 +119,16 @@ public class MainActivity extends AppCompatActivity
     }
 
     //clicks next level
-    public void onDialogNextLevelClick(DialogFragment dialogFragment){
-        if(!doYouEvenLift.incrementCurrentLevel()){}//no more LEVELS
-    }
-    //clicks retry level
-    public void onDialogRetryClick(DialogFragment dialogFragment){
-        drawView.updateCanvas();
+    public void onDialogNextLevelClick(DialogFragment dialogFragment) {
+        if (!trace.incrementCurrentLevel()) {
+        }//no more LEVELS
     }
 
-    public DrawView getDrawView() {
-        return drawView;
+    //clicks retry level
+    public void onDialogRetryClick(DialogFragment dialogFragment) {
+
     }
+
 
     public void launchNextLevelDialog() {
         DialogFragment newFragment = new NextLevelDialogFragment();
@@ -137,8 +138,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        doYouEvenLift.setCurrentLevel(position);
-        if(drawerLayout.isDrawerOpen(drawerList))
+        trace.setCurrentLevel(position);
+        if (drawerLayout.isDrawerOpen(drawerList))
             drawerLayout.closeDrawer(drawerList);
         else
             drawerLayout.openDrawer(drawerList);
@@ -148,9 +149,5 @@ public class MainActivity extends AppCompatActivity
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         drawerToggle.syncState();
-    }
-
-    public Toolbar getMyToolbar() {
-        return myToolbar;
     }
 }

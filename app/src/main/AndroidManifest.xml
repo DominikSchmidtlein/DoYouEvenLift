@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.domkick1.doyouevenlift" >
+    package="com.domkick1.trace" >
 
     <application
         android:allowBackup="true"
@@ -8,7 +8,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name="com.domkick1.com.domkick1.trace.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" >
@@ -19,13 +19,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".InstructionsActivity"
+            android:name="com.domkick1.com.domkick1.trace.InstructionsActivity"
             android:label="@string/title_activity_instructions"
             android:theme="@style/AppTheme"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName="com.domkick1.com.domkick1.trace.MainActivity">
                 <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value=".MainActivity"/>
+                    android:value="com.domkick1.com.domkick1.trace.MainActivity"/>
         </activity>
     </application>
 

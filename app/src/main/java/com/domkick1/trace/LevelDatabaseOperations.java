@@ -1,11 +1,11 @@
-package com.domkick1.doyouevenlift;
+package com.domkick1.trace;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.domkick1.doyouevenlift.LevelTableData.LevelTableInfo;
+import com.domkick1.trace.LevelTableData.LevelTableInfo;
 
 /**
  * Created by dominikschmidtlein on 10/26/2015.

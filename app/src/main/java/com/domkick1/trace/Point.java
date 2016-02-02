@@ -1,11 +1,11 @@
-package com.domkick1.doyouevenlift;
+package com.domkick1.trace;
 
 /**
  * Created by dominik on 03/08/15.
  */
 public class Point {
-    private float x;
-    private float y;
+    private final float x;
+    private final float y;
 
     public Point(float x, float y) {
         this.x = x;
@@ -19,14 +19,14 @@ public class Point {
 
     @Override
     public boolean equals(Object o) {
-        if(!(o instanceof Point))
+        if (!(o instanceof Point))
             return false;
         Point p = (Point) o;
-        if(p.getX() != this.getX())
-            return false;
-        if(p.getY() != this.getY())
-            return false;
-        return true;
+        return p.getX() == this.getX() && p.getY() == this.getY();
+    }
+
+    public double getDistance(Point p2){
+        return Math.sqrt(Math.pow(this.getX() - p2.getX(), 2) + Math.pow(this.getY() - p2.getY(), 2));
     }
 
     public float getX(){
@@ -34,11 +34,5 @@ public class Point {
     }
     public float getY(){
         return this.y;
-    }
-    public void setX(float x){
-        this.x = x;
-    }
-    public void setY(float y){
-        this.y = y;
     }
 }

@@ -1,4 +1,4 @@
-package com.domkick1.doyouevenlift;
+package com.domkick1.trace;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
