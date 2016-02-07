@@ -4,7 +4,7 @@
     <string name="congratulations">Congratulations!</string>
     <string name="action_settings">Settings</string>
     <string name="game_description">Trace the image below without lifting your finger</string>
-    <string name="next_shape_button" >next shape</string>
+    <string name="next_shape_button">next shape</string>
     <string name="next_level_title">Congratulations</string>
     <string name="next_level_next">Next</string>
     <string name="next_level_retry">Retry</string>
@@ -12,4 +12,6 @@
     <string name="close_drawer">Closed</string>
     <string name="game_instructions_text"><big><b>Welcome to Trace</b></big>\n\nHow to play:\n\nTrace the image on screen without lifting you finger!\n\nGood Luck</string>
     <string name="title_activity_instructions">How to Play</string>
+    <string name="title_activity_level_builder">Trace Level Builder</string>
+    <string name="action_level_builder">Level Builder</string>
 </resources>

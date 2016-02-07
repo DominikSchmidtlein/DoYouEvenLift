@@ -49,12 +49,14 @@ public class TraceGame extends Trace {
                     trace.add(new Line(nearPoint, touchPoint));
                 return nearPoint != null;
             case MotionEvent.ACTION_MOVE:
-                Point startPoint = new Point(trace.get(trace.size() - 1).getP1());
-                ArrayList<Line> componentLines = isLineInShape(new Line(startPoint, nearPoint));
-                if (nearPoint != null && componentLines != null && !isOccupied(componentLines)) {
-                    addLinesToTrace(startPoint, componentLines);
-                    trace.add(new Line(nearPoint, touchPoint));
-                    return true;
+                if(nearPoint != null) {
+                    Point startPoint = new Point(trace.get(trace.size() - 1).getP1());
+                    ArrayList<Line> componentLines = isLineInShape(new Line(startPoint, nearPoint));
+                    if (componentLines != null && !isOccupied(componentLines)) {
+                        addLinesToTrace(startPoint, componentLines);
+                        trace.add(new Line(nearPoint, touchPoint));
+                        return true;
+                    }
                 }
                 replaceLastPoint(touchPoint, trace);
                 return true;
@@ -129,13 +131,6 @@ public class TraceGame extends Trace {
     private boolean isOccupied(ArrayList<Line> componentLines) {
         for (Line l : componentLines)
             if (isLineInSet(trace, l))
-                return true;
-        return false;
-    }
-
-    private boolean isLineInSet(ArrayList<Line> set, Line line) {
-        for (Line l : set)
-            if (l.equals(line) || l.getOpposite().equals(line))
                 return true;
         return false;
     }

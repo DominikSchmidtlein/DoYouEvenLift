@@ -21,7 +21,7 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity
         implements NextLevelDialogFragment.NextLevelDialogListener, ListView.OnItemClickListener, View.OnTouchListener, WinEventListener {
 
-    private DrawView drawView;
+    private DrawViewGame drawViewGame;
     private TraceGame traceGame;
     private DrawerLayout drawerLayout;
     private ListView drawerList;
@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity
     private Toolbar myToolbar;
 
     public static MainActivity mainActivity;
-
 
 
     @Override
@@ -76,10 +75,10 @@ public class MainActivity extends AppCompatActivity
         traceGame = new TraceGame(size, actionBarHeight, 0);
         traceGame.setWinEventListener(this);
 
-        drawView = (DrawView) findViewById(R.id.draw_view);
-        drawView.addModel(traceGame);
+        drawViewGame = (DrawViewGame) findViewById(R.id.draw_view);
+        drawViewGame.addModel(traceGame);
 
-        drawView.setOnTouchListener(this);
+        drawViewGame.setOnTouchListener(this);
     }
 
     @Override
@@ -99,14 +98,19 @@ public class MainActivity extends AppCompatActivity
 
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Intent intent = new Intent(MainActivity.this, InstructionsActivity.class);
-            startActivity(intent);
-            return true;
+        Intent intent;
+        switch (id) {
+            case R.id.action_settings:
+                intent = new Intent(MainActivity.this, InstructionsActivity.class);
+                break;
+            case R.id.action_level_builder:
+                intent = new Intent(MainActivity.this, LevelBuilderActivity.class);
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
+        startActivity(intent);
+        return true;
     }
 
     @Override
@@ -162,7 +166,7 @@ public class MainActivity extends AppCompatActivity
         drawerToggle.syncState();
     }
 
-    public void displayToast(String s){
+    public void displayToast(String s) {
         Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
     }
 }

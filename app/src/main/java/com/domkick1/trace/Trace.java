@@ -65,14 +65,7 @@ public abstract class Trace extends Observable {
         lines.set(lines.size()-1, new Line(lines.get(lines.size()-1).getP1(), point));
     }
 
-    public ArrayList<Line> floatsAsLines(float[] floats){
-        ArrayList<Line> lines = new ArrayList<>(floats.length/4);
-        for(int i = 0; i < floats.length; i += 4)
-            lines.add(new Line(floats[i], floats[i + 1], floats[i + 2], floats[i + 3]));
-        return lines;
-    }
-
-    private boolean isLineInSet(ArrayList<Line> set, Line line){
+    protected boolean isLineInSet(ArrayList<Line> set, Line line){
         for(Line l: set)
             if(l.equals(line) || l.getOpposite().equals(line))
                 return true;

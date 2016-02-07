@@ -60,7 +60,7 @@ public class Levels {
             new float[]{800, 620, 600, 620, 600, 620, 400, 620, 400, 620, 200, 620, 200, 620, 100, 793, 100, 793, 300, 793, 300, 793, 500, 793, 500, 793, 700, 793, 700, 793, 900, 793, 900, 793, 1000, 620, 1000, 620, 900, 446, 900, 446, 800, 620, 800, 620, 900, 793, 900, 793, 800, 966, 800, 966, 600, 966, 600, 966, 400, 966, 400, 966, 200, 966, 200, 966, 300, 793, 300, 793, 200, 620, 200, 620, 300, 446, 300, 446, 400, 620, 400, 620, 500, 793, 500, 793, 600, 966, 600, 966, 700, 793, 700, 793, 600, 620, 600, 620, 500, 446, 500, 446, 700, 446, 700, 446, 800, 620, 800, 620, 700, 793, 700, 793, 800, 966, 800, 966, 600, 1312, 600, 1312, 400, 966, 400, 966, 300, 1139, 300, 1139, 200, 966,},
     };
 
-    public static final float[] SQUARE_POINTS = new float[]{
+    private static final float[] SQUARE_POINTS = new float[]{
             100, 100, 300, 100, 500, 100, 700, 100, 900, 100,
             100, 300, 300, 300, 500, 300, 700, 300, 900, 300,
             100, 500, 300, 500, 500, 500, 700, 500, 900, 500,
@@ -71,7 +71,7 @@ public class Levels {
             100, 1500, 300, 1500, 500, 1500, 700, 1500, 900, 1500,
             100, 1700, 300, 1700, 500, 1700, 700, 1700, 900, 1700};
 
-    public static final float[] ISOMETRIC_POINTS = new float[]{
+    private static final float[] ISOMETRIC_POINTS = new float[]{
             100, 100, 300, 100, 500, 100, 700, 100, 900, 100,
             200, 273, 400, 273, 600, 273, 800, 273, 1000, 273,
             100, 446, 300, 446, 500, 446, 700, 446, 900, 446,
@@ -97,6 +97,19 @@ public class Levels {
         for (int i = 0; i < centeredLines.length; i += 4)
             lines.add(new Line(centeredLines[i], centeredLines[i + 1], centeredLines[i + 2], centeredLines[i + 3]));
         return lines;
+    }
+
+    public static ArrayList<Point> getGridAsPoints(TraceBuilder.Mode mode, int width, int height, int topOffset) {
+        float[] centeredPoints = centerPoints(getGridByMode(mode), width, height, topOffset);
+
+        ArrayList<Point> points = new ArrayList<>(centeredPoints.length / 2);
+        for (int i = 0; i < centeredPoints.length; i += 2)
+            points.add(new Point(centeredPoints[i], centeredPoints[i + 1]));
+        return points;
+    }
+
+    private static float[] getGridByMode(TraceBuilder.Mode mode) {
+        return (mode == TraceBuilder.Mode.ISOMETRIC) ? ISOMETRIC_POINTS : SQUARE_POINTS;
     }
 
     public static float[] centerPoints(float[] points, int width, int height, int topOffset) {
