@@ -11,6 +11,7 @@ import android.view.View;
 public class LevelBuilderActivity extends AppCompatActivity implements View.OnTouchListener {
 
     TraceBuilder traceBuilder;
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,11 +21,11 @@ public class LevelBuilderActivity extends AppCompatActivity implements View.OnTo
         Toolbar toolbar = (Toolbar) findViewById(R.id.level_builder_toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Shape len: " + traceBuilder.getShape().size(), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -41,11 +42,17 @@ public class LevelBuilderActivity extends AppCompatActivity implements View.OnTo
         drawViewLevelBuilder.addModel(traceBuilder);
 
         drawViewLevelBuilder.setOnTouchListener(this);
-
     }
+
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN)
+            fab.hide();
+        else if(event.getAction() == MotionEvent.ACTION_MOVE)
+            fab.hide();
+        else
+            fab.show();
         return traceBuilder.onTouch(v, event);
     }
 }

@@ -54,10 +54,8 @@ public class TraceBuilder extends Trace {
                     if (!shape.get(shape.size() - 1).getP1().equals(nearPoint)) {
                         Line newLine = new Line(shape.get(shape.size() - 1).getP1(), nearPoint);
                         shape.remove(shape.size() - 1);
-
-                        ArrayList<Line> simp = getSimpleLines(newLine);
-                        shape.addAll(simp);
-
+                        shape.addAll(getSimpleLines(newLine));
+                        cleanShape();
                         shape.add(new Line(nearPoint, touchPoint));
                         return true;
                     }
@@ -108,6 +106,10 @@ public class TraceBuilder extends Trace {
         Point temp = points.get(i1);
         points.set(i1, points.get(i2));
         points.set(i2, temp);
+    }
+
+    private void cleanShape(){
+        shape = removeDuplicates(shape);
     }
 
     public ArrayList<Point> getPoints() {

@@ -3,6 +3,9 @@ package com.domkick1.trace;
 import android.view.MotionEvent;
 import android.view.View;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.ListIterator;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -70,6 +73,24 @@ public abstract class Trace extends Observable {
             if(l.equals(line) || l.getOpposite().equals(line))
                 return true;
         return false;
+    }
+
+    /**
+     * Returns a list of lines where all instances of duplicates are removed. Therefore if there
+     * were 2 instances of lineA, there will be none in the return list.
+     * @param lines a list of lines that may contain duplicates
+     * @return a list free of all instances that were once duplicates
+     */
+    protected ArrayList<Line> removeDuplicates(ArrayList<Line> lines){
+        ArrayList<Line> noDuplicateLines = new ArrayList<>(lines.size());
+        for(ListIterator<Line> i = lines.listIterator(); i.hasNext();){
+            Line line = i.next();
+            i.remove();
+            if(!lines.contains(line.getOpposite()) && !lines.contains(line))
+                noDuplicateLines.add(line);
+            i.add(line);
+        }
+        return noDuplicateLines;
     }
 
 }
