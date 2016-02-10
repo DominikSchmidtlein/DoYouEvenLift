@@ -13,6 +13,7 @@ public class LevelBuilderActivity extends AppCompatActivity implements View.OnTo
 
     TraceBuilder traceBuilder;
     FloatingActionButton fab;
+    FabListener fabListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +31,8 @@ public class LevelBuilderActivity extends AppCompatActivity implements View.OnTo
                         .setAction("Action", null).show();
             }
         });
+        fabListener = new FabListener();
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         android.graphics.Point size = new android.graphics.Point();
@@ -50,15 +53,38 @@ public class LevelBuilderActivity extends AppCompatActivity implements View.OnTo
     public boolean onTouch(View v, MotionEvent event) {
 
         boolean ret = traceBuilder.onTouch(v, event);
-        Log.d("DOM", "Event: " + event.getAction() + ", Ret: " + ret);
         if ((event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) && ret) {
-            fab.hide();
-            Log.d("DOM", "Hiding");
+            fabListener.setShown(false);
+            fab.hide(fabListener);
         }
         if (!ret || event.getAction() == MotionEvent.ACTION_UP) {
-            fab.show();
-            Log.d("DOM", "Showing");
+            fabListener.setShown(true);
+            fab.show(fabListener);
         }
         return ret;
     }
+
+    private class FabListener extends FloatingActionButton.OnVisibilityChangedListener {
+
+        private boolean shown;
+
+        @Override
+        public void onHidden(FloatingActionButton fab) {
+            super.onHidden(fab);
+            if (shown)
+                fab.show(this);
+        }
+
+        @Override
+        public void onShown(FloatingActionButton fab) {
+            super.onShown(fab);
+            if (!shown)
+                fab.hide(this);
+        }
+
+        public void setShown(boolean shown) {
+            this.shown = shown;
+        }
+    }
+
 }
