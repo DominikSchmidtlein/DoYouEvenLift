@@ -41,15 +41,18 @@ public class TraceBuilder extends Trace {
             return false;
 
         Point touchPoint = new Point(event.getX(), event.getY());
-        Point nearPoint = isNearVertexInPoints(touchPoint, points, RADIUS);
+        Point nearPoint;
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                nearPoint = shape.isEmpty() ? isNearVertexInPoints(touchPoint, points, RADIUS)
+                        : isNearVertexInLines(touchPoint, shape, RADIUS);
                 if (nearPoint != null)
                     shape.add(new Line(nearPoint, touchPoint));
                 return nearPoint != null;
 
             case MotionEvent.ACTION_MOVE:
+                nearPoint = isNearVertexInPoints(touchPoint, points, RADIUS);
                 if (nearPoint != null) {
                     if (!shape.get(shape.size() - 1).getP1().equals(nearPoint)) {
                         Line newLine = new Line(shape.get(shape.size() - 1).getP1(), nearPoint);
@@ -108,7 +111,7 @@ public class TraceBuilder extends Trace {
         points.set(i2, temp);
     }
 
-    private void cleanShape(){
+    private void cleanShape() {
         shape = removeDuplicates(shape);
     }
 

@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -47,12 +48,17 @@ public class LevelBuilderActivity extends AppCompatActivity implements View.OnTo
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN)
+
+        boolean ret = traceBuilder.onTouch(v, event);
+        Log.d("DOM", "Event: " + event.getAction() + ", Ret: " + ret);
+        if ((event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) && ret) {
             fab.hide();
-        else if(event.getAction() == MotionEvent.ACTION_MOVE)
-            fab.hide();
-        else
+            Log.d("DOM", "Hiding");
+        }
+        if (!ret || event.getAction() == MotionEvent.ACTION_UP) {
             fab.show();
-        return traceBuilder.onTouch(v, event);
+            Log.d("DOM", "Showing");
+        }
+        return ret;
     }
 }
