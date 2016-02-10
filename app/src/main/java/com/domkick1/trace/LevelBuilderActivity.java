@@ -5,7 +5,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -27,7 +26,7 @@ public class LevelBuilderActivity extends AppCompatActivity implements View.OnTo
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Shape len: " + traceBuilder.getShape().size(), Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Shape legality: " + (traceBuilder.getProblemPoints() == null), Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });

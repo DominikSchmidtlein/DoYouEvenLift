@@ -15,6 +15,7 @@ public class TraceBuilder extends Trace {
     private Mode mode;
     private ArrayList<Point> points;
     private ArrayList<Line> shape;
+    private ArrayList<Point> problemPoints;
 
 
     public TraceBuilder(android.graphics.Point screenSize, int actionBarHeight, Mode mode) {
@@ -43,8 +44,11 @@ public class TraceBuilder extends Trace {
         Point touchPoint = new Point(event.getX(), event.getY());
         Point nearPoint;
 
+        problemPoints = null;
+
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+
                 nearPoint = shape.isEmpty() ? isNearVertexInPoints(touchPoint, points, RADIUS)
                         : isNearVertexInLines(touchPoint, shape, RADIUS);
                 if (nearPoint != null)
@@ -67,6 +71,7 @@ public class TraceBuilder extends Trace {
                 return true;
             default:
                 shape.remove(shape.size() - 1);
+                updateShapeLegality();
                 return false;
 
         }
@@ -115,11 +120,28 @@ public class TraceBuilder extends Trace {
         shape = removeDuplicates(shape);
     }
 
+    private void updateShapeLegality(){
+        problemPoints = isShapeLegal();
+    }
+
+    private ArrayList<Point> isShapeLegal() {
+        ArrayList<Point> problemPoints = new ArrayList<>(shape.size());
+        for (Line line : shape)
+            for (Point point : line)
+                if (!problemPoints.remove(point))
+                    problemPoints.add(point);
+        return (problemPoints.size() == 2 || problemPoints.isEmpty()) ? null : problemPoints;
+    }
+
     public ArrayList<Point> getPoints() {
         return points;
     }
 
     public ArrayList<Line> getShape() {
         return shape;
+    }
+
+    public ArrayList<Point> getProblemPoints() {
+        return problemPoints;
     }
 }

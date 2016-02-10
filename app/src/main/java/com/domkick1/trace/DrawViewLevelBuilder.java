@@ -15,6 +15,7 @@ public class DrawViewLevelBuilder extends DrawView {
 
     private Paint pointPaint;
     private Paint linePaint;
+    private Paint problemPaint;
 
     public DrawViewLevelBuilder(Context context) {
         super(context);
@@ -38,6 +39,8 @@ public class DrawViewLevelBuilder extends DrawView {
         canvas.drawPoints(pointsAsFloats(traceBuilder.getPoints()), pointPaint);
         if(traceBuilder.getShape() != null)
             canvas.drawLines(linesAsFloats(traceBuilder.getShape()), linePaint);
+        if(traceBuilder.getProblemPoints() != null)
+            canvas.drawPoints(pointsAsFloats(traceBuilder.getProblemPoints()), problemPaint);
     }
 
     @Override
@@ -47,7 +50,10 @@ public class DrawViewLevelBuilder extends DrawView {
         pointPaint.setStrokeCap(Paint.Cap.ROUND);
         pointPaint.setStrokeWidth(30);
         linePaint = new Paint(pointPaint);
-        linePaint.setColor(Color.RED);
+        linePaint.setColor(0xFFFF8000);
+        problemPaint = new Paint(pointPaint);
+        problemPaint.setColor(Color.RED);
+        problemPaint.setStrokeWidth(50);
     }
 
     public void addModel(TraceBuilder traceBuilder){
