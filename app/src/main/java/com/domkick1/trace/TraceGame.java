@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Observer;
 import java.util.Queue;
 
 /**
@@ -30,10 +29,10 @@ public class TraceGame extends Trace {
     public TraceGame(android.graphics.Point screenSize, int actionBarHeight, int level) {
         super(screenSize, actionBarHeight);
         winEventListeners = new ArrayList<>(2);
-        setCurrentLevel(level);
+        this.currentLevel = level;
+        setupLevel();
 
     }
-
 
     @Override
     protected boolean handleTouch(View v, MotionEvent event) {
@@ -96,21 +95,17 @@ public class TraceGame extends Trace {
     public boolean incrementCurrentLevel() {
         if (currentLevel >= Levels.LEVELS.length - 1)
             return false;
-        setCurrentLevel(currentLevel + 1);
+        currentLevel ++;
+        setupLevel();
         return true;
     }
 
-    private void setupLevel(int currentLevel) {
+    private void setupLevel() {
         shape = Levels.getLevelAsLines(currentLevel, size.x, size.y, actionBarHeight);
         trace = new ArrayList<>(shape.size());
         hashMap = generateMap();
         setChanged();
         notifyObservers();
-    }
-
-    public void setCurrentLevel(int currentLevel) {
-        this.currentLevel = currentLevel;
-        setupLevel(currentLevel);
     }
 
     public void setTrace(ArrayList<Line> trace) {

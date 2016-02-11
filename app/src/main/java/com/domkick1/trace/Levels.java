@@ -83,17 +83,10 @@ public class Levels {
             100, 1486, 300, 1486, 500, 1486, 700, 1486, 900, 1486,
             200, 1659, 400, 1659, 600, 1659, 800, 1659, 1000, 1659,};
 
-    public static String[] getLevelNames() {
-        String[] names = new String[LEVELS.length];
-        for (int i = 0; i < LEVELS.length; i++)
-            names[i] = "Level " + i;
-        return names;
-    }
-
     public static ArrayList<Line> getLevelAsLines(int level, int width, int height, int topOffset) {
         float[] centeredLines = centerPoints(LEVELS[level], width, height, topOffset);
 
-        ArrayList<Line> lines = new ArrayList<Line>(centeredLines.length / 4);
+        ArrayList<Line> lines = new ArrayList<>(centeredLines.length / 4);
         for (int i = 0; i < centeredLines.length; i += 4)
             lines.add(new Line(centeredLines[i], centeredLines[i + 1], centeredLines[i + 2], centeredLines[i + 3]));
         return lines;
@@ -112,7 +105,7 @@ public class Levels {
         return (mode == TraceBuilder.Mode.ISOMETRIC) ? ISOMETRIC_POINTS : SQUARE_POINTS;
     }
 
-    public static float[] centerPoints(float[] points, int width, int height, int topOffset) {
+    private static float[] centerPoints(float[] points, int width, int height, int topOffset) {
         float left = width;
         float top = height;
         float right = 0;

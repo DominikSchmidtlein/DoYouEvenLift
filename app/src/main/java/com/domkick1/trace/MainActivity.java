@@ -8,6 +8,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -45,21 +46,19 @@ public class MainActivity extends AppCompatActivity
 
         drawerLayout = (DrawerLayout) findViewById(R.id.main_layout);
         drawerList = (ListView) findViewById(R.id.left_drawer);
-        drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, Levels.getLevelNames()));
+        drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, new String[]{"Play", "Level Builder"}));
         drawerList.setOnItemClickListener(this);
 
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, null, R.string.open_drawer, R.string.close_drawer) {
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                getSupportActionBar().setTitle(TraceGame.NAME);
                 invalidateOptionsMenu();
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                getSupportActionBar().setTitle(Levels.NAME);
                 invalidateOptionsMenu();
             }
         };
@@ -103,9 +102,6 @@ public class MainActivity extends AppCompatActivity
             case R.id.action_settings:
                 intent = new Intent(MainActivity.this, InstructionsActivity.class);
                 break;
-            case R.id.action_level_builder:
-                intent = new Intent(MainActivity.this, LevelBuilderActivity.class);
-                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -144,7 +140,6 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-
     public void launchNextLevelDialog() {
         DialogFragment newFragment = new NextLevelDialogFragment();
         newFragment.show(getFragmentManager(), "next_level");
@@ -153,7 +148,20 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        traceGame.setCurrentLevel(position);
+        //traceGame.setCurrentLevel(position);
+
+        Log.d("DOM", "Position: " + position + ", ID: " + id);
+
+        switch (position) {
+            case 0:
+                break;
+            case 1:
+                startActivity(new Intent(MainActivity.this, LevelBuilderActivity.class));
+                break;
+            default:
+                break;
+        }
+
         if (drawerLayout.isDrawerOpen(drawerList))
             drawerLayout.closeDrawer(drawerList);
         else
