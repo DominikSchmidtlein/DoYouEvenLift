@@ -8,38 +8,28 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 
-public class MainActivity extends AppCompatActivity
-        implements NextLevelDialogFragment.NextLevelDialogListener, ListView.OnItemClickListener, View.OnTouchListener, WinEventListener {
+public class MainActivity extends AppCompatActivity implements ListView.OnItemClickListener, NextLevelDialogFragment.NextLevelDialogListener {
 
-    private DrawViewGame drawViewGame;
-    private TraceGame traceGame;
     private DrawerLayout drawerLayout;
     private ListView drawerList;
     private ActionBarDrawerToggle drawerToggle;
-    private Toolbar myToolbar;
 
-    public static MainActivity mainActivity;
-
+    private GameController gameController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mainActivity = this;
-
-        myToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(myToolbar);
 
         //LevelDatabaseOperations levelDatabaseOperations = new LevelDatabaseOperations(this);
@@ -68,16 +58,15 @@ public class MainActivity extends AppCompatActivity
 
         android.graphics.Point size = new android.graphics.Point();
         getWindowManager().getDefaultDisplay().getSize(size);
-
         int actionBarHeight = (int) getApplicationContext().getTheme().obtainStyledAttributes(new int[]{android.R.attr.actionBarSize}).getDimension(0, 0);
 
-        traceGame = new TraceGame(size, actionBarHeight, 0);
-        traceGame.setWinEventListener(this);
+        TraceGame traceGame = new TraceGame(size, actionBarHeight, 0);
+        DrawViewGame drawViewGame = (DrawViewGame) findViewById(R.id.draw_view);
+        gameController = new GameController(this, traceGame, drawViewGame);
 
-        drawViewGame = (DrawViewGame) findViewById(R.id.draw_view);
         drawViewGame.addModel(traceGame);
-
-        drawViewGame.setOnTouchListener(this);
+        drawViewGame.setOnTouchListener(gameController);
+        traceGame.setWinEventListener(gameController);
     }
 
     @Override
@@ -110,16 +99,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onWin(WinEvent winEvent) {
-        launchNextLevelDialog();
-    }
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        return traceGame.onTouch(v, event);
-    }
-
-    @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
@@ -130,27 +109,14 @@ public class MainActivity extends AppCompatActivity
         return super.onPrepareOptionsMenu(menu);
     }
 
-    //clicks next level
-    public void onDialogNextLevelClick(DialogFragment dialogFragment) {
-        traceGame.incrementCurrentLevel();
-    }
-
-    //clicks retry level
-    public void onDialogRetryClick(DialogFragment dialogFragment) {
-
-    }
-
-    public void launchNextLevelDialog() {
-        DialogFragment newFragment = new NextLevelDialogFragment();
-        newFragment.show(getFragmentManager(), "next_level");
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        drawerToggle.syncState();
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-        //traceGame.setCurrentLevel(position);
-
-        Log.d("DOM", "Position: " + position + ", ID: " + id);
 
         switch (position) {
             case 0:
@@ -168,13 +134,12 @@ public class MainActivity extends AppCompatActivity
             drawerLayout.openDrawer(drawerList);
     }
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        drawerToggle.syncState();
+    public void onDialogNextLevelClick(DialogFragment dialogFragment) {
+        gameController.nextLevelSelected();
     }
 
-    public void displayToast(String s) {
-        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+    public void onDialogRetryClick(DialogFragment dialogFragment) {
+
     }
+
 }

@@ -68,6 +68,11 @@ public class TraceGame extends Trace {
         }
     }
 
+    /**
+     * Updates the last line of trace, and appends the remaining lines  to trace.
+     * @param startPoint the start of the new line
+     * @param lines a sort list of lines where the first point of lines[0] matches startpoint
+     */
     private void addLinesToTrace(Point startPoint, List<Line> lines) {
         trace.set(trace.size() - 1, lines.get(0));
         for (Line line : lines)
@@ -112,6 +117,12 @@ public class TraceGame extends Trace {
         this.trace = trace;
     }
 
+    /**
+     * Checks a map of line keys, for the given line and return output. First checks that the line
+     * has 2 valid points
+     * @param line the line to check for
+     * @return a set of lines that make up the given line, or null if the line doesn't exist
+     */
     private ArrayList<Line> isLineInShape(Line line) {
         return (line.getP1() == null || line.getP2() == null) ? null : hashMap.get(line);
     }

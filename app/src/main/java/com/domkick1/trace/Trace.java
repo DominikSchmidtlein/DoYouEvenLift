@@ -64,10 +64,21 @@ public abstract class Trace extends Observable {
         return null;
     }
 
+    /**
+     * Replaces point 2 of the last line in the given array with the given point.
+     * @param point the new point
+     * @param lines the set of lines where the last line's second point is replaced
+     */
     protected void replaceLastPoint(Point point, ArrayList<Line> lines){
         lines.set(lines.size()-1, new Line(lines.get(lines.size()-1).getP1(), point));
     }
 
+    /**
+     * Checks if a line is in an array of lines, regardless of order of points.
+     * @param set list of lines
+     * @param line line to be searched for
+     * @return true of set contains line as forwards or backwards
+     */
     protected boolean isLineInSet(ArrayList<Line> set, Line line){
         for(Line l: set)
             if(l.equals(line) || l.getOpposite().equals(line))
