@@ -48,7 +48,7 @@ public class TraceGame extends Trace {
                     trace.add(new Line(nearPoint, touchPoint));
                 return nearPoint != null;
             case MotionEvent.ACTION_MOVE:
-                if(nearPoint != null) {
+                if (nearPoint != null) {
                     Point startPoint = new Point(trace.get(trace.size() - 1).getP1());
                     ArrayList<Line> componentLines = isLineInShape(new Line(startPoint, nearPoint));
                     if (componentLines != null && !isOccupied(componentLines)) {
@@ -60,7 +60,7 @@ public class TraceGame extends Trace {
                 replaceLastPoint(touchPoint, trace);
                 return true;
             default:
-                trace.remove(trace.size()-1);
+                trace.remove(trace.size() - 1);
                 if (win())
                     notifyWinEventListeners();
                 trace.clear();
@@ -70,8 +70,9 @@ public class TraceGame extends Trace {
 
     /**
      * Updates the last line of trace, and appends the remaining lines  to trace.
+     *
      * @param startPoint the start of the new line
-     * @param lines a sort list of lines where the first point of lines[0] matches startpoint
+     * @param lines      a sort list of lines where the first point of lines[0] matches startpoint
      */
     private void addLinesToTrace(Point startPoint, List<Line> lines) {
         trace.set(trace.size() - 1, lines.get(0));
@@ -80,12 +81,12 @@ public class TraceGame extends Trace {
                 trace.add(line);
     }
 
-    public void setWinEventListener(WinEventListener eventListener){
+    public void setWinEventListener(WinEventListener eventListener) {
         winEventListeners.add(eventListener);
     }
 
-    private void notifyWinEventListeners(){
-        for(WinEventListener listener : winEventListeners)
+    private void notifyWinEventListeners() {
+        for (WinEventListener listener : winEventListeners)
             listener.onWin(new WinEvent(this));
     }
 
@@ -100,7 +101,7 @@ public class TraceGame extends Trace {
     public boolean incrementCurrentLevel() {
         if (currentLevel >= levelHelper.getLevelCount() - 1)
             return false;
-        currentLevel ++;
+        currentLevel++;
         setupLevel();
         return true;
     }
@@ -120,6 +121,7 @@ public class TraceGame extends Trace {
     /**
      * Checks a map of line keys, for the given line and return output. First checks that the line
      * has 2 valid points
+     *
      * @param line the line to check for
      * @return a set of lines that make up the given line, or null if the line doesn't exist
      */
@@ -162,9 +164,7 @@ public class TraceGame extends Trace {
      */
     private HashMap<Line, ArrayList<Line>> generateMap() {
         HashMap<Line, ArrayList<Line>> map = addShapeToMap();
-        Log.d("Trace", "Done add shape");
         addCompoundLinesToMap(map);
-        Log.d("Trace", "Done add compound");
         return map;
     }
 
@@ -236,8 +236,8 @@ public class TraceGame extends Trace {
         Line compoundLine1 = new Line(l1.getP2(), l2.getP2());
         Line compoundLine2 = new Line(l2.getP2(), l1.getP2());
 
-        ArrayList<Line> components1 = new ArrayList<Line>();
-        ArrayList<Line> components2 = new ArrayList<Line>();
+        ArrayList<Line> components1 = new ArrayList<>();
+        ArrayList<Line> components2 = new ArrayList<>();
 
         components1.addAll(map.get(l1.getOpposite()));
         components1.addAll(map.get(l2));

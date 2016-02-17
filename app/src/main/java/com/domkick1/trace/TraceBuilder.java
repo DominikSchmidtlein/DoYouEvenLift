@@ -84,6 +84,7 @@ public class TraceBuilder extends Trace {
 
         for (int i = 0; i < intersectingPoints.size() - 1; i++)
             simpleLines.add(new Line(intersectingPoints.get(i), intersectingPoints.get(i + 1)));
+
         return simpleLines;
     }
 
@@ -123,6 +124,7 @@ public class TraceBuilder extends Trace {
     private void updateShapeLegality(){
         problemPoints = isShapeLegal();
     }
+
 
     private ArrayList<Point> isShapeLegal() {
         ArrayList<Point> problemPoints = new ArrayList<>(shape.size());

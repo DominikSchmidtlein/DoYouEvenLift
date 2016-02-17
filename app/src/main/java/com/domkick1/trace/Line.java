@@ -8,13 +8,13 @@ import java.util.Iterator;
 /**
  * Created by dominik on 05/08/15.
  */
-public class Line implements Collection<Point> {
+public class Line implements Iterable<Point> {
 
     private Point p1;
     private Point p2;
     private float slope;
 
-    public Line(Point p1, Point p2) {
+    public Line(@NonNull Point p1, @NonNull Point p2) {
         this.p1 = p1;
         this.p2 = p2;
         slope = getSlope();
@@ -51,62 +51,8 @@ public class Line implements Collection<Point> {
         };
     }
 
-    @Override
-    public boolean remove(Object object) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean removeAll(Collection<?> collection) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean retainAll(Collection<?> collection) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public int size() {
-        if (isEmpty())
-            return 0;
-        return (p1 == null || p2 == null) ? 1 : 2;
-    }
-
-    @NonNull
-    @Override
-    public Object[] toArray() {
-        return new Object[0];
-    }
-
-    @NonNull
-    @Override
-    public <T> T[] toArray(T[] array) {
-        return null;
-    }
-
-    @Override
-    public boolean add(Point object) {
-        return false;
-    }
-
-    @Override
-    public boolean addAll(Collection<? extends Point> collection) {
-        return false;
-    }
-
-    @Override
-    public void clear() {
-        throw new UnsupportedOperationException();
-    }
-
     public boolean contains(Object obj) {
         return p1.equals(obj) || p2.equals(obj);
-    }
-
-    @Override
-    public boolean containsAll(Collection<?> collection) {
-        throw new UnsupportedOperationException();
     }
 
     public double getIsometricSlope(double xOffset, double yOffset, double columnWidth, double rowHeight) {
@@ -143,11 +89,6 @@ public class Line implements Collection<Point> {
         return Math.round(p1.getX() * p1.getY() * p2.getX() * p2.getY() / 1000000 - 2147483647);
     }
 
-    @Override
-    public boolean isEmpty() {
-        return p1 == null && p2 == null;
-    }
-
     public Line getOpposite() {
         return new Line(p2, p1);
     }
@@ -166,7 +107,7 @@ public class Line implements Collection<Point> {
 
 
     public boolean intersects(Point point) {
-        if(!squareContains(point))
+        if (!squareContains(point))
             return false;
         if (slope == Float.POSITIVE_INFINITY)
             return p1.getX() == point.getX();
