@@ -18,10 +18,10 @@ public class TraceBuilder extends Trace {
     private ArrayList<Point> problemPoints;
 
 
-    public TraceBuilder(android.graphics.Point screenSize, int actionBarHeight, Mode mode) {
-        super(screenSize, actionBarHeight);
+    public TraceBuilder(LevelHelper levelHelper, android.graphics.Point screenSize, int actionBarHeight, Mode mode) {
+        super(levelHelper, screenSize, actionBarHeight);
         this.mode = mode;
-        points = Levels.getGridAsPoints(mode, screenSize.x, screenSize.y, actionBarHeight);
+        points = levelHelper.getGridAsPoints(mode, screenSize.x, screenSize.y, actionBarHeight);
         shape = new ArrayList<>(50);
     }
 
@@ -131,6 +131,13 @@ public class TraceBuilder extends Trace {
                 if (!problemPoints.remove(point))
                     problemPoints.add(point);
         return (problemPoints.size() == 2 || problemPoints.isEmpty()) ? null : problemPoints;
+    }
+
+    public boolean addLevel(){
+        if(getProblemPoints() != null)
+            return false;
+        levelHelper.addLevelToShapes(shape);
+        return true;
     }
 
     public ArrayList<Point> getPoints() {

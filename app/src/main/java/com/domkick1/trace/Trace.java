@@ -16,10 +16,13 @@ public abstract class Trace extends Observable {
 
     public static final int RADIUS = 80;
 
+    protected LevelHelper levelHelper;
+
     protected android.graphics.Point size;
     protected int actionBarHeight;
 
-    public Trace(android.graphics.Point screenSize, int actionBarHeight){
+    public Trace(LevelHelper levelHelper, android.graphics.Point screenSize, int actionBarHeight){
+        this.levelHelper = levelHelper;
         this.size = screenSize;
         this.actionBarHeight = actionBarHeight;
     }

@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.logging.Level;
 
 /**
  * Created by dominikschmidtlein on 10/21/2015.
@@ -16,7 +17,6 @@ import java.util.Queue;
 public class TraceGame extends Trace {
     public static final int RADIUS = 80;
     public static final String NAME = "TraceGame";
-
 
     private HashMap<Line, ArrayList<Line>> hashMap;
     private ArrayList<Line> shape;
@@ -26,8 +26,8 @@ public class TraceGame extends Trace {
 
     private int currentLevel;
 
-    public TraceGame(android.graphics.Point screenSize, int actionBarHeight, int level) {
-        super(screenSize, actionBarHeight);
+    public TraceGame(LevelHelper levelHelper, android.graphics.Point screenSize, int actionBarHeight, int level) {
+        super(levelHelper, screenSize, actionBarHeight);
         winEventListeners = new ArrayList<>(2);
         this.currentLevel = level;
         setupLevel();
@@ -98,7 +98,7 @@ public class TraceGame extends Trace {
     }
 
     public boolean incrementCurrentLevel() {
-        if (currentLevel >= Levels.LEVELS.length - 1)
+        if (currentLevel >= levelHelper.getLevelCount() - 1)
             return false;
         currentLevel ++;
         setupLevel();
@@ -106,7 +106,7 @@ public class TraceGame extends Trace {
     }
 
     private void setupLevel() {
-        shape = Levels.getLevelAsLines(currentLevel, size.x, size.y, actionBarHeight);
+        shape = levelHelper.getLevelAsLines(currentLevel, size.x, size.y, actionBarHeight);
         trace = new ArrayList<>(shape.size());
         hashMap = generateMap();
         setChanged();

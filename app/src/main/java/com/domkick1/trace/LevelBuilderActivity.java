@@ -26,8 +26,9 @@ public class LevelBuilderActivity extends AppCompatActivity implements View.OnTo
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Shape legality: " + (traceBuilder.getProblemPoints() == null), Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                if (!traceBuilder.addLevel())
+                    Snackbar.make(view, "Cannot add illegal shape", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
             }
         });
         fabListener = new FabListener();
@@ -39,7 +40,7 @@ public class LevelBuilderActivity extends AppCompatActivity implements View.OnTo
 
         int actionBarHeight = (int) getApplicationContext().getTheme().obtainStyledAttributes(new int[]{android.R.attr.actionBarSize}).getDimension(0, 0);
 
-        traceBuilder = new TraceBuilder(size, actionBarHeight, TraceBuilder.Mode.ISOMETRIC);
+        traceBuilder = new TraceBuilder(new LevelHelper(this), size, actionBarHeight, TraceBuilder.Mode.ISOMETRIC);
 
         DrawViewLevelBuilder drawViewLevelBuilder = (DrawViewLevelBuilder) findViewById(R.id.level_builder_draw_view);
         drawViewLevelBuilder.addModel(traceBuilder);

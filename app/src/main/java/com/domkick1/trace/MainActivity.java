@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements ListView.OnItemCl
         getWindowManager().getDefaultDisplay().getSize(size);
         int actionBarHeight = (int) getApplicationContext().getTheme().obtainStyledAttributes(new int[]{android.R.attr.actionBarSize}).getDimension(0, 0);
 
-        TraceGame traceGame = new TraceGame(size, actionBarHeight, 0);
+        TraceGame traceGame = new TraceGame(new LevelHelper(this), size, actionBarHeight, 0);
         DrawViewGame drawViewGame = (DrawViewGame) findViewById(R.id.draw_view);
         gameController = new GameController(this, traceGame, drawViewGame);
 
