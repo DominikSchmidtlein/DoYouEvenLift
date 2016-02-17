@@ -17,7 +17,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -45,13 +44,21 @@ public class LevelHelper {
 
     public void addLevelToShapes(ArrayList<Line> level) {
 
-        JSONArray levelAsJson = new JSONArray(Arrays.asList(linesAsFloats(level)));
+        float[] lines = linesAsFloats(level);
+        JSONArray levelAsJson = new JSONArray();
+
+        Log.d("DOM", levelAsJson.toString());
 
         try {
+            for(int i = 0; i < lines.length; i ++)
+                levelAsJson.put(lines[i]);
+
             JSONObject jsonData = getJsonFromFile(shapeFile);
             JSONArray levelArray = jsonData.getJSONArray("levels");
             levelArray.put(levelAsJson);
-            writeJsonToFile(levelArray.toString());
+            jsonData = new JSONObject();
+            jsonData.put("levels", levelArray);
+            writeJsonToFile(jsonData.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -82,7 +89,7 @@ public class LevelHelper {
     private float[] getIsometricPoints() {
         try {
             JSONObject jsonFromFile = getJsonFromFile(pointsFile);
-            JSONArray isometricPoints = jsonFromFile.getJSONObject("points").getJSONArray("isometric");
+            JSONArray isometricPoints = jsonFromFile.getJSONArray("isometric");
             return jsonToArray(isometricPoints);
         } catch (Exception e) {
             e.printStackTrace();
@@ -93,7 +100,7 @@ public class LevelHelper {
     private float[] getSquarePoints() {
         try {
             JSONObject jsonFromFile = getJsonFromFile(pointsFile);
-            JSONArray squarePoints = jsonFromFile.getJSONObject("points").getJSONArray("square");
+            JSONArray squarePoints = jsonFromFile.getJSONArray("square");
             return jsonToArray(squarePoints);
         } catch (Exception e) {
             e.printStackTrace();
@@ -160,6 +167,7 @@ public class LevelHelper {
     }
 
     private void writeJsonToFile(String jsonString) {
+        Log.d("DOM", jsonString);
         try {
             Log.d("DOM", Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) + "");
 
