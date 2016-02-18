@@ -32,8 +32,6 @@ public class MainActivity extends AppCompatActivity implements ListView.OnItemCl
         Toolbar myToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(myToolbar);
 
-        //LevelDatabaseOperations levelDatabaseOperations = new LevelDatabaseOperations(this);
-
         drawerLayout = (DrawerLayout) findViewById(R.id.main_layout);
         drawerList = (ListView) findViewById(R.id.left_drawer);
         drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, new String[]{"Play", "Level Builder"}));
@@ -60,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements ListView.OnItemCl
         getWindowManager().getDefaultDisplay().getSize(size);
         int actionBarHeight = (int) getApplicationContext().getTheme().obtainStyledAttributes(new int[]{android.R.attr.actionBarSize}).getDimension(0, 0);
 
-        TraceGame traceGame = new TraceGame(new LevelHelper(this), size, actionBarHeight, 0);
+        TraceGame traceGame = new TraceGame(this, size, actionBarHeight, 0);
         DrawViewGame drawViewGame = (DrawViewGame) findViewById(R.id.draw_view);
         gameController = new GameController(this, traceGame, drawViewGame);
 

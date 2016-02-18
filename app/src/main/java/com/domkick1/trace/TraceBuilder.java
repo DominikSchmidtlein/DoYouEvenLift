@@ -1,10 +1,10 @@
 package com.domkick1.trace;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -12,20 +12,42 @@ import java.util.ArrayList;
  */
 public class TraceBuilder extends Trace {
 
+    private TraceBuilderJsonHelper builderJsonHelper;
+
+    private static final int RADIUS_DOWN = 80;
+    private static final int RADIUS_MOVE = 40;
+
     private Mode mode;
-    private ArrayList<Point> points;
-    private ArrayList<Line> shape;
-    private ArrayList<Point> problemPoints;
+    private PointList points;
+    private LineList shape;
+    private PointList problemPoints;
 
 
-    public TraceBuilder(LevelHelper levelHelper, android.graphics.Point screenSize, int actionBarHeight, Mode mode) {
-        super(levelHelper, screenSize, actionBarHeight);
+    public TraceBuilder(Context context, android.graphics.Point screenSize, int actionBarHeight, Mode mode) {
+        super(context, screenSize, actionBarHeight);
         this.mode = mode;
-        points = levelHelper.getGridAsPoints(mode, screenSize.x, screenSize.y, actionBarHeight);
-        shape = new ArrayList<>(50);
+        builderJsonHelper = new TraceBuilderJsonHelper(context);
+
+        points = builderJsonHelper.getGridAsPoints(mode, screenSize.x, screenSize.y, actionBarHeight);
+        shape = new LineList(50);
+        problemPoints = new PointList();
     }
 
-    public enum Mode {SQUARE, ISOMETRIC}
+    public enum Mode {
+        SQUARE("square"),
+        ISOMETRIC("isometric");
+
+        private String value;
+
+        Mode(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return value;
+        }
+    }
 
 
     /**
@@ -44,19 +66,17 @@ public class TraceBuilder extends Trace {
         Point touchPoint = new Point(event.getX(), event.getY());
         Point nearPoint;
 
-        problemPoints = null;
-
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-
-                nearPoint = shape.isEmpty() ? isNearVertexInPoints(touchPoint, points, RADIUS)
-                        : isNearVertexInLines(touchPoint, shape, RADIUS);
+                nearPoint = shape.isEmpty() ? points.isNearVertex(touchPoint, RADIUS_DOWN)
+                        : shape.isNearVertex(touchPoint, RADIUS_DOWN);
                 if (nearPoint != null)
                     shape.add(new Line(nearPoint, touchPoint));
                 return nearPoint != null;
 
             case MotionEvent.ACTION_MOVE:
-                nearPoint = isNearVertexInPoints(touchPoint, points, RADIUS);
+                nearPoint = points.isNearVertex(touchPoint, RADIUS_MOVE);
+                problemPoints.clear();
                 if (nearPoint != null) {
                     if (!shape.get(shape.size() - 1).getP1().equals(nearPoint)) {
                         Line newLine = new Line(shape.get(shape.size() - 1).getP1(), nearPoint);
@@ -67,79 +87,40 @@ public class TraceBuilder extends Trace {
                         return true;
                     }
                 }
-                replaceLastPoint(touchPoint, shape);
+                shape.replaceLastPoint(touchPoint);
                 return true;
             default:
                 shape.remove(shape.size() - 1);
                 updateShapeLegality();
                 return false;
-
         }
     }
 
-    protected ArrayList<Line> getSimpleLines(Line line) {
-        ArrayList<Point> intersectingPoints = getIntersectingPoints(line);
-        sortPoints(intersectingPoints, line);
-        ArrayList<Line> simpleLines = new ArrayList<>(intersectingPoints.size() - 1);
-
-        for (int i = 0; i < intersectingPoints.size() - 1; i++)
-            simpleLines.add(new Line(intersectingPoints.get(i), intersectingPoints.get(i + 1)));
-
-        return simpleLines;
-    }
-
-    protected ArrayList<Point> getIntersectingPoints(Line line) {
-        ArrayList<Point> intersectingPoints = new ArrayList<>();
-        for (Point point : points)
-            if (line.intersects(point))
-                intersectingPoints.add(point);
-        return intersectingPoints;
-    }
-
-    protected void sortPoints(ArrayList<Point> points, Line line) {
-        boolean swapped;
-        do {
-            swapped = false;
-            for (int i = 1; i < points.size(); i++) {
-                if (line.getP1().getDistance(points.get(i - 1)) > line.getP1().getDistance(points.get(i))) {
-                    swap(i - 1, i, points);
-                    swapped = true;
-                }
-            }
-        } while (swapped);
-        if (!line.getP2().equals(points.get(points.size() - 1)))
-            throw new UnsupportedOperationException();
-    }
-
-    protected void swap(int i1, int i2, ArrayList<Point> points) {
-        Point temp = points.get(i1);
-        points.set(i1, points.get(i2));
-        points.set(i2, temp);
+    private LineList getSimpleLines(Line line) {
+        PointList intersectingPoints = points.getPointsOnLine(line);
+        intersectingPoints.sortDistanceToPoint(line.getP1());
+        return new LineList(intersectingPoints, true);
     }
 
     private void cleanShape() {
-        shape = removeDuplicates(shape);
+        shape = shape.getWithoutDuplicates();
     }
 
-    private void updateShapeLegality(){
-        problemPoints = isShapeLegal();
+    private void updateShapeLegality() {
+        problemPoints = shape.getOddlyOccurringPoints();
+        if (problemPoints.size() == 2)
+            problemPoints.clear();
     }
 
-
-    private ArrayList<Point> isShapeLegal() {
-        ArrayList<Point> problemPoints = new ArrayList<>(shape.size());
-        for (Line line : shape)
-            for (Point point : line)
-                if (!problemPoints.remove(point))
-                    problemPoints.add(point);
-        return (problemPoints.size() == 2 || problemPoints.isEmpty()) ? null : problemPoints;
-    }
-
-    public boolean addLevel(){
-        if(getProblemPoints() != null)
+    public boolean generateNewJsonFile() {
+        if (!getProblemPoints().isEmpty())
             return false;
-        levelHelper.addLevelToShapes(shape);
+        logLevel(shape);
         return true;
+    }
+
+    public void resetLevelsToJsonFile() {
+        builderJsonHelper.loadLevelsFromAssets();
     }
 
     public ArrayList<Point> getPoints() {
@@ -152,5 +133,9 @@ public class TraceBuilder extends Trace {
 
     public ArrayList<Point> getProblemPoints() {
         return problemPoints;
+    }
+
+    private void logLevel(LineList level) {
+        Log.d("DOM", level.toJsonArray().toString());
     }
 }

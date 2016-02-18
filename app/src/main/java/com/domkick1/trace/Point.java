@@ -12,7 +12,7 @@ public class Point {
         this.y = y;
     }
 
-    public Point(Point point){
+    public Point(Point point) {
         this.x = point.x;
         this.y = point.y;
     }
@@ -25,14 +25,15 @@ public class Point {
         return p.getX() == this.getX() && p.getY() == this.getY();
     }
 
-    public double getDistance(Point p2){
+    public double getDistance(Point p2) {
         return Math.sqrt(Math.pow(this.getX() - p2.getX(), 2) + Math.pow(this.getY() - p2.getY(), 2));
     }
 
-    public float getX(){
+    public float getX() {
         return this.x;
     }
-    public float getY(){
+
+    public float getY() {
         return this.y;
     }
 }

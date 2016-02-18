@@ -14,4 +14,5 @@
     <string name="title_activity_instructions">How to Play</string>
     <string name="title_activity_level_builder">Trace Level Builder</string>
     <string name="action_level_builder">Level Builder</string>
+    <string name="reset_levels">Reset Levels</string>
 </resources>

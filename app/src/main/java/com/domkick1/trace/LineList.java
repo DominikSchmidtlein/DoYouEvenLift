@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
@@ -21,6 +22,10 @@ public class LineList extends ArrayList<Line> {
         super(size);
     }
 
+    public LineList(Collection<Line> collection) {
+        super(collection);
+    }
+
     public LineList(float[] floats) {
         super(floats.length / 4);
         for (int i = 0; i < floats.length; i += 4)
@@ -28,14 +33,19 @@ public class LineList extends ArrayList<Line> {
     }
 
     /**
-     * Creates a list of lines out of points where each line is 2 adjacent points according to the
-     * pointlist's order.
+     * Creates a list of lines from a list of points. If usePointsTwice is true, then the end of one
+     * line will be used as the start of the next. Otherwise, the lines will be created from pairs
+     * of separate points. Therefore if usePointsTwice is true the new lines will be (a,b), (b,c),
+     * (c,d)... However if usePointsTwice is false, the new lines will be (a,b), (c,d), (e,f)...
      *
-     * @param points a list of points
+     * @param points         a list of points
+     * @param usePointsTwice if true, successive lines include same points, else not
      */
-    public LineList(PointList points) {
-        super(points.size() - 1);
-        for (int i = 0; i < points.size() - 1; i++)
+    public LineList(PointList points, boolean usePointsTwice) {
+        super(usePointsTwice ? points.size() - 1 : points.size() / 2);
+        int increment = usePointsTwice ? 1 : 2;
+
+        for (int i = 0; i < points.size() - 1; i += increment)
             add(new Line(points.get(i), points.get(i + 1)));
     }
 

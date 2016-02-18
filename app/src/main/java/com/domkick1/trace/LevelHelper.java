@@ -11,13 +11,11 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
 
 /**
  * Created by domin_2o9sb4z on 2016-02-16.
@@ -41,109 +39,30 @@ public class LevelHelper {
         }
     }
 
-    public void addLevelToShapes(ArrayList<Line> level) {
-
-        float[] lines = linesAsFloats(level);
-        JSONArray levelAsJson = new JSONArray();
-
-        Log.d("DOM", levelAsJson.toString());
-
-        try {
-            for(int i = 0; i < lines.length; i ++)
-                levelAsJson.put(lines[i]);
-
-            JSONObject jsonData = getJsonFromFile(shapeFile);
-            JSONArray levelArray = jsonData.getJSONArray("levels");
-            levelArray.put(levelAsJson);
-            jsonData = new JSONObject();
-            jsonData.put("levels", levelArray);
-            writeJsonToFile(jsonData.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public LineList getLevelAsLines(int level, int width, int height, int topOffset) {
+        return new LineList(
+                new PointList(getLevelFromFile(level)).getCenteredPoints(width, height, topOffset),
+                false);
     }
 
-    public ArrayList<Line> getLevelAsLines(int level, int width, int height, int topOffset) {
-        float[] centeredLines = centerPoints(getLevelFromFile(level), width, height, topOffset);
-
-        ArrayList<Line> lines = new ArrayList<>(centeredLines.length / 4);
-        for (int i = 0; i < centeredLines.length; i += 4)
-            lines.add(new Line(centeredLines[i], centeredLines[i + 1], centeredLines[i + 2], centeredLines[i + 3]));
-        return lines;
+    public PointList getGridAsPoints(TraceBuilder.Mode mode, int width, int height, int topOffset) {
+        return new PointList(getGridByMode(mode)).getCenteredPoints(width, height, topOffset);
     }
 
-    public ArrayList<Point> getGridAsPoints(TraceBuilder.Mode mode, int width, int height, int topOffset) {
-        float[] centeredPoints = centerPoints(getGridByMode(mode), width, height, topOffset);
-
-        ArrayList<Point> points = new ArrayList<>(centeredPoints.length / 2);
-        for (int i = 0; i < centeredPoints.length; i += 2)
-            points.add(new Point(centeredPoints[i], centeredPoints[i + 1]));
-        return points;
-    }
-
-    private float[] getGridByMode(TraceBuilder.Mode mode) {
-        return (mode == TraceBuilder.Mode.ISOMETRIC) ? getIsometricPoints() : getSquarePoints();
-    }
-
-    private float[] getIsometricPoints() {
+    private JSONArray getGridByMode(TraceBuilder.Mode mode) {
         try {
             JSONObject jsonFromFile = getJsonFromFile(pointsFile);
-            JSONArray isometricPoints = jsonFromFile.getJSONArray("isometric");
-            return jsonToArray(isometricPoints);
+            return jsonFromFile.getJSONArray(mode.toString());
         } catch (Exception e) {
             e.printStackTrace();
             throw new UnsupportedOperationException();
         }
     }
 
-    private float[] getSquarePoints() {
+    private JSONArray getLevelFromFile(int level) {
         try {
-            JSONObject jsonFromFile = getJsonFromFile(pointsFile);
-            JSONArray squarePoints = jsonFromFile.getJSONArray("square");
-            return jsonToArray(squarePoints);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new UnsupportedOperationException();
-        }
-    }
-
-    private float[] centerPoints(float[] points, int width, int height, int topOffset) {
-        float left = width;
-        float top = height;
-        float right = 0;
-        float bot = 0;
-
-        for (int i = 0; i < points.length; i += 2) {
-            left = (points[i] < left) ? points[i] : left;
-            right = (points[i] > right) ? points[i] : right;
-            top = (points[i + 1] < top) ? points[i + 1] : top;
-            bot = (points[i + 1] > bot) ? points[i + 1] : bot;
-        }
-
-        float x = (width - right - left) / 2;
-        float y = (height - topOffset - top - bot) / 2;
-
-        float[] centeredPoints = new float[points.length];
-        for (int i = 0; i < points.length; i += 2) {
-            centeredPoints[i] = points[i] + x;
-            centeredPoints[i + 1] = points[i + 1] + y;
-        }
-        return centeredPoints;
-    }
-
-    private float[] jsonToArray(JSONArray jsonArray) throws JSONException {
-        float[] floats = new float[jsonArray.length()];
-        for (int i = 0; i < jsonArray.length(); i++)
-            floats[i] = jsonArray.getInt(i);
-        return floats;
-    }
-
-    private float[] getLevelFromFile(int level) {
-        JSONObject jsonObject = getJsonFromFile(shapeFile);
-        try {
-            JSONArray jsonLevels = jsonObject.getJSONArray("levels");
-            JSONArray jsonLevel = jsonLevels.getJSONArray(level);
-            return jsonToArray(jsonLevel);
+            JSONObject jsonObject = getJsonFromFile(shapeFile);
+            return jsonObject.getJSONArray("levels").getJSONArray(level);
         } catch (Exception e) {
             e.printStackTrace();
             throw new UnsupportedOperationException();
@@ -154,7 +73,6 @@ public class LevelHelper {
         try {
             AssetManager assetManager = context.getAssets();
             InputStream file = assetManager.open(filename);
-
             byte[] data = new byte[file.available()];
             file.read(data);
             file.close();
@@ -194,16 +112,18 @@ public class LevelHelper {
         }
     }
 
-    protected float[] linesAsFloats(ArrayList<Line> lines) {
-        float[] floats = new float[lines.size() * 4];
-        int i = 0;
-        for (Line line : lines) {
-            floats[i] = line.getP1().getX();
-            floats[i + 1] = line.getP1().getY();
-            floats[i + 2] = line.getP2().getX();
-            floats[i + 3] = line.getP2().getY();
-            i += 4;
+    public void extendAndStoreShapesJson(LineList level) {
+        JSONArray newLevel = level.toJsonArray();
+        try {
+            JSONObject jsonData = getJsonFromFile(shapeFile);
+            JSONArray levelArray = jsonData.getJSONArray("levels");
+            levelArray.put(newLevel);
+            jsonData = new JSONObject();
+            jsonData.put("levels", levelArray);
+            writeJsonToFile(jsonData.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return floats;
     }
+
 }

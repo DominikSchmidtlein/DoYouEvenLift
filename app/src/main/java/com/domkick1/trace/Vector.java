@@ -9,34 +9,34 @@ public class Vector {
     private double x;
     private double y;
 
-    public Vector(double x, double y){
+    public Vector(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    public Vector(Point startPoint, Point endPoint){
+    public Vector(Point startPoint, Point endPoint) {
         this(endPoint.getX() - startPoint.getX(), endPoint.getY() - startPoint.getY());
     }
 
-    public Vector(Line line){
+    public Vector(Line line) {
         this(line.getP1(), line.getP2());
     }
 
-    public Vector getInverse(){
+    public Vector getInverse() {
         return new Vector(x * -1, y * -1);
     }
 
     @Override
     public boolean equals(Object o) {
-        if(!(o instanceof Vector))
+        if (!(o instanceof Vector))
             return false;
         Vector v = (Vector) o;
         return (Math.abs(this.x - v.getX()) < EPSILON) && (Math.abs(this.y - v.getY()) < EPSILON);
     }
 
-    public Vector getUnitVector(){
-        double hypotenuse = Math.hypot(this.x,this.y);
-        return new Vector(this.x/hypotenuse, this.y/hypotenuse);
+    public Vector getUnitVector() {
+        double hypotenuse = Math.hypot(this.x, this.y);
+        return new Vector(this.x / hypotenuse, this.y / hypotenuse);
     }
 
     public double getX() {
@@ -45,13 +45,5 @@ public class Vector {
 
     public double getY() {
         return y;
-    }
-
-    public void setX(double x) {
-        this.x = x;
-    }
-
-    public void setY(double y) {
-        this.y = y;
     }
 }
