@@ -66,6 +66,12 @@ public class Line implements Iterable<Point> {
         return rise / isometricRun;
     }
 
+    /**
+     * If lines have any points in common, the common point is returned.
+     *
+     * @param line a line that may have points in common with this
+     * @return a common point or null if none exist
+     */
     public Point isTouching(Line line) {
         if (line == null)
             return null;
@@ -105,16 +111,21 @@ public class Line implements Iterable<Point> {
         return rise / run;
     }
 
-
+    /**
+     * Returns true if a point lies on the line, else false. Endpoints return true.
+     *
+     * @param point a point that may lie on the line
+     * @return true if the point is on the line
+     */
     public boolean intersects(Point point) {
         if (!squareContains(point))
             return false;
         if (slope == Float.POSITIVE_INFINITY)
             return p1.getX() == point.getX();
-        return Math.abs((point.getY() - slope * point.getX() - getYIntercept())) < 0.1;
+        return Math.abs((point.getY() - slope * point.getX() - getYIntercept())) < 0.0000000000001;
     }
 
-    private boolean squareContains(Point point) {
+    public boolean squareContains(Point point) {
         return !(point.getX() < p1.getX() && point.getX() < p2.getX()) &&
                 !(point.getX() > p1.getX() && point.getX() > p2.getX()) &&
                 !(point.getY() < p1.getY() && point.getY() < p2.getY()) &&

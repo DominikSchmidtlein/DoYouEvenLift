@@ -110,10 +110,7 @@ public class LineList extends ArrayList<Line> {
      * @return true of set contains line as forwards or backwards
      */
     public boolean aDirectionalContains(Line line) {
-        for (Line l : this)
-            if (l.equals(line) || l.getOpposite().equals(line))
-                return true;
-        return false;
+        return contains(line) || contains(line.getOpposite());
     }
 
     /**
@@ -127,7 +124,7 @@ public class LineList extends ArrayList<Line> {
         for (ListIterator<Line> i = listIterator(); i.hasNext(); ) {
             Line line = i.next();
             i.remove();
-            if (!contains(line.getOpposite()) && !contains(line))
+            if (!aDirectionalContains(line))
                 noDuplicateLines.add(line);
             i.add(line);
         }
@@ -151,14 +148,12 @@ public class LineList extends ArrayList<Line> {
     /**
      * Updates the last line of trace, and appends the remaining lines  to trace.
      *
-     * @param startPoint the start of the new line
-     * @param lines      a sorted list of lines where the first point of lines[0] matches startpoint
+     * @param lines a sorted list of lines where the first point of lines[0] matches startpoint
      */
-    public void addLines(Point startPoint, LineList lines) {
+    public void addLines(LineList lines) {
         set(size() - 1, lines.get(0));
-        for (Line line : lines)
-            if (!line.contains(startPoint))
-                add(line);
+        for (int i = 1; i < lines.size(); i++)
+            add(lines.get(i));
     }
 
     /**
@@ -169,32 +164,11 @@ public class LineList extends ArrayList<Line> {
      * @return true if there is overlap, false otherwise
      */
     public boolean isOccupied(LineList componentLines) {
+        if (componentLines == null)
+            return false;
         for (Line l : componentLines)
             if (aDirectionalContains(l))
                 return true;
         return false;
     }
-
-    /**
-     * Adds all the lines from this to the map, forwards and backwards, and sets the line itself as
-     * its only component.
-     *
-     * @return a map containing all simple lines and their 1 component
-     */
-    private HashMap<Line, LineList> getMapOfLines() {
-        HashMap<Line, LineList> map = new HashMap<>();
-        LineList components;
-
-        for (Line line : this) {
-            components = new LineList();
-            components.add(line);
-            map.put(line, components);
-
-            components = new LineList();
-            components.add(line.getOpposite());
-            map.put(line.getOpposite(), components);
-        }
-        return map;
-    }
-
 }

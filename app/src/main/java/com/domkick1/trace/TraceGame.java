@@ -48,10 +48,10 @@ public class TraceGame extends Trace {
                 return nearPoint != null;
             case MotionEvent.ACTION_MOVE:
                 if (nearPoint != null) {
-                    Point startPoint = new Point(trace.get(trace.size() - 1).getP1());
+                    Point startPoint = trace.get(trace.size() - 1).getP1();
                     LineList componentLines = hashMap.get(new Line(startPoint, nearPoint));
                     if (componentLines != null && !trace.isOccupied(componentLines)) {
-                        trace.addLines(startPoint, componentLines);
+                        trace.addLines(componentLines);
                         trace.add(new Line(nearPoint, touchPoint));
                         return true;
                     }

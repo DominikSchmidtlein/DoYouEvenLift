@@ -147,7 +147,7 @@ public class PointList extends ArrayList<Point> {
      * @param topOffset vertical offset, possibly due to an action bar
      * @return a point with x and y offsets
      */
-    private Point getOffsets(int width, int height, int topOffset) {
+    public Point getOffsets(int width, int height, int topOffset) {
         float left = width;
         float top = height;
         float right = 0;
@@ -162,6 +162,5 @@ public class PointList extends ArrayList<Point> {
 
         return new Point((width - right - left) / 2, (height - topOffset - top - bot) / 2);
     }
-
 
 }
