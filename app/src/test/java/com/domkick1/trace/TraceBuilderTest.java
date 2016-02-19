@@ -44,7 +44,7 @@ public class TraceBuilderTest {
         });
 
         PointList points2 = traceBuilder.generateIsometricPoints(200, 600, 800, 300);
-        
+
         assertTrue(points.equals(points2));
     }
 

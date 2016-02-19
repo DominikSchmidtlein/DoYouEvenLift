@@ -42,13 +42,11 @@ public class LineDictionary extends HashMap<Line, LineList> {
      */
     private void addCompoundLines(LineList lines) {
         Queue<Line> queue = new LinkedList<>(lines);
-        Line testLine;
         Point commonPoint;
-        LineList simpleAndCompoundLines;
 
         while (!queue.isEmpty()) {
-            testLine = queue.poll();
-            simpleAndCompoundLines = new LineList(keySet());
+            Line testLine = queue.poll();
+            LineList simpleAndCompoundLines = new LineList(keySet());
             for (Line line : simpleAndCompoundLines) {
                 if ((commonPoint = testLine.isTouching(line)) == null)
                     continue; //not touching

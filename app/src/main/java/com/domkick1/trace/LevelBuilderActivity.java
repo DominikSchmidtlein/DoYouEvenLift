@@ -46,7 +46,6 @@ public class LevelBuilderActivity extends AppCompatActivity implements View.OnTo
 
         DrawViewLevelBuilder drawViewLevelBuilder = (DrawViewLevelBuilder) findViewById(R.id.level_builder_draw_view);
         drawViewLevelBuilder.addModel(traceBuilder);
-
         drawViewLevelBuilder.setOnTouchListener(this);
     }
 
@@ -62,7 +61,10 @@ public class LevelBuilderActivity extends AppCompatActivity implements View.OnTo
 
         switch (id) {
             case R.id.action_reset:
-                traceBuilder.resetLevelsToJsonFile();
+                traceBuilder.clear();
+                break;
+            case R.id.action_grid_toggle:
+                traceBuilder.toggleGrid();
                 break;
             default:
                 return super.onOptionsItemSelected(item);

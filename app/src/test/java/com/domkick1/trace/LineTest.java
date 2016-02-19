@@ -112,4 +112,5 @@ public class LineTest {
         assertTrue(line1.getYIntercept() == 3);
         assertTrue(line2.getYIntercept() == 15);
     }
+
 }

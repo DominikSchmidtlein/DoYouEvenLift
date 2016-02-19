@@ -116,4 +116,43 @@ public class LineListTest {
         assertTrue(lines1.isOccupied(lines2));
         assertTrue(!lines1.isOccupied(lines3));
     }
+
+    @Test
+    public void testGetConnectedLines() {
+        Point tl, tr, bl, br, ml, mt, mr, mb;
+        LineList lines = new LineList();
+        // left
+        lines.add(new Line(tl = new Point(100, 100), ml = new Point(100, 500)));
+        lines.add(new Line(ml, bl = new Point(100, 1000)));
+
+        // bot
+        lines.add(new Line(mb = new Point(600, 1000), bl));
+        lines.add(new Line(mb, br = new Point(800, 1000)));
+
+        // top
+        lines.add(new Line(tl, mt = new Point(400, 150)));
+        lines.add(new Line(tr = new Point(1000, 250), mt));
+
+        // right
+        lines.add(new Line(mr = new Point(900, 625), br));
+        lines.add(new Line(tr, mr));
+
+        // vertical
+        lines.add(new Line(mt, mb));
+
+        lines = lines.getConnectedLines();
+
+        LineList correctLines = new LineList();
+        correctLines.add(new Line(tl, mt));
+        correctLines.add(new Line(tr, mt));
+        correctLines.add(new Line(bl, mb));
+        correctLines.add(new Line(br, mb));
+        correctLines.add(new Line(tl, bl));
+        correctLines.add(new Line(tr, br));
+        correctLines.add(new Line(mt, mb));
+
+        assertTrue(correctLines.size() == lines.size());
+        for (Line l : lines)
+            assertTrue(correctLines.aDirectionalContains(l));
+    }
 }

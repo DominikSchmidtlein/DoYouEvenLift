@@ -12,12 +12,10 @@ public class Line implements Iterable<Point> {
 
     private Point p1;
     private Point p2;
-    private float slope;
 
     public Line(@NonNull Point p1, @NonNull Point p2) {
         this.p1 = p1;
         this.p2 = p2;
-        slope = getSlope();
     }
 
     public Line(float p1x, float p1y, float p2x, float p2y) {
@@ -100,7 +98,7 @@ public class Line implements Iterable<Point> {
     }
 
     public float getYIntercept() {
-        return p2.getY() - slope * p2.getX();
+        return p2.getY() - getSlope() * p2.getX();
     }
 
     public float getSlope() {
@@ -120,9 +118,9 @@ public class Line implements Iterable<Point> {
     public boolean intersects(Point point) {
         if (!squareContains(point))
             return false;
-        if (slope == Float.POSITIVE_INFINITY)
+        if (getSlope() == Float.POSITIVE_INFINITY)
             return p1.getX() == point.getX();
-        return Math.abs((point.getY() - slope * point.getX() - getYIntercept())) < 0.0000000000001;
+        return Math.abs((point.getY() - getSlope() * point.getX() - getYIntercept())) < 0.0000000000001;
     }
 
     public boolean squareContains(Point point) {

@@ -17,7 +17,6 @@ public class TraceBuilderJsonHelper {
     private JSONObject jsonLevelsObject;
 
     private final String shapeFile = "shapes.json";
-    private final String pointsFile = "points.json";
 
     public TraceBuilderJsonHelper(Context context) {
         jsonHelper = new JsonHelper(context);
@@ -26,20 +25,6 @@ public class TraceBuilderJsonHelper {
         if (jsonLevelsObject == null)
             jsonLevelsObject = jsonHelper.getJsonFromAssets(shapeFile);
         Log.d("DOM", jsonLevelsObject.toString());
-    }
-
-    public PointList getGridAsPoints(TraceBuilder.Mode mode, int width, int height, int topOffset) {
-        return new PointList(getGridByMode(mode));
-    }
-
-    private JSONArray getGridByMode(TraceBuilder.Mode mode) {
-        try {
-            JSONObject jsonFromFile = jsonHelper.getJsonFromAssets(pointsFile);
-            return jsonFromFile.getJSONArray(mode.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new UnsupportedOperationException();
-        }
     }
 
     public void generateUpdatedJson(LineList level) {

@@ -6,8 +6,10 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Queue;
 
 /**
  * Created by domin_2o9sb4z on 2016-02-17.
@@ -169,5 +171,56 @@ public class LineList extends ArrayList<Line> {
             if (aDirectionalContains(l))
                 return true;
         return false;
+    }
+
+    public int getPointCount(Point point) {
+        int count = 0;
+        for (Line line : this)
+            for (Point p : line)
+                if (p.equals(point))
+                    count++;
+        return count;
+    }
+
+    /**
+     * Returns a list of lines where simple lines are combined into single larger lines where
+     * possible.
+     *
+     * @return a list of lines where multiple simple lines in the same direction are simplified into
+     * one line
+     */
+    public LineList getConnectedLines() {
+        Queue<Line> queue = new LinkedList<>(this);
+        LineList connectedLines = new LineList(this);
+
+        while (!queue.isEmpty()) {
+            Line testLine = queue.poll();
+            for (Line line : connectedLines) {
+                Point commonPoint = testLine.isTouching(line);
+                if(connectedLines.getPointCount(commonPoint) != 2)
+                    continue;
+                if (!testLine.getP1().equals(commonPoint))
+                    testLine = testLine.getOpposite();
+                if (!line.getP1().equals(commonPoint))
+                    line = line.getOpposite();
+                if (!new Vector(testLine).getUnitVector().equals(new Vector(line).getUnitVector().getInverse()))
+                    continue;
+
+                Line newLine = new Line(testLine.getP2(), line.getP2());
+                connectedLines.add(newLine);
+                connectedLines.remove(testLine);
+                connectedLines.remove(testLine.getOpposite());
+                connectedLines.remove(line);
+                connectedLines.remove(line.getOpposite());
+                queue.remove(testLine);
+                queue.remove(testLine.getOpposite());
+                queue.remove(line);
+                queue.remove(line.getOpposite());
+                queue.add(newLine);
+                break;
+            }
+        }
+        return connectedLines;
+//        return new LineList(queue);
     }
 }

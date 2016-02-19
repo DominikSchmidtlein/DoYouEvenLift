@@ -23,7 +23,6 @@ import java.io.InputStream;
 public class LevelHelper {
 
     private final String shapeFile = "shapes.json";
-    private final String pointsFile = "points.json";
     Context context;
 
     public LevelHelper(Context context) {
@@ -43,20 +42,6 @@ public class LevelHelper {
         return new LineList(
                 new PointList(getLevelFromFile(level)).getCenteredPoints(width, height, topOffset),
                 false);
-    }
-
-    public PointList getGridAsPoints(TraceBuilder.Mode mode, int width, int height, int topOffset) {
-        return new PointList(getGridByMode(mode)).getCenteredPoints(width, height, topOffset);
-    }
-
-    private JSONArray getGridByMode(TraceBuilder.Mode mode) {
-        try {
-            JSONObject jsonFromFile = getJsonFromFile(pointsFile);
-            return jsonFromFile.getJSONArray(mode.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new UnsupportedOperationException();
-        }
     }
 
     private JSONArray getLevelFromFile(int level) {

@@ -12,31 +12,26 @@ import java.util.ArrayList;
  */
 public class TraceBuilder extends Trace {
 
-    private TraceBuilderJsonHelper builderJsonHelper;
-
     private static final int RADIUS_DOWN = 80;
     private static final int RADIUS_MOVE = 40;
 
     private Mode mode;
-    private PointList points;
+    private PointList points, problemPoints;
     private LineList shape;
-    private PointList problemPoints;
+
+    private final int pointGap = 200;
 
 
     public TraceBuilder(Context context, android.graphics.Point screenSize, int actionBarHeight, Mode mode) {
         super(context, screenSize, actionBarHeight);
         this.mode = mode;
-//        builderJsonHelper = new TraceBuilderJsonHelper(context);
-
-        points = generateSquarePoints(200, screenSize.x, screenSize.y, actionBarHeight);
+        points = generatePointsByMode(mode);
         shape = new LineList(50);
         problemPoints = new PointList();
     }
 
     public enum Mode {
-        SQUARE("square"),
-        ISOMETRIC("isometric");
-
+        SQUARE("square"), ISOMETRIC("isometric");
         private String value;
 
         Mode(String value) {
@@ -81,7 +76,7 @@ public class TraceBuilder extends Trace {
                     if (!shape.get(shape.size() - 1).getP1().equals(nearPoint)) {
                         Line newLine = new Line(shape.get(shape.size() - 1).getP1(), nearPoint);
                         shape.addLines(getSimpleLines(newLine));
-                        cleanShape();
+                        shape = shape.getWithoutDuplicates();
                         shape.add(new Line(nearPoint, touchPoint));
                         return true;
                     }
@@ -101,10 +96,6 @@ public class TraceBuilder extends Trace {
         return new LineList(intersectingPoints, true);
     }
 
-    private void cleanShape() {
-        shape = shape.getWithoutDuplicates();
-    }
-
     private void updateShapeLegality() {
         problemPoints = shape.getOddlyOccurringPoints();
         if (problemPoints.size() == 2)
@@ -113,8 +104,17 @@ public class TraceBuilder extends Trace {
 
     public boolean logLevel() {
         if (getProblemPoints().isEmpty())
-            Log.d("DOM", shape.toJsonArray().toString());
+            Log.d("DOM", shape.getConnectedLines().toJsonArray().toString());
         return getProblemPoints().isEmpty();
+    }
+
+    private PointList generatePointsByMode(Mode mode) {
+        if (mode == Mode.ISOMETRIC)
+            return generateIsometricPoints(pointGap, size.x, size.y, 0);
+        else if (mode == Mode.SQUARE)
+            return generateSquarePoints(pointGap, size.x, size.y, 0);
+        else
+            return null;
     }
 
     public PointList generateSquarePoints(int pointGap, int width, int height, int topOffset) {
@@ -143,8 +143,20 @@ public class TraceBuilder extends Trace {
         return (((y - yOffset - pointGap / 2) / yJump) % 2) - 0 < 0.001 ? 0 : 100;
     }
 
-    public void resetLevelsToJsonFile() {
-        builderJsonHelper.loadLevelsFromAssets();
+    public void clear() {
+        shape.clear();
+        problemPoints.clear();
+        setChanged();
+        notifyObservers();
+    }
+
+    public void toggleGrid() {
+        setMode(mode == Mode.ISOMETRIC ? Mode.SQUARE : Mode.ISOMETRIC);
+    }
+
+    public void setMode(Mode mode) {
+        this.mode = mode;
+        points = generatePointsByMode(mode);
     }
 
     public ArrayList<Point> getPoints() {
