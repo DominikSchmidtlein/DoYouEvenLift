@@ -28,7 +28,7 @@ public class LevelBuilderActivity extends AppCompatActivity implements View.OnTo
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!traceBuilder.generateNewJsonFile())
+                if (!traceBuilder.logLevel())
                     Snackbar.make(view, "Cannot add illegal shape", Snackbar.LENGTH_LONG)
                             .setAction("Action", null).show();
             }

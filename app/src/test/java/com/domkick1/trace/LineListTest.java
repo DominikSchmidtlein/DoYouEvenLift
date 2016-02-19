@@ -3,6 +3,8 @@ package com.domkick1.trace;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -38,32 +40,46 @@ public class LineListTest {
 
     @Test
     public void testFloatConstructor() {
-
-
+        float[] flts = new float[]{point1b.getX(), point1b.getY(), point2b.getX(), point2b.getY()};
+        assertTrue(lines3.equals(new LineList(flts)));
     }
 
     @Test
-    public void testToJsonArray() {
+    public void testPointListConstructor() throws Exception {
+        PointList pointsDoubled = new PointList();
+        pointsDoubled.add(line1.getP1());
+        pointsDoubled.add(line1.getP2());
+        pointsDoubled.add(line2.getP1());
+        pointsDoubled.add(line2.getP2());
 
+        PointList pointsSingle = new PointList(pointsDoubled);
+        pointsSingle.remove(line1.getP2());
 
+        LineList lines = new LineList(lines1);
+        lines.remove(line3);
+
+        assertTrue(new LineList(pointsDoubled, false).equals(new LineList(pointsSingle, true)));
+        assertTrue(new LineList(pointsDoubled, false).equals(lines));
     }
 
     @Test
     public void testToFloatArray() {
-
-
+        float[] floats = {point2a.getX(), point2a.getY(), point1a.getX(), point1a.getY(),
+                point1b.getX(), point1b.getY(), point2b.getX(), point2b.getY()};
+        assertTrue(Arrays.equals(floats, lines2.toFloatArray()));
     }
 
     @Test
     public void testReplaceLastPoint() {
-
-
+        LineList lines = new LineList(lines3);
+        lines.replaceLastPoint(point3a);
+        assertTrue(lines.get(0).equals(new Line(point1b, point3a)));
     }
 
     @Test
     public void testIsNearVertex() {
-
-
+        assertTrue(lines1.isNearVertex(point1a, 5).equals(point1a));
+        assertTrue(lines1.isNearVertex(point1b, 80) == null);
     }
 
     @Test

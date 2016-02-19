@@ -29,7 +29,7 @@ public class TraceBuilderJsonHelper {
     }
 
     public PointList getGridAsPoints(TraceBuilder.Mode mode, int width, int height, int topOffset) {
-        return new PointList(getGridByMode(mode)).getCenteredPoints(width, height, topOffset);
+        return new PointList(getGridByMode(mode));
     }
 
     private JSONArray getGridByMode(TraceBuilder.Mode mode) {

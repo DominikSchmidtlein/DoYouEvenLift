@@ -26,9 +26,9 @@ public class TraceBuilder extends Trace {
     public TraceBuilder(Context context, android.graphics.Point screenSize, int actionBarHeight, Mode mode) {
         super(context, screenSize, actionBarHeight);
         this.mode = mode;
-        builderJsonHelper = new TraceBuilderJsonHelper(context);
+//        builderJsonHelper = new TraceBuilderJsonHelper(context);
 
-        points = builderJsonHelper.getGridAsPoints(mode, screenSize.x, screenSize.y, actionBarHeight);
+        points = generateSquarePoints(200, screenSize.x, screenSize.y, actionBarHeight);
         shape = new LineList(50);
         problemPoints = new PointList();
     }
@@ -80,8 +80,7 @@ public class TraceBuilder extends Trace {
                 if (nearPoint != null) {
                     if (!shape.get(shape.size() - 1).getP1().equals(nearPoint)) {
                         Line newLine = new Line(shape.get(shape.size() - 1).getP1(), nearPoint);
-                        shape.remove(shape.size() - 1);
-                        shape.addAll(getSimpleLines(newLine));
+                        shape.addLines(getSimpleLines(newLine));
                         cleanShape();
                         shape.add(new Line(nearPoint, touchPoint));
                         return true;
@@ -112,11 +111,36 @@ public class TraceBuilder extends Trace {
             problemPoints.clear();
     }
 
-    public boolean generateNewJsonFile() {
-        if (!getProblemPoints().isEmpty())
-            return false;
-        logLevel(shape);
-        return true;
+    public boolean logLevel() {
+        if (getProblemPoints().isEmpty())
+            Log.d("DOM", shape.toJsonArray().toString());
+        return getProblemPoints().isEmpty();
+    }
+
+    public PointList generateSquarePoints(int pointGap, int width, int height, int topOffset) {
+        PointList points = new PointList();
+        for (int y = topOffset + pointGap / 2; y < height - pointGap / 4; y += pointGap)
+            for (int x = pointGap / 2; x < width - pointGap / 4; x += pointGap)
+                points.add(new Point(x, y));
+        return points;
+    }
+
+    public PointList generateIsometricPoints(int pointGap, int width, int height, int yOffset) {
+        float xStart = pointGap / 2;
+        float yStart = pointGap / 2 + yOffset;
+        float xEnd = width - pointGap / 4;
+        float yEnd = height - pointGap / 4;
+        float yJump = (float) Math.sqrt(3) * pointGap / 2;
+
+        PointList points = new PointList();
+        for (float y = yStart; y < yEnd; y += yJump)
+            for (float x = xStart + getXOffset(y, yJump, pointGap, yOffset); x < xEnd; x += pointGap)
+                points.add(new Point(x, y));
+        return points;
+    }
+
+    public float getXOffset(float y, float yJump, float pointGap, float yOffset) {
+        return (((y - yOffset - pointGap / 2) / yJump) % 2) - 0 < 0.001 ? 0 : 100;
     }
 
     public void resetLevelsToJsonFile() {
@@ -133,9 +157,5 @@ public class TraceBuilder extends Trace {
 
     public ArrayList<Point> getProblemPoints() {
         return problemPoints;
-    }
-
-    private void logLevel(LineList level) {
-        Log.d("DOM", level.toJsonArray().toString());
     }
 }

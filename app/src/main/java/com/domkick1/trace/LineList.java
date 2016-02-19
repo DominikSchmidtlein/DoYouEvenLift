@@ -151,9 +151,8 @@ public class LineList extends ArrayList<Line> {
      * @param lines a sorted list of lines where the first point of lines[0] matches startpoint
      */
     public void addLines(LineList lines) {
-        set(size() - 1, lines.get(0));
-        for (int i = 1; i < lines.size(); i++)
-            add(lines.get(i));
+        remove(size() - 1);
+        addAll(lines);
     }
 
     /**
