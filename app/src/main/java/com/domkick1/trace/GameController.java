@@ -3,7 +3,7 @@ package com.domkick1.trace;
 import android.app.DialogFragment;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ListView;
+import android.widget.Toast;
 
 /**
  * Created by domin_2o9sb4z on 2016-02-11.
@@ -35,7 +35,8 @@ public class GameController implements View.OnTouchListener, WinEventListener {
     }
 
     public void nextLevelSelected(){
-        gameModel.incrementCurrentLevel();
+        if(!gameModel.toNextLevel())
+            Toast.makeText(mainActivity, mainActivity.getString(R.string.no_more_levels), Toast.LENGTH_LONG).show();
     }
 
 }

@@ -152,6 +152,7 @@ public class TraceBuilder extends Trace {
 
     public void toggleGrid() {
         setMode(mode == Mode.ISOMETRIC ? Mode.SQUARE : Mode.ISOMETRIC);
+        clear();
     }
 
     public void setMode(Mode mode) {

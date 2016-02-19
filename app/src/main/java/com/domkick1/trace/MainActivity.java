@@ -16,11 +16,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 
-public class MainActivity extends AppCompatActivity implements ListView.OnItemClickListener, NextLevelDialogFragment.NextLevelDialogListener {
+public class MainActivity extends AppCompatActivity implements NextLevelDialogFragment.NextLevelDialogListener {
 
-    private DrawerLayout drawerLayout;
-    private ListView drawerList;
-    private ActionBarDrawerToggle drawerToggle;
+//    private DrawerLayout drawerLayout;
+//    private ListView drawerList;
+//    private ActionBarDrawerToggle drawerToggle;
 
     private GameController gameController;
 
@@ -32,27 +32,27 @@ public class MainActivity extends AppCompatActivity implements ListView.OnItemCl
         Toolbar myToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(myToolbar);
 
-        drawerLayout = (DrawerLayout) findViewById(R.id.main_layout);
-        drawerList = (ListView) findViewById(R.id.left_drawer);
-        drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, new String[]{"Play", "Level Builder"}));
-        drawerList.setOnItemClickListener(this);
+//        drawerLayout = (DrawerLayout) findViewById(R.id.main_layout);
+//        drawerList = (ListView) findViewById(R.id.left_drawer);
+//        drawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, new String[]{"Play", "Level Builder"}));
+//        drawerList.setOnItemClickListener(this);
 
-        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, null, R.string.open_drawer, R.string.close_drawer) {
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                invalidateOptionsMenu();
-            }
+//        drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, null, R.string.open_drawer, R.string.close_drawer) {
+//            @Override
+//            public void onDrawerClosed(View drawerView) {
+//                super.onDrawerClosed(drawerView);
+//                invalidateOptionsMenu();
+//            }
 
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                invalidateOptionsMenu();
-            }
-        };
-        drawerLayout.setDrawerListener(drawerToggle);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
+//            @Override
+//            public void onDrawerOpened(View drawerView) {
+//                super.onDrawerOpened(drawerView);
+//                invalidateOptionsMenu();
+//            }
+//        };
+//        drawerLayout.setDrawerListener(drawerToggle);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setHomeButtonEnabled(true);
 
         android.graphics.Point size = new android.graphics.Point();
         getWindowManager().getDefaultDisplay().getSize(size);
@@ -79,14 +79,14 @@ public class MainActivity extends AppCompatActivity implements ListView.OnItemCl
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        if (drawerToggle.onOptionsItemSelected(item))
-            return true;
+//        if (drawerToggle.onOptionsItemSelected(item))
+//            return true;
 
         int id = item.getItemId();
 
         Intent intent;
         switch (id) {
-            case R.id.action_settings:
+            case R.id.action_instructions:
                 intent = new Intent(MainActivity.this, InstructionsActivity.class);
                 break;
             default:
@@ -96,11 +96,11 @@ public class MainActivity extends AppCompatActivity implements ListView.OnItemCl
         return true;
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        drawerToggle.onConfigurationChanged(newConfig);
-    }
+//    @Override
+//    public void onConfigurationChanged(Configuration newConfig) {
+//        super.onConfigurationChanged(newConfig);
+//        drawerToggle.onConfigurationChanged(newConfig);
+//    }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -110,27 +110,27 @@ public class MainActivity extends AppCompatActivity implements ListView.OnItemCl
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        drawerToggle.syncState();
+//        drawerToggle.syncState();
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-        switch (position) {
-            case 0:
-                break;
-            case 1:
-                startActivity(new Intent(MainActivity.this, LevelBuilderActivity.class));
-                break;
-            default:
-                break;
-        }
-
-        if (drawerLayout.isDrawerOpen(drawerList))
-            drawerLayout.closeDrawer(drawerList);
-        else
-            drawerLayout.openDrawer(drawerList);
-    }
+//    @Override
+//    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//
+//        switch (position) {
+//            case 0:
+//                break;
+//            case 1:
+//                startActivity(new Intent(MainActivity.this, LevelBuilderActivity.class));
+//                break;
+//            default:
+//                break;
+//        }
+//
+//        if (drawerLayout.isDrawerOpen(drawerList))
+//            drawerLayout.closeDrawer(drawerList);
+//        else
+//            drawerLayout.openDrawer(drawerList);
+//    }
 
     public void onDialogNextLevelClick(DialogFragment dialogFragment) {
         gameController.nextLevelSelected();

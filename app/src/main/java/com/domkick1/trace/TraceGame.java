@@ -22,15 +22,15 @@ public class TraceGame extends Trace {
 
     private List<WinEventListener> winEventListeners;
 
-    private int currentLevel;
+    private int currentLevel = -1;
+    private ArrayList<Integer> unPlayedLevels;
 
     public TraceGame(Context context, android.graphics.Point screenSize, int actionBarHeight, int level) {
         super(context, screenSize, actionBarHeight);
         gameJsonHelper = new TraceGameJsonHelper(context);
-
         winEventListeners = new ArrayList<>(2);
-        currentLevel = level;
-        setupLevel();
+        setupUnPlayedLevels();
+        toNextLevel();
     }
 
     @Override
@@ -76,10 +76,11 @@ public class TraceGame extends Trace {
             listener.onWin(new WinEvent(this));
     }
 
-    public boolean incrementCurrentLevel() {
-        if (currentLevel >= gameJsonHelper.getLevelCount() - 1)
+    public boolean toNextLevel() {
+        unPlayedLevels.remove(Integer.valueOf(currentLevel));
+        if (unPlayedLevels.isEmpty())
             return false;
-        currentLevel++;
+        currentLevel = unPlayedLevels.get((int) (Math.random() * unPlayedLevels.size()));
         setupLevel();
         return true;
     }
@@ -90,6 +91,12 @@ public class TraceGame extends Trace {
         hashMap = new LineDictionary(shape);
         setChanged();
         notifyObservers();
+    }
+
+    private void setupUnPlayedLevels() {
+        unPlayedLevels = new ArrayList<>(gameJsonHelper.getLevelCount());
+        for (int i = 0; i < gameJsonHelper.getLevelCount(); i++)
+            unPlayedLevels.add(i);
     }
 
     /**
