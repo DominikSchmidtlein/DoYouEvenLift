@@ -17,4 +17,5 @@
     <string name="reset_levels">Reset Levels</string>
     <string name="no_more_levels">no more levels :(, brb</string>
     <string name="action_instructions">Instructions</string>
+    <string name="level_builder">Level Builder</string>
 </resources>

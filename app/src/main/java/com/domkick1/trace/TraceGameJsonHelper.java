@@ -28,7 +28,7 @@ public class TraceGameJsonHelper {
 
     public LineList getLevelAsLines(int level, int width, int height, int topOffset) {
         return new LineList(
-                new PointList(getLevelFromFile(level)).getCenteredPoints(width, height, topOffset),
+                new PointList(getLevelFromFile(level)).getCenteredPoints(width, height, topOffset + 50),
                 false);
     }
 
