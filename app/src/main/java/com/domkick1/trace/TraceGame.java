@@ -116,4 +116,7 @@ public class TraceGame extends Trace {
         return trace;
     }
 
+    private void loadLevels(){
+
+    }
 }
