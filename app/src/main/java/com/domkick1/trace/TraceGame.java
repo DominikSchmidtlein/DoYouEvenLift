@@ -15,6 +15,7 @@ public class TraceGame extends Trace {
     private static final int RADIUS = 80;
 
     private TraceGameJsonHelper gameJsonHelper;
+    private LevelSaver levelSaver;
 
     private LineDictionary hashMap;
     private LineList shape;
@@ -22,14 +23,14 @@ public class TraceGame extends Trace {
 
     private List<WinEventListener> winEventListeners;
 
-    private int currentLevel = -1;
-    private ArrayList<Integer> unPlayedLevels;
+    private LevelState levelState;
 
     public TraceGame(Context context, android.graphics.Point screenSize, int actionBarHeight, int level) {
         super(context, screenSize, actionBarHeight);
         gameJsonHelper = new TraceGameJsonHelper(context);
+        levelSaver = new LevelSaver(context);
+        levelState = levelSaver.loadState();
         winEventListeners = new ArrayList<>(2);
-        setupUnPlayedLevels();
         toNextLevel();
     }
 
@@ -77,26 +78,18 @@ public class TraceGame extends Trace {
     }
 
     public boolean toNextLevel() {
-        unPlayedLevels.remove(Integer.valueOf(currentLevel));
-        if (unPlayedLevels.isEmpty())
-            return false;
-        currentLevel = unPlayedLevels.get((int) (Math.random() * unPlayedLevels.size()));
+        levelState.levelPlayed();
+        levelState.nextLevel();
         setupLevel();
         return true;
     }
 
     private void setupLevel() {
-        shape = gameJsonHelper.getLevelAsLines(currentLevel, size.x, size.y, actionBarHeight);
+        shape = gameJsonHelper.getLevelAsLines(levelState.getCurrentLevel(), size.x, size.y, actionBarHeight);
         trace = new LineList(shape.size());
         hashMap = new LineDictionary(shape);
         setChanged();
         notifyObservers();
-    }
-
-    private void setupUnPlayedLevels() {
-        unPlayedLevels = new ArrayList<>(gameJsonHelper.getLevelCount());
-        for (int i = 0; i < gameJsonHelper.getLevelCount(); i++)
-            unPlayedLevels.add(i);
     }
 
     /**
