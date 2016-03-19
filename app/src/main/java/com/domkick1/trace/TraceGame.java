@@ -88,7 +88,18 @@ public class TraceGame extends Trace {
             return;
         }
         trace = new LineList(shape.size());
-        hashMap = new LineDictionary(shape);
+        hashMap = new LineDictionary(shape, false);
+
+        new Thread() {
+            @Override
+            public void run() {
+                LineDictionary dict = new LineDictionary(shape, true);
+                synchronized (hashMap) {
+                    hashMap = dict;
+                }
+            }
+        }.start();
+
         setChanged();
         notifyObservers();
     }

@@ -9,10 +9,11 @@ import java.util.Queue;
  */
 public class LineDictionary extends HashMap<Line, LineList> {
 
-    public LineDictionary(LineList lines) {
+    public LineDictionary(LineList lines, boolean compound) {
         super();
         addLines(lines);
-        addCompoundLines(lines);
+        if(compound)
+            addCompoundLines(lines);
     }
 
     /**
@@ -87,5 +88,10 @@ public class LineDictionary extends HashMap<Line, LineList> {
         put(compoundLine2, components2);
 
         return compoundLine1;
+    }
+
+    @Override
+    public synchronized LineList get(Object key) {
+        return super.get(key);
     }
 }

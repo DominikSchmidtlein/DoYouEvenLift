@@ -59,7 +59,7 @@ public class LineDictionaryTest {
 
     @Test
     public void testConstructor() {
-        LineDictionary testDictionary = new LineDictionary(lines);
+        LineDictionary testDictionary = new LineDictionary(lines, true);
 
         assertTrue(testDictionary.size() == (8 + 4) * 2);
 
