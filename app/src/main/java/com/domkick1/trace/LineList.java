@@ -34,6 +34,11 @@ public class LineList extends ArrayList<Line> {
             add(new Line(floats[i], floats[i + 1], floats[i + 2], floats[i + 3]));
     }
 
+    public LineList(JSONArray jsonArray, ScreenDimensions dim) {
+        this(new PointList(jsonArray)
+                .getCenteredPoints(dim), false);
+    }
+
     /**
      * Creates a list of lines from a list of points. If usePointsTwice is true, then the end of one
      * line will be used as the start of the next. Otherwise, the lines will be created from pairs
@@ -197,7 +202,7 @@ public class LineList extends ArrayList<Line> {
             Line testLine = queue.poll();
             for (Line line : connectedLines) {
                 Point commonPoint = testLine.isTouching(line);
-                if(connectedLines.getPointCount(commonPoint) != 2)
+                if (connectedLines.getPointCount(commonPoint) != 2)
                     continue;
                 if (!testLine.getP1().equals(commonPoint))
                     testLine = testLine.getOpposite();

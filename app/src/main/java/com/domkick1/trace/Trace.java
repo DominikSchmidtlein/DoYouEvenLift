@@ -16,12 +16,10 @@ import java.util.Observer;
  */
 public abstract class Trace extends Observable {
 
-    protected android.graphics.Point size;
-    protected int actionBarHeight;
+    protected Context context;
 
-    public Trace(Context context, android.graphics.Point screenSize, int actionBarHeight) {
-        this.size = screenSize;
-        this.actionBarHeight = actionBarHeight;
+    public Trace(Context context) {
+        this.context = context;
     }
 
     public boolean onTouch(View v, MotionEvent event) {

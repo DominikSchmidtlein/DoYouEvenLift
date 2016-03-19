@@ -18,4 +18,9 @@
     <string name="no_more_levels">no more levels :(, brb</string>
     <string name="action_instructions">Instructions</string>
     <string name="level_builder">Level Builder</string>
+
+    <string name="level_state_file">levelstate.json</string>
+    <string name="levels_file">shapes.json</string>
+    <string name="current_level_key">currentlevel</string>
+    <string name="remaining_levels_key">remaininglevels</string>
 </resources>

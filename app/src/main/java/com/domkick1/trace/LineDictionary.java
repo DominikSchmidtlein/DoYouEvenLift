@@ -88,6 +88,4 @@ public class LineDictionary extends HashMap<Line, LineList> {
 
         return compoundLine1;
     }
-
-
 }

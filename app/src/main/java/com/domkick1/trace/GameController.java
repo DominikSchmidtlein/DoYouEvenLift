@@ -8,7 +8,7 @@ import android.widget.Toast;
 /**
  * Created by domin_2o9sb4z on 2016-02-11.
  */
-public class GameController implements View.OnTouchListener, WinEventListener {
+public class GameController implements View.OnTouchListener, WinListener {
 
     private MainActivity mainActivity;
     private TraceGame gameModel;

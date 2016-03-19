@@ -1,81 +1,113 @@
 package com.domkick1.trace;
 
-import org.json.JSONArray;
+import android.support.annotation.NonNull;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by domin_2o9sb4z on 2016-02-25.
  */
 public class LevelState {
 
-    private ArrayList<Integer> nonPlayedLevels;
+
+    private LevelList levels;
+    private RemainingLevels remainingLevels;
     private Integer currentLevel;
 
-    public LevelState(int currentLevel, int numberOfLevels) {
+    private List<LevelStateChangedListener> levelStateChangedListeners = new ArrayList<>();
+
+    /**
+     * Picks random level from all available levels
+     * @param levels all available levels
+     */
+    public LevelState(@NonNull LevelList levels) {
+        this(0, new RemainingLevels(levels.size()), levels);
+        resetLevels();
+    }
+
+    public LevelState(@NonNull Integer currentLevel, @NonNull RemainingLevels remainingLevels, @NonNull LevelList levels) {
         this.currentLevel = currentLevel;
-        this.nonPlayedLevels = new ArrayList<>(numberOfLevels);
-        for (int i = 0; i < numberOfLevels; i++)
-            nonPlayedLevels.add(i);
+        this.remainingLevels = remainingLevels;
+        this.levels = levels;
     }
 
-    public LevelState(JSONObject jObj) {
-        try {
-            this.currentLevel = jObj.getInt(LevelSaver.currentLevel);
-            this.nonPlayedLevels = jsonToIntArray(jObj.getJSONArray(LevelSaver.notPlayedLevels));
-        } catch (JSONException e) {
-            throw new UnsupportedOperationException();
-        }
+    public void setLevelChangedListener(LevelStateChangedListener listener) {
+        levelStateChangedListeners.add(listener);
+        listener.onLevelStateChanged(new LevelStateChangedEvent(this));
     }
 
-    public void levelPlayed() {
-        nonPlayedLevels.remove(currentLevel);
+    private void notifyLevelStateChangedListeners() {
+        for (LevelStateChangedListener listener : levelStateChangedListeners)
+            listener.onLevelStateChanged(new LevelStateChangedEvent(this));
     }
 
-    public boolean nextLevel() {
-        if (nonPlayedLevels.isEmpty())
-            return false;
-        currentLevel = nonPlayedLevels.get((int) (Math.random() * nonPlayedLevels.size()));
-        return true;
+    /**
+     * Removes the current level from remaining levels. Then chooses a new level randomly. Notifies
+     * listeners that the state has changed.
+     *
+     * @return returns the next level or null if no levels remain
+     */
+    public LineList nextLevel() {
+        if (!remainingLevels.remove(currentLevel))
+            return null;
+        LineList nextLevel = chooseLevel();
+        notifyLevelStateChangedListeners();
+        return nextLevel;
     }
 
-    private ArrayList<Integer> jsonToIntArray(JSONArray jArray) {
-        ArrayList<Integer> intList = new ArrayList<>(jArray.length());
-        for (int i = 0; i < jArray.length(); i++) {
-            try {
-                intList.add(jArray.getInt(i));
-            } catch (JSONException e) {
-                return null;
-            }
-        }
-        return intList;
+    /**
+     * Sets up remaining levels to contain all indicies. Then randomly selects new level. Notifies
+     * listeners that state has changed.
+     *
+     * @return
+     */
+    public LineList resetLevels() {
+        initializeRemainingLevels();
+        LineList nextLevel = chooseLevel();
+        notifyLevelStateChangedListeners();
+        return nextLevel;
     }
 
-    private JSONArray listToJson(ArrayList<Integer> intList) {
-        JSONArray jArray = new JSONArray();
-        for (Integer i : intList)
-            jArray.put(i);
-        return jArray;
+    /**
+     * Randomly selects one of the indices from remaining levels
+     *
+     * @return
+     */
+    private LineList chooseLevel() {
+        if (remainingLevels.isEmpty())
+            return null;
+        currentLevel = remainingLevels.get((int) (Math.random() * remainingLevels.size()));
+        return levels.get(currentLevel);
+    }
+
+    private void initializeRemainingLevels() {
+        remainingLevels.clear();
+        remainingLevels.ensureCapacity(levels.size());
+        for (int i = 0; i < levels.size(); i++)
+            remainingLevels.add(i);
+    }
+
+    public LineList getLevel() {
+        return levels.get(currentLevel.intValue());
     }
 
     public JSONObject toJson() {
         JSONObject jObj = new JSONObject();
         try {
-            jObj.put(LevelSaver.currentLevel, currentLevel);
-            jObj.put(LevelSaver.notPlayedLevels, listToJson(nonPlayedLevels));
+            jObj.put(StateLoader.currentLevelKey, currentLevel);
+            jObj.put(StateLoader.remainingLevelsKey, remainingLevels.toJson());
             return jObj;
         } catch (JSONException e) {
             throw new UnsupportedOperationException();
         }
     }
 
-    public ArrayList<Integer> getNonPlayedLevels() {
-        return nonPlayedLevels;
-    }
-
-    public int getCurrentLevel() {
-        return currentLevel;
+    @Override
+    public String toString() {
+        return toJson().toString();
     }
 }

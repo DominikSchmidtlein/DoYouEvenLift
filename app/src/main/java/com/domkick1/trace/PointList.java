@@ -123,13 +123,11 @@ public class PointList extends ArrayList<Point> {
      * Returns a list of points that are centered in a screen of a given height, width, and vertical
      * offset.
      *
-     * @param width     the width of the screen
-     * @param height    the height of the screen
-     * @param topOffset vertical offset, possibly due to an action bar
+     * @param dim the screen dimensions
      * @return a list of points that are centered
      */
-    public PointList getCenteredPoints(int width, int height, int topOffset) {
-        Point offsets = getOffsets(width, height, topOffset);
+    public PointList getCenteredPoints(ScreenDimensions dim) {
+        Point offsets = getOffsets(dim);
 
         PointList centeredPoints = new PointList(size());
         for (Point point : this)
@@ -142,14 +140,12 @@ public class PointList extends ArrayList<Point> {
      * Calculates the necessary x and y offsets to center these points in a screen with the given
      * dimensions
      *
-     * @param width     width of the screen
-     * @param height    height of the screen
-     * @param topOffset vertical offset, possibly due to an action bar
+     * @param dim the screen dimensions
      * @return a point with x and y offsets
      */
-    public Point getOffsets(int width, int height, int topOffset) {
-        float left = width;
-        float top = height;
+    public Point getOffsets(ScreenDimensions dim) {
+        float left = dim.getWidth();
+        float top = dim.getHeight();
         float right = 0;
         float bot = 0;
 
@@ -160,7 +156,7 @@ public class PointList extends ArrayList<Point> {
             bot = (point.getY() > bot) ? point.getY() : bot;
         }
 
-        return new Point((width - right - left) / 2, (height - topOffset - top - bot) / 2);
+        return new Point((dim.getWidth() - right - left) / 2, (dim.getHeight() - dim.getTopOffset() - top - bot) / 2);
     }
 
 }

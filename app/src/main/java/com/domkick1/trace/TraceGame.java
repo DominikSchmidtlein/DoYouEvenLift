@@ -1,8 +1,12 @@
 package com.domkick1.trace;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,24 +18,18 @@ public class TraceGame extends Trace {
 
     private static final int RADIUS = 80;
 
-    private TraceGameJsonHelper gameJsonHelper;
-    private LevelSaver levelSaver;
-
     private LineDictionary hashMap;
     private LineList shape;
     private LineList trace;
 
-    private List<WinEventListener> winEventListeners;
+    private List<WinListener> winListeners = new ArrayList<>(2);
 
     private LevelState levelState;
 
-    public TraceGame(Context context, android.graphics.Point screenSize, int actionBarHeight, int level) {
-        super(context, screenSize, actionBarHeight);
-        gameJsonHelper = new TraceGameJsonHelper(context);
-        levelSaver = new LevelSaver(context);
-        levelState = levelSaver.loadState();
-        winEventListeners = new ArrayList<>(2);
-        toNextLevel();
+    public TraceGame(Context context, @NonNull LevelState state) {
+        super(context);
+        levelState = state;
+        setupLevel();
     }
 
     @Override
@@ -68,24 +66,27 @@ public class TraceGame extends Trace {
         }
     }
 
-    public void setWinEventListener(WinEventListener eventListener) {
-        winEventListeners.add(eventListener);
+    public void setWinEventListener(WinListener eventListener) {
+        winListeners.add(eventListener);
     }
 
     private void notifyWinEventListeners() {
-        for (WinEventListener listener : winEventListeners)
+        for (WinListener listener : winListeners)
             listener.onWin(new WinEvent(this));
     }
 
     public boolean toNextLevel() {
-        levelState.levelPlayed();
         levelState.nextLevel();
         setupLevel();
         return true;
     }
 
     private void setupLevel() {
-        shape = gameJsonHelper.getLevelAsLines(levelState.getCurrentLevel(), size.x, size.y, actionBarHeight);
+        shape = levelState.getLevel();
+        if (shape == null) {
+            Toast.makeText(context, "no more levels", Toast.LENGTH_LONG).show();
+            return;
+        }
         trace = new LineList(shape.size());
         hashMap = new LineDictionary(shape);
         setChanged();
@@ -107,9 +108,5 @@ public class TraceGame extends Trace {
 
     public ArrayList<Line> getTrace() {
         return trace;
-    }
-
-    private void loadLevels(){
-
     }
 }

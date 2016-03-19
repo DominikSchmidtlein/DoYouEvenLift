@@ -14,6 +14,7 @@ public class TraceBuilder extends Trace {
 
     private static final int RADIUS_DOWN = 80;
     private static final int RADIUS_MOVE = 40;
+    private final android.graphics.Point size;
 
     private Mode mode;
     private PointList points, problemPoints;
@@ -23,7 +24,8 @@ public class TraceBuilder extends Trace {
 
 
     public TraceBuilder(Context context, android.graphics.Point screenSize, int actionBarHeight, Mode mode) {
-        super(context, screenSize, actionBarHeight);
+        super(context);
+        this.size = screenSize;
         this.mode = mode;
         points = generatePointsByMode(mode);
         shape = new LineList(50);

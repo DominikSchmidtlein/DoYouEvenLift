@@ -70,7 +70,7 @@ public class PointListTest {
 
     @Test
     public void testGetOffsets() throws Exception {
-        assertTrue(sortedPoints.getOffsets(500, 600, 100).equals(new Point(0, 0)));
-        assertTrue(sortedPoints.getOffsets(700, 800, 100).equals(new Point(100, 100)));
+        assertTrue(sortedPoints.getOffsets(new ScreenDimensions(500, 600, 100)).equals(new Point(0, 0)));
+        assertTrue(sortedPoints.getOffsets(new ScreenDimensions(700, 800, 100)).equals(new Point(100, 100)));
     }
 }

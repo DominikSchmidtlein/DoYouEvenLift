@@ -8,23 +8,37 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.json.JSONObject;
+
 public class MainActivity extends AppCompatActivity implements NextLevelDialogFragment.NextLevelDialogListener {
 
     private GameController gameController;
+
+    private final String currentLevelKey = "currentlevel";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Toolabr setup
         Toolbar myToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(myToolbar);
 
+        // get screen dimensions and action bar height
         android.graphics.Point size = new android.graphics.Point();
         getWindowManager().getDefaultDisplay().getSize(size);
         int actionBarHeight = (int) getApplicationContext().getTheme().obtainStyledAttributes(new int[]{android.R.attr.actionBarSize}).getDimension(0, 0);
+        ScreenDimensions dim = new ScreenDimensions(size.x, size.y, actionBarHeight + 50);
 
-        TraceGame traceGame = new TraceGame(this, size, actionBarHeight, 0);
+        // read state from files
+        LevelState state = new StateLoader(this, dim).loadState();
+
+        // set state saver to listen for state changes
+        state.setLevelChangedListener(new StateSaver(this));
+        state.resetLevels();
+
+        TraceGame traceGame = new TraceGame(this, state);
         DrawViewGame drawViewGame = (DrawViewGame) findViewById(R.id.draw_view);
         gameController = new GameController(this, traceGame, drawViewGame);
 
