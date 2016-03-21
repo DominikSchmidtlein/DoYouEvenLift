@@ -6,8 +6,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,9 +20,9 @@ public class TraceGame extends Trace {
     private LineList shape;
     private LineList trace;
 
-    private List<WinListener> winListeners = new ArrayList<>(2);
+    private final List<WinListener> winListeners = new ArrayList<>(2);
 
-    private LevelState levelState;
+    private final LevelState levelState;
 
     public TraceGame(Context context, @NonNull LevelState state) {
         super(context);

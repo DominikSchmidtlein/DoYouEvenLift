@@ -1,19 +1,12 @@
 <resources>
     <string name="app_name">Trace</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="congratulations">Congratulations!</string>
-    <string name="action_settings">Settings</string>
-    <string name="game_description">Trace the image below without lifting your finger</string>
-    <string name="next_shape_button">next shape</string>
+
     <string name="next_level_title">Congratulations</string>
     <string name="next_level_next">Next</string>
     <string name="next_level_retry">Retry</string>
-    <string name="open_drawer">Open</string>
-    <string name="close_drawer">Closed</string>
     <string name="game_instructions_text"><big><b>Welcome to Trace</b></big>\n\nHow to play:\n\nTrace the image on screen without lifting you finger!\n\nGood Luck</string>
     <string name="title_activity_instructions">How to Play</string>
     <string name="title_activity_level_builder">Trace Level Builder</string>
-    <string name="action_level_builder">Level Builder</string>
     <string name="reset_levels">Reset Levels</string>
     <string name="no_more_levels">no more levels :(, brb</string>
     <string name="action_instructions">Instructions</string>
@@ -21,6 +14,4 @@
 
     <string name="level_state_file">levelstate.json</string>
     <string name="levels_file">shapes.json</string>
-    <string name="current_level_key">currentlevel</string>
-    <string name="remaining_levels_key">remaininglevels</string>
 </resources>

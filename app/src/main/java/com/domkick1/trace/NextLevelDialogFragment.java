@@ -14,8 +14,8 @@ import android.view.LayoutInflater;
 public class NextLevelDialogFragment extends DialogFragment {
 
     public interface NextLevelDialogListener {
-        public void onDialogNextLevelClick(DialogFragment dialog);
-        public void onDialogRetryClick(DialogFragment dialog);
+        void onDialogNextLevelClick(DialogFragment dialog);
+        void onDialogRetryClick(DialogFragment dialog);
     }
 
     NextLevelDialogListener nlListener;

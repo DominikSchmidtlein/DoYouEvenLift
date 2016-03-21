@@ -16,7 +16,7 @@ import java.util.Observer;
  */
 public abstract class Trace extends Observable {
 
-    protected Context context;
+    protected final Context context;
 
     public Trace(Context context) {
         this.context = context;

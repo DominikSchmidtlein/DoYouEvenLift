@@ -8,8 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import org.json.JSONObject;
-
 public class MainActivity extends AppCompatActivity implements NextLevelDialogFragment.NextLevelDialogListener {
 
     private GameController gameController;

@@ -34,7 +34,7 @@ public class TraceBuilder extends Trace {
 
     public enum Mode {
         SQUARE("square"), ISOMETRIC("isometric");
-        private String value;
+        private final String value;
 
         Mode(String value) {
             this.value = value;

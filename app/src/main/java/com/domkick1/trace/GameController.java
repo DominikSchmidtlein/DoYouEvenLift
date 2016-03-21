@@ -10,9 +10,9 @@ import android.widget.Toast;
  */
 public class GameController implements View.OnTouchListener, WinListener {
 
-    private MainActivity mainActivity;
-    private TraceGame gameModel;
-    private DrawViewGame gameView;
+    private final MainActivity mainActivity;
+    private final TraceGame gameModel;
+    private final DrawViewGame gameView;
 
     public GameController(MainActivity mainActivity, TraceGame gameModel, DrawViewGame gameView){
         this.mainActivity = mainActivity;

@@ -2,7 +2,6 @@ package com.domkick1.trace;
 
 import android.support.annotation.NonNull;
 
-import java.util.Collection;
 import java.util.Iterator;
 
 /**
@@ -10,8 +9,8 @@ import java.util.Iterator;
  */
 public class Line implements Iterable<Point> {
 
-    private Point p1;
-    private Point p2;
+    private final Point p1;
+    private final Point p2;
 
     public Line(@NonNull Point p1, @NonNull Point p2) {
         this.p1 = p1;
@@ -60,7 +59,6 @@ public class Line implements Iterable<Point> {
         double isometricRun = p2IsometricX - p1IsometricX;
         if (isometricRun == 0)
             return Float.POSITIVE_INFINITY;
-        ;
         return rise / isometricRun;
     }
 

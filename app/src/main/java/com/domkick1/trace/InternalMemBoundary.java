@@ -13,7 +13,7 @@ import java.io.IOException;
  */
 public class InternalMemBoundary {
 
-    private Context context;
+    private final Context context;
 
     public InternalMemBoundary(Context context) {
         this.context = context;

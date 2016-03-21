@@ -7,6 +7,6 @@ import java.util.EventListener;
  */
 public interface WinListener extends EventListener {
 
-    public void onWin(WinEvent winEvent);
+    void onWin(WinEvent winEvent);
 
 }

@@ -6,8 +6,8 @@ package com.domkick1.trace;
 public class Vector {
     public static final double EPSILON = 0.01;
 
-    private double x;
-    private double y;
+    private final double x;
+    private final double y;
 
     public Vector(double x, double y) {
         this.x = x;

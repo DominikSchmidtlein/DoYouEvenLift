@@ -5,9 +5,9 @@ package com.domkick1.trace;
  */
 public class ScreenDimensions {
 
-    private int width;
-    private int height;
-    private int topOffset;
+    private final int width;
+    private final int height;
+    private final int topOffset;
 
     public ScreenDimensions(int w, int h, int tO) {
         width = w;

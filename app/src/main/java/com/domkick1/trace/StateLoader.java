@@ -1,7 +1,6 @@
 package com.domkick1.trace;
 
 import android.content.Context;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,10 +14,10 @@ public class StateLoader {
     public static final String remainingLevelsKey = "remaininglevels";
     public static final String levelsKey = "levels";
 
-    private AssetsBoundary assetsBoundary;
-    private Context context;
-    private InternalMemBoundary internalMemBoundary;
-    private ScreenDimensions dimensions;
+    private final AssetsBoundary assetsBoundary;
+    private final Context context;
+    private final InternalMemBoundary internalMemBoundary;
+    private final ScreenDimensions dimensions;
 
     public StateLoader(Context context, ScreenDimensions dimensions) {
         this.context = context;
@@ -35,8 +34,6 @@ public class StateLoader {
 
             // load state
             String stateString = internalMemBoundary.read(context.getString(R.string.level_state_file));
-
-            Log.d("DOM", stateString);
 
             if (stateString == null)
                 return new LevelState(levelList);

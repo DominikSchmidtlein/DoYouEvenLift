@@ -7,6 +7,6 @@ import java.util.EventListener;
  */
 public interface LevelStateChangedListener extends EventListener {
 
-    public void onLevelStateChanged(LevelStateChangedEvent event);
+    void onLevelStateChanged(LevelStateChangedEvent event);
 
 }

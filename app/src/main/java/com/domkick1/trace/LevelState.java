@@ -14,11 +14,11 @@ import java.util.List;
 public class LevelState {
 
 
-    private LevelList levels;
-    private RemainingLevels remainingLevels;
+    private final LevelList levels;
+    private final RemainingLevels remainingLevels;
     private Integer currentLevel;
 
-    private List<LevelStateChangedListener> levelStateChangedListeners = new ArrayList<>();
+    private final List<LevelStateChangedListener> levelStateChangedListeners = new ArrayList<>();
 
     /**
      * Picks random level from all available levels

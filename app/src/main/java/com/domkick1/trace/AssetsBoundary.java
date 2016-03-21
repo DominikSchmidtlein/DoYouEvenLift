@@ -12,7 +12,7 @@ import java.io.InputStream;
  */
 public class AssetsBoundary {
 
-    private Context context;
+    private final Context context;
 
     public AssetsBoundary(Context context) {
         this.context = context;
