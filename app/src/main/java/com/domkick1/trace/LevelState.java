@@ -83,9 +83,8 @@ public class LevelState {
             remainingLevels.add(totalLevels);
 
         // if levels size is less than totalLevels
-        for (; totalLevels > levels.size() ; totalLevels --) {
+        for (; totalLevels > levels.size() ; totalLevels --)
             remainingLevels.remove(totalLevels - 1);
-        }
     }
 
     public LineList getLevel() {
