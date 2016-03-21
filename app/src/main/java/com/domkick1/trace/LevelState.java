@@ -17,6 +17,7 @@ public class LevelState {
     private final LevelList levels;
     private final RemainingLevels remainingLevels;
     private Integer currentLevel;
+    private Integer totalLevels;
 
     private final List<LevelStateChangedListener> levelStateChangedListeners = new ArrayList<>();
 
@@ -25,14 +26,16 @@ public class LevelState {
      * @param levels all available levels
      */
     public LevelState(@NonNull LevelList levels) {
-        this(0, new RemainingLevels(levels.size()), levels);
+        this(0, levels.size(), new RemainingLevels(levels.size()), levels);
         resetLevels();
     }
 
-    public LevelState(@NonNull Integer currentLevel, @NonNull RemainingLevels remainingLevels, @NonNull LevelList levels) {
+    public LevelState(@NonNull Integer currentLevel, Integer totalLevels, @NonNull RemainingLevels remainingLevels, @NonNull LevelList levels) {
         this.currentLevel = currentLevel;
+        this.totalLevels = totalLevels;
         this.remainingLevels = remainingLevels;
         this.levels = levels;
+        ensureSize();
     }
 
     public void setLevelChangedListener(LevelStateChangedListener listener) {
@@ -54,9 +57,9 @@ public class LevelState {
     public LineList nextLevel() {
         if (!remainingLevels.remove(currentLevel))
             return null;
-        LineList nextLevel = chooseLevel();
+        currentLevel = remainingLevels.chooseLevel();
         notifyLevelStateChangedListeners();
-        return nextLevel;
+        return levels.get(currentLevel);
     }
 
     /**
@@ -66,29 +69,23 @@ public class LevelState {
      * @return
      */
     public LineList resetLevels() {
-        initializeRemainingLevels();
-        LineList nextLevel = chooseLevel();
+        remainingLevels.initializeRemainingLevels(levels.size());
+        currentLevel = remainingLevels.chooseLevel();
         notifyLevelStateChangedListeners();
-        return nextLevel;
-    }
-
-    /**
-     * Randomly selects one of the indices from remaining levels
-     *
-     * @return
-     */
-    private LineList chooseLevel() {
-        if (remainingLevels.isEmpty())
-            return null;
-        currentLevel = remainingLevels.get((int) (Math.random() * remainingLevels.size()));
         return levels.get(currentLevel);
     }
 
-    private void initializeRemainingLevels() {
-        remainingLevels.clear();
+    public void ensureSize() {
         remainingLevels.ensureCapacity(levels.size());
-        for (int i = 0; i < levels.size(); i++)
-            remainingLevels.add(i);
+
+        // if levels size is greater than totalLevels (new levels added)
+        for (; totalLevels < levels.size(); totalLevels ++)
+            remainingLevels.add(totalLevels);
+
+        // if levels size is less than totalLevels
+        for (; totalLevels > levels.size() ; totalLevels --) {
+            remainingLevels.remove(totalLevels - 1);
+        }
     }
 
     public LineList getLevel() {
@@ -98,6 +95,7 @@ public class LevelState {
     public JSONObject toJson() {
         JSONObject jObj = new JSONObject();
         try {
+            jObj.put(StateLoader.totalLevelsKey, totalLevels);
             jObj.put(StateLoader.currentLevelKey, currentLevel);
             jObj.put(StateLoader.remainingLevelsKey, remainingLevels.toJson());
             return jObj;

@@ -35,8 +35,7 @@ public class LineList extends ArrayList<Line> {
     }
 
     public LineList(JSONArray jsonArray, ScreenDimensions dim) {
-        this(new PointList(jsonArray)
-                .getCenteredPoints(dim), false);
+        this(new PointList(jsonArray).getCenteredPoints(dim), false);
     }
 
     /**
@@ -226,6 +225,5 @@ public class LineList extends ArrayList<Line> {
             }
         }
         return connectedLines;
-//        return new LineList(queue);
     }
 }

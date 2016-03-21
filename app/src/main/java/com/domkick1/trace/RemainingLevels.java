@@ -37,4 +37,22 @@ public class RemainingLevels extends ArrayList<Integer> {
         return jArray;
     }
 
+    /**
+     * Randomly selects one of the indices from remaining levels
+     *
+     * @return
+     */
+    public Integer chooseLevel() {
+        if (isEmpty())
+            return null;
+        return get((int) (Math.random() * size()));
+    }
+
+    public void initializeRemainingLevels(int size) {
+        clear();
+        ensureCapacity(size);
+        for (int i = 0; i < size; i++)
+            add(i);
+    }
+
 }

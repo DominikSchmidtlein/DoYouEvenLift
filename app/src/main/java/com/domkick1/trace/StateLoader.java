@@ -10,6 +10,7 @@ import org.json.JSONObject;
  */
 public class StateLoader {
 
+    public static final String totalLevelsKey = "totallevels";
     public static final String currentLevelKey = "currentlevel";
     public static final String remainingLevelsKey = "remaininglevels";
     public static final String levelsKey = "levels";
@@ -38,10 +39,11 @@ public class StateLoader {
             if (stateString == null)
                 return new LevelState(levelList);
 
+            Integer totalLevels = new JSONObject(stateString).getInt(totalLevelsKey);
             Integer currentLevel = new JSONObject(stateString).getInt(currentLevelKey);
             RemainingLevels remainingLevels = new RemainingLevels(new JSONObject(stateString));
 
-            return new LevelState(currentLevel, remainingLevels, levelList);
+            return new LevelState(currentLevel, totalLevels, remainingLevels, levelList);
         } catch (JSONException e) {
             e.printStackTrace();
             return null;

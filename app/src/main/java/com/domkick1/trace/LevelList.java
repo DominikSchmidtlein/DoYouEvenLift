@@ -26,8 +26,4 @@ public class LevelList extends ArrayList<LineList> {
         }
     }
 
-    public JSONArray toJson() {
-        throw new UnsupportedOperationException();
-    }
-
 }
