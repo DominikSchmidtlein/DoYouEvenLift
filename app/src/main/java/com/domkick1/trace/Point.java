@@ -17,7 +17,7 @@ public class Point {
         if (!(o instanceof Point))
             return false;
         Point p = (Point) o;
-        return p.getX() == this.getX() && p.getY() == this.getY();
+        return Math.abs(p.getX() - this.getX()) < 0.01 && Math.abs(p.getY() - this.getY()) < 0.01;
     }
 
     public double getDistance(Point p2) {

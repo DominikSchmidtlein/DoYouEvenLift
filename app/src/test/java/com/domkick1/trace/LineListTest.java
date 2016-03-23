@@ -1,5 +1,7 @@
 package com.domkick1.trace;
 
+import junit.framework.Assert;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -154,5 +156,20 @@ public class LineListTest {
         assertTrue(correctLines.size() == lines.size());
         for (Line l : lines)
             assertTrue(correctLines.aDirectionalContains(l));
+    }
+
+    @Test
+    public void testAddIntersections() {
+        LineList lineList = new LineList();
+        lineList.add(new Line(10, 10, 20, 20));
+        lineList.add(new Line(20, 10, 10, 20));
+        lineList.addIntersections();
+
+        Assert.assertTrue(lineList.size() == 4);
+
+        Assert.assertTrue(lineList.contains(new Line(10, 10, 15, 15)));
+        Assert.assertTrue(lineList.contains(new Line(20, 20, 15, 15)));
+        Assert.assertTrue(lineList.contains(new Line(10, 20, 15, 15)));
+        Assert.assertTrue(lineList.contains(new Line(20, 10, 15, 15)));
     }
 }

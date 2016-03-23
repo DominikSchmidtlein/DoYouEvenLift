@@ -231,7 +231,9 @@ public class LineList extends ArrayList<Line> {
      * Searches for lines in this linelist that intersect and decomposes them into simplelines that
      * include the intersection point. The original composite lines are removed.
      */
-    public void addIntersections() {
+    public LineList addIntersections() {
+        LineList additions = new LineList();
+        LineList removals = new LineList();
         for (int i = 0; i < size(); i++) {
             for (int j = i + 1; j < size(); j++) {
                 // lines that have points in common cannot intersect anywhere else
@@ -242,14 +244,22 @@ public class LineList extends ArrayList<Line> {
                 //lines don't intersect where they are defined
                 if(intersectionPoint == null) continue;
 
-                add(new Line(get(i).getP1(), intersectionPoint));
-                add(new Line(get(i).getP2(), intersectionPoint));
-                add(new Line(get(j).getP1(), intersectionPoint));
-                add(new Line(get(j).getP2(), intersectionPoint));
+                additions.add(new Line(get(i).getP1(), intersectionPoint));
+                additions.add(new Line(get(i).getP2(), intersectionPoint));
+                additions.add(new Line(get(j).getP1(), intersectionPoint));
+                additions.add(new Line(get(j).getP2(), intersectionPoint));
 
-                remove(get(i));
-                remove(get(j));
+                removals.add(get(i));
+                removals.add(get(j));
             }
         }
+        addAll(additions);
+        removeAll(removals);
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return toJsonArray().toString();
     }
 }

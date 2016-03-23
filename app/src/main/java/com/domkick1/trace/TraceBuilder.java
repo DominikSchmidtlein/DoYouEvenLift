@@ -106,7 +106,7 @@ public class TraceBuilder extends Trace {
 
     public boolean logLevel() {
         if (getProblemPoints().isEmpty())
-            Log.d("DOM", shape.getConnectedLines().toJsonArray().toString());
+            Log.d("DOM", shape.getConnectedLines().addIntersections().toString());
         return getProblemPoints().isEmpty();
     }
 
