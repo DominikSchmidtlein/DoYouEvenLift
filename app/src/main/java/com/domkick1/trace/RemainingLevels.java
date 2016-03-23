@@ -18,7 +18,6 @@ public class RemainingLevels extends ArrayList<Integer> {
     }
 
     public RemainingLevels(@NonNull JSONObject statejson) {
-        super();
         try {
             JSONArray jArray = statejson.getJSONArray(StateLoader.remainingLevelsKey);
             ensureCapacity(jArray.length());

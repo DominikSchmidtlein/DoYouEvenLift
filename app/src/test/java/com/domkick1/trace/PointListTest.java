@@ -1,5 +1,6 @@
 package com.domkick1.trace;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,26 +36,26 @@ public class PointListTest {
     }
 
     @Test
-    public void testToFloatArray() throws Exception {
+    public void testToFloatArray() {
         assertTrue(Arrays.equals(sortedPoints.toFloatArray(),
                 new float[]{100, 100, 200, 200, 300, 300, 400, 400}
         ));
     }
 
     @Test
-    public void testIsNearVertex() throws Exception {
+    public void testIsNearVertex() {
         assertTrue(points.isNearVertex(new Point(280, 280), 80).equals(point3));
     }
 
     @Test
-    public void testSortDistanceToPoint() throws Exception {
+    public void testSortDistanceToPoint() {
         assertTrue(!points.equals(sortedPoints));
         points.sortDistanceToPoint(point1);
         assertTrue(points.equals(sortedPoints));
     }
 
     @Test
-    public void testGetPointsOnLine() throws Exception {
+    public void testGetPointsOnLine() {
         PointList pointsOnLine = points.getPointsOnLine(new Line(point2, point4));
 
         PointList correctPoints = new PointList();
@@ -69,8 +70,26 @@ public class PointListTest {
     }
 
     @Test
-    public void testGetOffsets() throws Exception {
-        assertTrue(sortedPoints.getOffsets(new ScreenDimensions(500, 600, 100)).equals(new Point(0, 0)));
-        assertTrue(sortedPoints.getOffsets(new ScreenDimensions(700, 800, 100)).equals(new Point(100, 100)));
+    public void testGetPointSpan() {
+        PointList points = new PointList(new float[]{1, 2, 2, 1, 3, 2, 2, 3});
+        Line span = points.getPointSpan();
+        Assert.assertEquals(span.getP1(), new Point(1,1));
+        Assert.assertEquals(span.getP2(), new Point(3,3));
+    }
+
+    @Test
+    public void testScalePoints() {
+        PointList points = new PointList(new float[]{400, 400, 400, 600, 500, 600, 500, 400});
+        PointList scaledPoints = points.getScaled(new ScreenDimensions(1000, 1000), (float) 0.8);
+        Assert.assertTrue(scaledPoints.contains(new Point(300, 100)));
+        Assert.assertTrue(scaledPoints.contains(new Point(300, 900)));
+        Assert.assertTrue(scaledPoints.contains(new Point(700, 100)));
+        Assert.assertTrue(scaledPoints.contains(new Point(700, 900)));
+    }
+
+    @Test
+    public void testGetOffsets() {
+        assertTrue(sortedPoints.getOffsets(new ScreenDimensions(500, 600 - 100)).equals(new Point(0, 0)));
+        assertTrue(sortedPoints.getOffsets(new ScreenDimensions(700, 800 - 100)).equals(new Point(100, 100)));
     }
 }

@@ -35,7 +35,7 @@ public class LineList extends ArrayList<Line> {
     }
 
     public LineList(JSONArray jsonArray, ScreenDimensions dim) {
-        this(new PointList(jsonArray).getCenteredPoints(dim), false);
+        this(new PointList(jsonArray).getScaled(dim, (float) 0.8), false);
     }
 
     /**
@@ -225,5 +225,31 @@ public class LineList extends ArrayList<Line> {
             }
         }
         return connectedLines;
+    }
+
+    /**
+     * Searches for lines in this linelist that intersect and decomposes them into simplelines that
+     * include the intersection point. The original composite lines are removed.
+     */
+    public void addIntersections() {
+        for (int i = 0; i < size(); i++) {
+            for (int j = i + 1; j < size(); j++) {
+                // lines that have points in common cannot intersect anywhere else
+                if(get(i).isTouching(get(j)) != null) continue;
+
+                Point intersectionPoint = get(i).intersects(get(j));
+
+                //lines don't intersect where they are defined
+                if(intersectionPoint == null) continue;
+
+                add(new Line(get(i).getP1(), intersectionPoint));
+                add(new Line(get(i).getP2(), intersectionPoint));
+                add(new Line(get(j).getP1(), intersectionPoint));
+                add(new Line(get(j).getP2(), intersectionPoint));
+
+                remove(get(i));
+                remove(get(j));
+            }
+        }
     }
 }

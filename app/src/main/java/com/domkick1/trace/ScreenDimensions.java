@@ -7,20 +7,14 @@ public class ScreenDimensions {
 
     private final int width;
     private final int height;
-    private final int topOffset;
 
-    public ScreenDimensions(int w, int h, int tO) {
+    public ScreenDimensions(int w, int h) {
         width = w;
         height = h;
-        topOffset = tO;
     }
 
     public int getHeight() {
         return height;
-    }
-
-    public int getTopOffset() {
-        return topOffset;
     }
 
     public int getWidth() {

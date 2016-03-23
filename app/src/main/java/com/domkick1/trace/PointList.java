@@ -2,6 +2,8 @@ package com.domkick1.trace;
 
 import android.support.annotation.NonNull;
 
+import junit.framework.Assert;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -137,15 +139,14 @@ public class PointList extends ArrayList<Point> {
     }
 
     /**
-     * Calculates the necessary x and y offsets to center these points in a screen with the given
-     * dimensions
+     * Returns a line that runs from top left to bottom right of the smallest rectangle that
+     * includes all points.
      *
-     * @param dim the screen dimensions
-     * @return a point with x and y offsets
+     * @return
      */
-    public Point getOffsets(ScreenDimensions dim) {
-        float left = dim.getWidth();
-        float top = dim.getHeight();
+    public Line getPointSpan() {
+        float left = Float.POSITIVE_INFINITY;
+        float top = Float.POSITIVE_INFINITY;
         float right = 0;
         float bot = 0;
 
@@ -155,8 +156,45 @@ public class PointList extends ArrayList<Point> {
             top = (point.getY() < top) ? point.getY() : top;
             bot = (point.getY() > bot) ? point.getY() : bot;
         }
+        return new Line(left, top, right, bot);
+    }
 
-        return new Point((dim.getWidth() - right - left) / 2, (dim.getHeight() - dim.getTopOffset() - top - bot) / 2);
+    public PointList getScaled(ScreenDimensions dim, float useFactor) {
+        Line span = getPointSpan();
+
+        float left = span.getP1().getX();
+        float top = span.getP1().getY();
+        float right = span.getP2().getX();
+        float bot = span.getP2().getY();
+
+        float width = right - left;
+        float height = bot - top;
+        float xScale = useFactor * dim.getWidth() / width;
+        float yScale = useFactor * dim.getHeight() / height;
+
+        float scale = (xScale < yScale) ? xScale : yScale;
+
+        PointList scalePoints = new PointList(size());
+        for (Point point : this) {
+            float x = scale * (point.getX() - left) + left;
+            float y = scale * (point.getY() - top) + top;
+            scalePoints.add(new Point(x, y));
+        }
+        return scalePoints.getCenteredPoints(dim);
+    }
+
+    /**
+     * Calculates the necessary x and y offsets to center these points in a screen with the given
+     * dimensions
+     *
+     * @param dim the screen dimensions
+     * @return a point with x and y offsets
+     */
+    public Point getOffsets(ScreenDimensions dim) {
+        Line span = getPointSpan();
+
+        return new Point((dim.getWidth() - span.getP2().getX() - span.getP1().getX()) / 2,
+                (dim.getHeight() - span.getP1().getY() - span.getP2().getY()) / 2);
     }
 
 }

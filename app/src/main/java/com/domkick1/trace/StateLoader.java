@@ -1,6 +1,7 @@
 package com.domkick1.trace;
 
 import android.content.Context;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,6 +47,7 @@ public class StateLoader {
             return new LevelState(currentLevel, totalLevels, remainingLevels, levelList);
         } catch (JSONException e) {
             e.printStackTrace();
+            Log.d("DOM", "RETURNING NULL");
             return null;
         }
     }

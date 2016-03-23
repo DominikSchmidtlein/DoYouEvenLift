@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements NextLevelDialogFr
         android.graphics.Point size = new android.graphics.Point();
         getWindowManager().getDefaultDisplay().getSize(size);
         int actionBarHeight = (int) getApplicationContext().getTheme().obtainStyledAttributes(new int[]{android.R.attr.actionBarSize}).getDimension(0, 0);
-        ScreenDimensions dim = new ScreenDimensions(size.x, size.y, actionBarHeight + 50);
+        ScreenDimensions dim = new ScreenDimensions(size.x, size.y - actionBarHeight - 25);
 
         // read state from files
         LevelState state = new StateLoader(this, dim).loadState();

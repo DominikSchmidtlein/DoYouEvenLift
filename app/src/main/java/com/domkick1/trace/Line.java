@@ -88,7 +88,7 @@ public class Line implements Iterable<Point> {
 
     @Override
     public int hashCode() {
-        return Math.round(p1.getX() * p1.getY() * p2.getX() * p2.getY() / 1000000 - 2147483647);
+        return Math.round(p1.getX() * p1.getY() * p2.getX() * p2.getY());
     }
 
     public Line getOpposite() {
@@ -119,6 +119,19 @@ public class Line implements Iterable<Point> {
         if (getSlope() == Float.POSITIVE_INFINITY)
             return p1.getX() == point.getX();
         return Math.abs((point.getY() - getSlope() * point.getX() - getYIntercept())) < 0.0000000000001;
+    }
+
+    public Point intersects(Line line) {
+        if (line == null) return null;
+        if (getSlope() == line.getSlope()) return null;
+
+        float x = (line.getYIntercept() - getYIntercept())/(getSlope() - line.getSlope());
+        float y = getSlope() * x + getYIntercept();
+        Point intersectionPoint = new Point(x, y);
+
+        if(!squareContains(intersectionPoint)) return null;
+        if(!line.squareContains(intersectionPoint)) return null;
+        return intersectionPoint;
     }
 
     public boolean squareContains(Point point) {

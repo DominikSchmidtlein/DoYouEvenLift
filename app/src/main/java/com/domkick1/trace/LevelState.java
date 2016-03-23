@@ -84,7 +84,7 @@ public class LevelState {
 
         // if levels size is less than totalLevels
         for (; totalLevels > levels.size() ; totalLevels --)
-            remainingLevels.remove(totalLevels - 1);
+            remainingLevels.remove(Integer.valueOf(totalLevels - 1));
     }
 
     public LineList getLevel() {
@@ -101,6 +101,14 @@ public class LevelState {
         } catch (JSONException e) {
             throw new UnsupportedOperationException();
         }
+    }
+
+    public Integer getTotalLevels() {
+        return totalLevels;
+    }
+
+    public RemainingLevels getRemainingLevels() {
+        return remainingLevels;
     }
 
     @Override

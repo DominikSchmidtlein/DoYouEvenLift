@@ -13,8 +13,11 @@ import java.util.ArrayList;
  */
 public class LevelList extends ArrayList<LineList> {
 
+    public LevelList(int size) {
+        super(size);
+    }
+
     public LevelList(@NonNull JSONObject jsonObject, @NonNull ScreenDimensions dimensions) {
-        super();
         try {
             JSONArray levels = jsonObject.getJSONArray(StateLoader.levelsKey);
             ensureCapacity(levels.length());
