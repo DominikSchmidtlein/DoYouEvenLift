@@ -141,6 +141,12 @@ public class Line implements Iterable<Point> {
                 !(point.getY() > p1.getY() && point.getY() > p2.getY());
     }
 
+    public LineList getSimpleLines(PointList points) {
+        PointList intersectingPoints = points.getPointsOnLine(this);
+        intersectingPoints.sortDistanceToPoint(this.getP1());
+        return new LineList(intersectingPoints, true);
+    }
+
     public Point getP1() {
         return p1;
     }

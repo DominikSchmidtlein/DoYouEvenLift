@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import java.util.Arrays;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -92,9 +93,31 @@ public class LineListTest {
     }
 
     @Test
-    public void testGetWithoutDuplicates() {
-        assertTrue(lines1.getWithoutDuplicates().equals(lines1));
-        assertTrue(lines4.getWithoutDuplicates().isEmpty());
+    public void testRemoveDuplicates() {
+        // with 3 duplicates
+        LineList withDuplicates = new LineList(3);
+        withDuplicates.add(new Line(1, 2, 3, 4));
+        withDuplicates.add(new Line(1, 2, 3, 4));
+        withDuplicates.add(new Line(1, 2, 3, 4));
+
+        LineList withoutDuplicates = new LineList(3);
+
+        withDuplicates.removeDuplicates();
+        assertTrue(withDuplicates.equals(withoutDuplicates));
+
+        // without duplicates
+        withDuplicates.clear();
+        withoutDuplicates.clear();
+        withDuplicates.removeDuplicates();
+        assertTrue(withDuplicates.equals(withoutDuplicates));
+
+        // with 2 duplicates
+        withDuplicates.clear();
+        withoutDuplicates.clear();
+        withDuplicates.add(new Line(1, 2, 3, 4));
+        withDuplicates.add(new Line(1, 2, 3, 4));
+        withDuplicates.removeDuplicates();
+        assertTrue(withDuplicates.equals(withoutDuplicates));
     }
 
     @Test

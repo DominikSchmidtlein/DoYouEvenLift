@@ -120,21 +120,19 @@ public class LineList extends ArrayList<Line> {
     }
 
     /**
-     * Returns a list of lines where all instances of duplicates are removed. Therefore if there
-     * were 2 instances of lineA, there will be none in the return list.
-     *
-     * @return a list free of all instances that were once duplicates
+     * Updates list where all instances of duplicates are removed. Therefore if there
+     * were 2 instances of lineA, there will be none afterwards.
      */
-    public LineList getWithoutDuplicates() {
-        LineList noDuplicateLines = new LineList(size());
-        for (ListIterator<Line> i = listIterator(); i.hasNext(); ) {
+    public void removeDuplicates() {
+        LineList withDuplicates = new LineList(this);
+        clear();
+        for (ListIterator<Line> i = withDuplicates.listIterator(); i.hasNext(); ) {
             Line line = i.next();
             i.remove();
-            if (!aDirectionalContains(line))
-                noDuplicateLines.add(line);
+            if (!withDuplicates.aDirectionalContains(line))
+                add(line);
             i.add(line);
         }
-        return noDuplicateLines;
     }
 
     /**
@@ -237,12 +235,12 @@ public class LineList extends ArrayList<Line> {
         for (int i = 0; i < size(); i++) {
             for (int j = i + 1; j < size(); j++) {
                 // lines that have points in common cannot intersect anywhere else
-                if(get(i).isTouching(get(j)) != null) continue;
+                if (get(i).isTouching(get(j)) != null) continue;
 
                 Point intersectionPoint = get(i).intersects(get(j));
 
                 //lines don't intersect where they are defined
-                if(intersectionPoint == null) continue;
+                if (intersectionPoint == null) continue;
 
                 additions.add(new Line(get(i).getP1(), intersectionPoint));
                 additions.add(new Line(get(i).getP2(), intersectionPoint));

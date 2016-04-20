@@ -113,4 +113,34 @@ public class LineTest {
         assertTrue(line2.getYIntercept() == 15);
     }
 
+    @Test
+    public void testGetSimpleLines() {
+        PointList points = new PointList(5);
+        points.add(new Point(10, 10));
+        points.add(new Point(20, 20));
+        points.add(new Point(30, 30));
+        points.add(new Point(30, 10));
+        points.add(new Point(10, 30));
+
+        // diagonal
+        Line line = new Line(10, 10, 30, 30);
+        LineList simpleLines = new LineList(2);
+        simpleLines.add(new Line(10, 10, 20, 20));
+        simpleLines.add(new Line(20, 20, 30, 30));
+        assertTrue(simpleLines.equals(line.getSimpleLines(points)));
+
+        // 2nd diagonal
+        line = new Line(30, 10, 10, 30);
+        simpleLines.clear();
+        simpleLines.add(new Line(30, 10, 20, 20));
+        simpleLines.add(new Line(20, 20, 10, 30));
+        assertTrue(line.getSimpleLines(points).equals(simpleLines));
+
+        // vertical
+        line = new Line(10, 10, 10, 30);
+        simpleLines.clear();
+        simpleLines.add(new Line(10, 10, 10, 30));
+        assertTrue(line.getSimpleLines(points).equals(simpleLines));
+    }
+
 }

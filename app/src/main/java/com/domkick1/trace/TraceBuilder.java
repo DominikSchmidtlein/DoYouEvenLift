@@ -77,8 +77,8 @@ public class TraceBuilder extends Trace {
                 if (nearPoint != null) {
                     if (!shape.get(shape.size() - 1).getP1().equals(nearPoint)) {
                         Line newLine = new Line(shape.get(shape.size() - 1).getP1(), nearPoint);
-                        shape.addWithReplacement(getSimpleLines(newLine));
-                        shape = shape.getWithoutDuplicates();
+                        shape.addWithReplacement(newLine.getSimpleLines(points));
+                        shape.removeDuplicates();
                         shape.add(new Line(nearPoint, touchPoint));
                         return true;
                     }
@@ -90,12 +90,6 @@ public class TraceBuilder extends Trace {
                 updateShapeLegality();
                 return false;
         }
-    }
-
-    private LineList getSimpleLines(Line line) {
-        PointList intersectingPoints = points.getPointsOnLine(line);
-        intersectingPoints.sortDistanceToPoint(line.getP1());
-        return new LineList(intersectingPoints, true);
     }
 
     private void updateShapeLegality() {
