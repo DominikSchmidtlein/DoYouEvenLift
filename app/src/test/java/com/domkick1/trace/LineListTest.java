@@ -107,7 +107,7 @@ public class LineListTest {
     public void testAddLines() {
         LineList lineList = new LineList();
         lineList.add(line4);
-        lineList.addLines(lines2);
+        lineList.addWithReplacement(lines2);
         assertTrue(lineList.equals(lines2));
     }
 

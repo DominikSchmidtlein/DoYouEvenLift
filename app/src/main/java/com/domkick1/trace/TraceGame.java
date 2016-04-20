@@ -48,7 +48,7 @@ public class TraceGame extends Trace {
                     Point startPoint = trace.get(trace.size() - 1).getP1();
                     LineList componentLines = hashMap.get(new Line(startPoint, nearPoint));
                     if (componentLines != null && !trace.isOccupied(componentLines)) {
-                        trace.addLines(componentLines);
+                        trace.addWithReplacement(componentLines);
                         trace.add(new Line(nearPoint, touchPoint));
                         return true;
                     }
@@ -81,6 +81,7 @@ public class TraceGame extends Trace {
 
     private void setupLevel() {
         shape = levelState.getLevel();
+//        Log.d("DOM", shape.toString());
         if (shape == null) {
             Toast.makeText(context, "no more levels", Toast.LENGTH_LONG).show();
             return;

@@ -77,7 +77,7 @@ public class TraceBuilder extends Trace {
                 if (nearPoint != null) {
                     if (!shape.get(shape.size() - 1).getP1().equals(nearPoint)) {
                         Line newLine = new Line(shape.get(shape.size() - 1).getP1(), nearPoint);
-                        shape.addLines(getSimpleLines(newLine));
+                        shape.addWithReplacement(getSimpleLines(newLine));
                         shape = shape.getWithoutDuplicates();
                         shape.add(new Line(nearPoint, touchPoint));
                         return true;

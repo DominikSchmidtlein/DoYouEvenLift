@@ -118,7 +118,7 @@ public class Line implements Iterable<Point> {
             return false;
         if (getSlope() == Float.POSITIVE_INFINITY)
             return p1.getX() == point.getX();
-        return Math.abs((point.getY() - getSlope() * point.getX() - getYIntercept())) < 0.0000000000001;
+        return Math.abs((point.getY() - getSlope() * point.getX() - getYIntercept())) < 0.001;
     }
 
     public Point intersects(Line line) {
