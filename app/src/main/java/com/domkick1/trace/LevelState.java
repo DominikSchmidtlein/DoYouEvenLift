@@ -58,6 +58,8 @@ public class LevelState {
         if (!remainingLevels.remove(currentLevel))
             return null;
         currentLevel = remainingLevels.chooseLevel();
+        if(currentLevel == null)
+            return null;
         notifyLevelStateChangedListeners();
         return levels.get(currentLevel);
     }
