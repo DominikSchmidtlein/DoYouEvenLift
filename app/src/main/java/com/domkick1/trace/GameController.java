@@ -14,7 +14,7 @@ public class GameController implements View.OnTouchListener, WinListener {
     private final TraceGame gameModel;
     private final DrawViewGame gameView;
 
-    public GameController(MainActivity mainActivity, TraceGame gameModel, DrawViewGame gameView){
+    public GameController(MainActivity mainActivity, TraceGame gameModel, DrawViewGame gameView) {
         this.mainActivity = mainActivity;
         this.gameModel = gameModel;
         this.gameView = gameView;
@@ -34,9 +34,8 @@ public class GameController implements View.OnTouchListener, WinListener {
         newFragment.show(mainActivity.getFragmentManager(), "next_level");
     }
 
-    public void nextLevelSelected(){
-        if(!gameModel.toNextLevel())
-            Toast.makeText(mainActivity, mainActivity.getString(R.string.no_more_levels), Toast.LENGTH_LONG).show();
+    public void nextLevelSelected() {
+        gameModel.toNextLevel();
     }
 
 }

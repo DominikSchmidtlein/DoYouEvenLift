@@ -23,10 +23,12 @@ public class TraceGame extends Trace {
     private final List<WinListener> winListeners = new ArrayList<>(2);
 
     private final LevelState levelState;
+    private final LevelLoader levelLoader;
 
-    public TraceGame(Context context, @NonNull LevelState state) {
+    public TraceGame(Context context, @NonNull LevelState state, LevelLoader levelLoader) {
         super(context);
         levelState = state;
+        this.levelLoader = levelLoader;
         setupLevel();
     }
 
@@ -73,18 +75,16 @@ public class TraceGame extends Trace {
             listener.onWin(new WinEvent(this));
     }
 
-    public boolean toNextLevel() {
+    public void toNextLevel() {
         levelState.nextLevel();
         setupLevel();
-        return true;
     }
 
     private void setupLevel() {
-        shape = levelState.getLevel();
-        ((MainActivity) context).setTitle(levelState.getCurrentLevel());
-        if (shape == null) {
-            Toast.makeText(context, "no more levels", Toast.LENGTH_LONG).show();
-            return;
+        try {
+            shape = levelLoader.getLevel(levelState.getCurrentLevel());
+        } catch (NoMoreLevelsException e) {
+            Toast.makeText(context, context.getString(R.string.no_more_levels), Toast.LENGTH_LONG).show();
         }
         trace = new LineList(shape.size());
         hashMap = new LineDictionary(shape, false);

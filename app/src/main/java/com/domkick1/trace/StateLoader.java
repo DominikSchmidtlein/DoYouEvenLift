@@ -3,52 +3,59 @@ package com.domkick1.trace;
 import android.content.Context;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * Created by domin_2o9sb4z on 2016-03-19.
  */
 public class StateLoader {
 
-    public static final String totalLevelsKey = "totallevels";
     public static final String currentLevelKey = "currentlevel";
-    public static final String remainingLevelsKey = "remaininglevels";
-    public static final String levelsKey = "levels";
+    public static final String playedLevels = "playedlevels";
 
-    private final AssetsBoundary assetsBoundary;
     private final Context context;
     private final InternalMemBoundary internalMemBoundary;
-    private final ScreenDimensions dimensions;
 
-    public StateLoader(Context context, ScreenDimensions dimensions) {
+    public StateLoader(Context context) {
         this.context = context;
-        this.dimensions = dimensions;
         internalMemBoundary = new InternalMemBoundary(context);
-        assetsBoundary = new AssetsBoundary(context);
     }
 
-    public LevelState loadState() {
+    public LevelState loadState(int totalLevels) {
         try {
-            // load levels
-            String levelsString = assetsBoundary.read(context.getString(R.string.levels_file));
-            LevelList levelList = new LevelList(new JSONObject(levelsString), dimensions);
-
             // load state
             String stateString = internalMemBoundary.read(context.getString(R.string.level_state_file));
 
-            if (stateString == null)
-                return new LevelState(levelList);
-
-            Integer totalLevels = new JSONObject(stateString).getInt(totalLevelsKey);
+            // parse current level and played levels
             Integer currentLevel = new JSONObject(stateString).getInt(currentLevelKey);
-            RemainingLevels remainingLevels = new RemainingLevels(new JSONObject(stateString));
+            JArrayList playedLevels = stringToList(stateString);
 
-            return new LevelState(currentLevel, totalLevels, remainingLevels, levelList);
-        } catch (JSONException e) {
+            return new LevelState(currentLevel, totalLevels, playedLevels);
+        } catch (FileNotFoundException fnf) {
+            // first time app is opened
+            return new LevelState(0, totalLevels, new JArrayList(totalLevels));
+        } catch (JSONException | IOException e) {
             e.printStackTrace();
-            Log.d("DOM", "RETURNING NULL");
-            return null;
+            throw new UnsupportedOperationException();
         }
     }
+
+    private JArrayList stringToList(String state) {
+        try {
+            JSONArray jArray = new JSONObject(state).getJSONArray(StateLoader.playedLevels);
+            JArrayList list = new JArrayList(jArray.length());
+            for (int i = 0; i < jArray.length(); i++)
+                list.add(jArray.getInt(i));
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            throw new UnsupportedOperationException();
+        }
+    }
+
 }

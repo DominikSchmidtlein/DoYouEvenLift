@@ -19,32 +19,18 @@ public class InternalMemBoundary {
         this.context = context;
     }
 
-    public String read(String filename) {
-        try {
-            byte[] buf = new byte[(int) new File(context.getFilesDir(), filename).length()];
-            FileInputStream inputStream = context.openFileInput(filename);
-            inputStream.read(buf);
-            inputStream.close();
-            return new String(buf);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        } catch (IOException ee) {
-            ee.printStackTrace();
-            return null;
-        }
+    public String read(String filename) throws IOException {
+        byte[] buf = new byte[(int) new File(context.getFilesDir(), filename).length()];
+        FileInputStream inputStream = context.openFileInput(filename);
+        inputStream.read(buf);
+        inputStream.close();
+        return new String(buf);
     }
 
-    public void write(String filename, String jsonString) {
-        try {
-            FileOutputStream outputStream = context.openFileOutput(filename, Context.MODE_PRIVATE);
-            outputStream.write(jsonString.getBytes());
-            outputStream.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException ee) {
-            ee.printStackTrace();
-        }
+    public void write(String filename, String jsonString) throws IOException{
+        FileOutputStream outputStream = context.openFileOutput(filename, Context.MODE_PRIVATE);
+        outputStream.write(jsonString.getBytes());
+        outputStream.close();
     }
 
 }

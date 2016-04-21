@@ -13,29 +13,19 @@ import java.util.List;
  */
 public class LevelState {
 
-
-    private final LevelList levels;
-    private final RemainingLevels remainingLevels;
+    private final JArrayList playedLevels;
+    private final JArrayList remainingLevels;
     private Integer currentLevel;
-    private Integer totalLevels;
 
     private final List<LevelStateChangedListener> levelStateChangedListeners = new ArrayList<>();
 
-    /**
-     * Picks random level from all available levels
-     * @param levels all available levels
-     */
-    public LevelState(@NonNull LevelList levels) {
-        this(0, levels.size(), new RemainingLevels(levels.size()), levels);
-        resetLevels();
-    }
-
-    public LevelState(@NonNull Integer currentLevel, Integer totalLevels, @NonNull RemainingLevels remainingLevels, @NonNull LevelList levels) {
+    public LevelState(int currentLevel, int totalLevels, JArrayList playedLevels) {
         this.currentLevel = currentLevel;
-        this.totalLevels = totalLevels;
-        this.remainingLevels = remainingLevels;
-        this.levels = levels;
-        ensureSize();
+        this.playedLevels = playedLevels;
+        remainingLevels = new JArrayList(totalLevels - playedLevels.size());
+        for (int i = 0; i < totalLevels; i++)
+            if (!playedLevels.contains(i))
+                remainingLevels.add(i);
     }
 
     public void setLevelChangedListener(LevelStateChangedListener listener) {
@@ -49,67 +39,50 @@ public class LevelState {
     }
 
     /**
-     * Removes the current level from remaining levels. Then chooses a new level randomly. Notifies
+     * Removes the current level from remaining levels. Then chooses a new level. Notifies
      * listeners that the state has changed.
      *
      * @return returns the next level or null if no levels remain
      */
-    public LineList nextLevel() {
-        if (!remainingLevels.remove(currentLevel))
-            return null;
-        currentLevel = remainingLevels.chooseLevel();
-        if(currentLevel == null)
-            return null;
+    public Integer nextLevel() {
+        levelCompleted();
+        chooseLevel();
         notifyLevelStateChangedListeners();
-        return levels.get(currentLevel);
+        return currentLevel;
     }
 
-    /**
-     * Sets up remaining levels to contain all indicies. Then randomly selects new level. Notifies
-     * listeners that state has changed.
-     *
-     * @return
-     */
-    public LineList resetLevels() {
-        remainingLevels.initializeRemainingLevels(levels.size());
-        currentLevel = remainingLevels.chooseLevel();
+    private void chooseLevel() {
+        currentLevel = remainingLevels.isEmpty() ? -1 : remainingLevels.get(0);
+    }
+
+    private void levelCompleted() {
+        if (currentLevel < 0)
+            return;
+        remainingLevels.remove(currentLevel);
+        playedLevels.add(currentLevel);
+    }
+
+    public Integer resetState(int numberOfLevels) throws NoMoreLevelsException {
+        remainingLevels.initializeRemainingLevels(numberOfLevels);
+        playedLevels.clear();
+        currentLevel = null;
+        nextLevel();
         notifyLevelStateChangedListeners();
-        return levels.get(currentLevel);
-    }
-
-    public void ensureSize() {
-        remainingLevels.ensureCapacity(levels.size());
-
-        // if levels size is greater than totalLevels (new levels added)
-        for (; totalLevels < levels.size(); totalLevels ++)
-            remainingLevels.add(totalLevels);
-
-        // if levels size is less than totalLevels
-        for (; totalLevels > levels.size() ; totalLevels --)
-            remainingLevels.remove(Integer.valueOf(totalLevels - 1));
-    }
-
-    public LineList getLevel() {
-        return levels.get(currentLevel.intValue());
+        return currentLevel;
     }
 
     public JSONObject toJson() {
         JSONObject jObj = new JSONObject();
         try {
-            jObj.put(StateLoader.totalLevelsKey, totalLevels);
             jObj.put(StateLoader.currentLevelKey, currentLevel);
-            jObj.put(StateLoader.remainingLevelsKey, remainingLevels.toJson());
+            jObj.put(StateLoader.playedLevels, playedLevels.toJson());
             return jObj;
         } catch (JSONException e) {
             throw new UnsupportedOperationException();
         }
     }
 
-    public Integer getTotalLevels() {
-        return totalLevels;
-    }
-
-    public RemainingLevels getRemainingLevels() {
+    public JArrayList getRemainingLevels() {
         return remainingLevels;
     }
 

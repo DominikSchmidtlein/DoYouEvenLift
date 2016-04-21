@@ -31,13 +31,13 @@ public class MainActivity extends AppCompatActivity implements NextLevelDialogFr
         ScreenDimensions dim = new ScreenDimensions(size.x, size.y - actionBarHeight - 25);
 
         // read state from files
-        LevelState state = new StateLoader(this, dim).loadState();
+        LevelState state = new StateLoader(this).loadState(new LevelLoader(this, dim).getNumberOfLevels());
 
         // set state saver to listen for state changes
         state.setLevelChangedListener(new StateSaver(this));
-        state.resetLevels();
+//        state.resetState();
 
-        TraceGame traceGame = new TraceGame(this, state);
+        TraceGame traceGame = new TraceGame(this, state, new LevelLoader(this, dim));
         DrawViewGame drawViewGame = (DrawViewGame) findViewById(R.id.draw_view);
         gameController = new GameController(this, traceGame, drawViewGame);
 
