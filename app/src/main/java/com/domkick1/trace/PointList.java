@@ -2,8 +2,6 @@ package com.domkick1.trace;
 
 import android.support.annotation.NonNull;
 
-import junit.framework.Assert;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -116,7 +114,7 @@ public class PointList extends ArrayList<Point> {
     public PointList getPointsOnLine(Line line) {
         PointList intersectingPoints = new PointList();
         for (Point point : this)
-            if (line.intersects(point))
+            if (line.intersectsPoint(point))
                 intersectingPoints.add(point);
         return intersectingPoints;
     }

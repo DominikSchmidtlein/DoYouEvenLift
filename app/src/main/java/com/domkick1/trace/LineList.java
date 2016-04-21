@@ -1,13 +1,13 @@
 package com.domkick1.trace;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.ListIterator;
 import java.util.Queue;
 
@@ -226,7 +226,7 @@ public class LineList extends ArrayList<Line> {
     }
 
     /**
-     * Searches for lines in this linelist that intersect and decomposes them into simplelines that
+     * Searches for lines in this linelist that intersect and decomposes them into simple lines that
      * include the intersection point. The original composite lines are removed.
      */
     public LineList addIntersections() {
@@ -237,7 +237,7 @@ public class LineList extends ArrayList<Line> {
                 // lines that have points in common cannot intersect anywhere else
                 if (get(i).isTouching(get(j)) != null) continue;
 
-                Point intersectionPoint = get(i).intersects(get(j));
+                Point intersectionPoint = get(i).intersectsLine(get(j));
 
                 //lines don't intersect where they are defined
                 if (intersectionPoint == null) continue;

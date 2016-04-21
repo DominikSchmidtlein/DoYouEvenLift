@@ -11,6 +11,7 @@ import android.view.MenuItem;
 public class MainActivity extends AppCompatActivity implements NextLevelDialogFragment.NextLevelDialogListener {
 
     private GameController gameController;
+    Toolbar myToolbar;
 
     private final String currentLevelKey = "currentlevel";
 
@@ -20,7 +21,7 @@ public class MainActivity extends AppCompatActivity implements NextLevelDialogFr
         setContentView(R.layout.activity_main);
 
         // Toolabr setup
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        myToolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(myToolbar);
 
         // get screen dimensions and action bar height
@@ -81,6 +82,10 @@ public class MainActivity extends AppCompatActivity implements NextLevelDialogFr
 
     public void onDialogRetryClick(DialogFragment dialogFragment) {
 
+    }
+
+    public void setTitle(int i) {
+        myToolbar.setTitle("Trace " + i);
     }
 
 }

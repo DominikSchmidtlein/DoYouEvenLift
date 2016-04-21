@@ -111,6 +111,10 @@ public class LevelState {
         return remainingLevels;
     }
 
+    public Integer getCurrentLevel() {
+        return currentLevel;
+    }
+
     @Override
     public String toString() {
         return toJson().toString();

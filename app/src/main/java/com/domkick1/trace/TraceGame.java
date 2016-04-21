@@ -81,7 +81,7 @@ public class TraceGame extends Trace {
 
     private void setupLevel() {
         shape = levelState.getLevel();
-//        Log.d("DOM", shape.toString());
+        ((MainActivity) context).setTitle(levelState.getCurrentLevel());
         if (shape == null) {
             Toast.makeText(context, "no more levels", Toast.LENGTH_LONG).show();
             return;

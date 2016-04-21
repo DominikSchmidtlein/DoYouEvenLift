@@ -55,22 +55,45 @@ public class LineTest {
     }
 
     @Test
-    public void testIntersects() {
+    public void testIntersectsPoint() {
         // Horizontal
-        assertTrue(horizontal.intersects(new Point(2, 3)));
-        assertTrue(horizontal.intersects(point1a));
-        assertTrue(horizontal.intersects(point1b));
-        assertTrue(!horizontal.intersects(new Point(2, (float) 3.1)));
+        assertTrue(horizontal.intersectsPoint(new Point(2, 3)));
+        assertTrue(horizontal.intersectsPoint(point1a));
+        assertTrue(horizontal.intersectsPoint(point1b));
+        assertTrue(!horizontal.intersectsPoint(new Point(2, (float) 3.1)));
 
         //Vertical
-        assertTrue(vertical.intersects(new Point(3, 5)));
-        assertTrue(vertical.intersects(point4a));
-        assertTrue(vertical.intersects(point4b));
+        assertTrue(vertical.intersectsPoint(new Point(3, 5)));
+        assertTrue(vertical.intersectsPoint(point4a));
+        assertTrue(vertical.intersectsPoint(point4b));
 
         //Diagonal
-        assertTrue(diagonal.intersects(point3a));
-        assertTrue(diagonal.intersects(point3b));
-        assertTrue(!diagonal.intersects(new Point(3, (float) 3.01)));
+        assertTrue(diagonal.intersectsPoint(point3a));
+        assertTrue(diagonal.intersectsPoint(point3b));
+        assertTrue(!diagonal.intersectsPoint(new Point(3, (float) 3.01)));
+    }
+
+    @Test
+    public void testIntersectsLine() {
+        // diagonals
+        Line l1 = new Line(10, 10, 30, 30);
+        Line l2 = new Line(10, 30, 30, 10);
+        assertTrue(l1.intersectsLine(l2).equals(new Point(20, 20)));
+
+        // vertical and horizontal
+        l1 = new Line(10, 10, 10, 50);
+        l2 = new Line(5, 20, 20, 20);
+        assertTrue(l1.intersectsLine(l2).equals(new Point(10, 20)));
+
+        // vertical and diagonal
+        l1 = new Line(5, 15, 15, 25);
+        l2 = new Line(10, 10, 10, 50);
+        assertTrue(l1.intersectsLine(l2).equals(new Point(10, 20)));
+
+        // out of bounds
+        l1 = new Line(20, 20, 50, 50);
+        l2 = new Line(5, 15, 30, 20);
+        assertTrue(l1.intersectsLine(l2) == null);
     }
 
     @Test

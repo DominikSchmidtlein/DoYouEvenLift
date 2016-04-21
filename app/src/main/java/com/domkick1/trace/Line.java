@@ -113,7 +113,7 @@ public class Line implements Iterable<Point> {
      * @param point a point that may lie on the line
      * @return true if the point is on the line
      */
-    public boolean intersects(Point point) {
+    public boolean intersectsPoint(Point point) {
         if (!squareContains(point))
             return false;
         if (getSlope() == Float.POSITIVE_INFINITY)
@@ -121,12 +121,20 @@ public class Line implements Iterable<Point> {
         return Math.abs((point.getY() - getSlope() * point.getX() - getYIntercept())) < 0.001;
     }
 
-    public Point intersects(Line line) {
+    public Point intersectsLine(Line line) {
         if (line == null) return null;
-        if (getSlope() == line.getSlope()) return null;
+        if (Math.abs(getSlope() - line.getSlope()) < 0.001) return null;
 
         float x = (line.getYIntercept() - getYIntercept())/(getSlope() - line.getSlope());
         float y = getSlope() * x + getYIntercept();
+
+        if(getSlope() == Float.POSITIVE_INFINITY) {
+            x = getP1().getX();
+            y = line.getSlope() * x + line.getYIntercept();
+        } else if(line.getSlope() == Float.POSITIVE_INFINITY) {
+            x = line.getP1().getX();
+            y = getSlope() * x + getYIntercept();
+        }
         Point intersectionPoint = new Point(x, y);
 
         if(!squareContains(intersectionPoint)) return null;
