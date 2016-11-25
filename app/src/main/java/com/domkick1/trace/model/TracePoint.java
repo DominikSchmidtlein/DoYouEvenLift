@@ -12,4 +12,8 @@ public class TracePoint {
 
     private List<Connection> connections;
 
+    Connection connectedTo(TracePoint tracePoint) {
+        return null;
+    }
+
 }

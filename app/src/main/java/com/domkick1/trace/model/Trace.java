@@ -8,7 +8,6 @@ import java.util.Map;
  */
 public class Trace {
 
-    int occupancyCount;
     Map<TracePoint, TracePoint> points;
     List<Connection> baseConnections;
 
@@ -17,5 +16,12 @@ public class Trace {
     }
 
 
+
+    /**
+     * Sets all connections to unoccupied. Sets
+     */
+    void reset() {
+
+    }
 
 }

@@ -7,11 +7,38 @@ import java.util.List;
  */
 public class Connection {
 
-    TracePoint point1;
-    TracePoint point2;
+    private TracePoint point1;
+    private TracePoint point2;
 
-    List<Connection> subConnections;
-    List<Connection> superConnections;
+    private List<Connection> subConnections;
+    private List<Connection> superConnections;
 
-    boolean occupied;
+    private State state;
+
+    private int length;
+    private int freeCount;
+
+    public Connection(TracePoint p1, TracePoint p2) {
+        point1 = p1;
+        point2 = p2;
+    }
+
+    boolean isFree() {
+        return state == State.FREE;
+    }
+
+    /**
+     * Sets current connection to occupied, subconnections to occupied and superconnections to
+     * blocked.
+     */
+    void setOccupied() {
+
+    }
+
+    private enum State {
+        OCCUPIED,
+        BLOCKED,
+        FREE
+    }
+
 }
