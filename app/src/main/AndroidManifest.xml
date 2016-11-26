@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.domkick1.trace">
+    package="dominikschmidtlein.trace">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -27,7 +27,7 @@
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.domkick1.trace.MainActivity" />
+                android:value="dominikschmidtlein.trace.MainActivity" />
         </activity>
         <activity
             android:name=".LevelBuilderActivity"
@@ -36,7 +36,7 @@
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.domkick1.trace.MainActivity" />
+                android:value="dominikschmidtlein.trace.MainActivity" />
         </activity>
     </application>
 

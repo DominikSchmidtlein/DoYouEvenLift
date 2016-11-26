@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.domkick1.trace.LevelBuilderActivity"
+    tools:context="dominikschmidtlein.trace.LevelBuilderActivity"
     tools:showIn="@layout/activity_level_builder">
 
-    <com.domkick1.trace.DrawViewLevelBuilder
+    <dominikschmidtlein.trace.DrawViewLevelBuilder
         android:id="@+id/level_builder_draw_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
