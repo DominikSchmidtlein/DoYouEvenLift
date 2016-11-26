@@ -15,7 +15,9 @@ public class Trace {
         return null;
     }
 
-
+    boolean isComplete() {
+        return false;
+    }
 
     /**
      * Sets all connections to unoccupied. Sets

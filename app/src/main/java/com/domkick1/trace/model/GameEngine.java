@@ -53,6 +53,9 @@ public class GameEngine implements Engine{
      */
     @Override
     public boolean up(TracePoint touchPoint) {
+        if (trace.isComplete()) {
+            // notify win event
+        }
         trace.reset();
         return false;
     }
