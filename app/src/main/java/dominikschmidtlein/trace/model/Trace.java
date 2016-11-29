@@ -8,21 +8,33 @@ import java.util.Map;
  */
 public class Trace {
 
-    Map<TracePoint, TracePoint> points;
-    List<Connection> baseConnections;
+    private Map<TracePoint, TracePoint> points;
+    private List<Connection> baseConnections;
 
-    TracePoint nearPoint(TracePoint tracePoint) {
+    public Trace() {
+
+    }
+
+    public void addPoint(TracePoint tracePoint) {
+
+    }
+
+    public void addConnection(TracePoint p1, TracePoint p2) {
+
+    }
+
+    public TracePoint nearPoint(TracePoint tracePoint) {
         return null;
     }
 
-    boolean isComplete() {
+    public boolean isComplete() {
         return false;
     }
 
     /**
-     * Sets all connections to unoccupied. Sets
+     * Sets all connections to unoccupied.
      */
-    void reset() {
+    public void reset() {
 
     }
 

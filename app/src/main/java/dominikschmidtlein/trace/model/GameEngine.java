@@ -9,6 +9,14 @@ public class GameEngine implements Engine{
     TracePoint endPoint;
     Trace trace;
 
+    public GameEngine(Trace trace) {
+        setTrace(trace);
+    }
+
+    public void setTrace(Trace trace) {
+        this.trace = trace;
+    }
+
     /**
      * Check if the touchPoint is in the trace. If so, initialize start/end points.
      * @param touchPoint

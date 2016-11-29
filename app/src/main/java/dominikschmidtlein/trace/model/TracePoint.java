@@ -12,7 +12,16 @@ public class TracePoint {
 
     private List<Connection> connections;
 
-    Connection connectedTo(TracePoint tracePoint) {
+    public TracePoint(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public void createConnection(TracePoint tracePoint) {
+
+    }
+
+    public Connection connectedTo(TracePoint tracePoint) {
         return null;
     }
 
