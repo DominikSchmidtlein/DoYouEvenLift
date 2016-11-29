@@ -39,6 +39,9 @@ public class TraceTest {
         trace.addConnection(p21, p43);
         trace.addConnection(p61, p43);
         trace.addConnection(p61, p72);
+        p32 = trace.nearPoint(p32);
+        p52 = trace.nearPoint(p52);
+
     }
 
     @Test
@@ -48,9 +51,6 @@ public class TraceTest {
 
     @Test
     public void testAddConnection() {
-        p32 = trace.nearPoint(p32);
-        p52 = trace.nearPoint(p52);
-
         assertNotNull(p32);
         assertNotNull(p52);
 
@@ -113,7 +113,29 @@ public class TraceTest {
 
     @Test
     public void testSuperConnections() {
-        
+        // base
+        Connection c12 = p12.connectedTo(p21);
+        Connection c13 = p12.connectedTo(p32);
+        Connection c23 = p21.connectedTo(p32);
+        Connection c34 = p32.connectedTo(p43);
+        Connection c35 = p32.connectedTo(p52);
+        Connection c45 = p43.connectedTo(p52);
+        Connection c56 = p52.connectedTo(p61);
+        Connection c57 = p52.connectedTo(p72);
+        Connection c67 = p61.connectedTo(p72);
+
+        // level 2
+        Connection c15 = p12.connectedTo(p52);
+        Connection c24 = p21.connectedTo(p43);
+        Connection c37 = p32.connectedTo(p72);
+        Connection c46 = p43.connectedTo(p61);
+
+        // level 3
+        Connection c17 = p12.connectedTo(p72);
+
+        assertTrue(c12.getSubConnections().isEmpty());
+        assertTrue(c13.getSubConnections().isEmpty());
+        assertTrue(c12.getSubConnections().isEmpty());
     }
 
     @Test

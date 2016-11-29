@@ -54,6 +54,14 @@ public class    Connection {
         return state;
     }
 
+    public List<Connection> getSubConnections() {
+        return subConnections;
+    }
+
+    public List<Connection> getSuperConnections() {
+        return superConnections;
+    }
+
     /**
      * Sets current connection to occupied, subconnections to occupied and superconnections to
      * blocked.
