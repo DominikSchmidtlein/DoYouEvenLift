@@ -3,12 +3,16 @@ package dominikschmidtlein.trace.model;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 /**
  * Created by domin_2o9sb4z on 2016-02-18.
  */
 public class ConnectionTest {
+
+    TracePoint p1;
+    TracePoint p2;
 
     Connection c1;
     Connection c2;
@@ -23,7 +27,10 @@ public class ConnectionTest {
 
     @Before
     public void setUp() {
-        c1 = new Connection(null, null);
+        p1 = new TracePoint(100, 100);
+        p2 = new TracePoint(200, 100);
+
+        c1 = new Connection(p1, p2);
         c2 = new Connection(null, null);
         c3 = new Connection(null, null);
         c4 = new Connection(null, null);
@@ -54,6 +61,12 @@ public class ConnectionTest {
         c8.addSuperConnection(c10);
 
         c9.addSuperConnection(c10);
+    }
+
+    @Test
+    public void testConstructor() {
+        assertNotNull(p1.connectedTo(p2));
+        assertNotNull(p2.connectedTo(p1));
     }
 
     @Test
@@ -151,5 +164,7 @@ public class ConnectionTest {
         assertTrue(c9.isOccupied());
         assertTrue(c10.isOccupied());
     }
+
+
 
 }

@@ -19,6 +19,21 @@ public class TraceTest {
     TracePoint p61;
     TracePoint p72;
 
+    Connection c12;
+    Connection c13;
+    Connection c23;
+    Connection c34;
+    Connection c35;
+    Connection c45;
+    Connection c56;
+    Connection c57;
+    Connection c67;
+    Connection c15;
+    Connection c24;
+    Connection c37;
+    Connection c46;
+    Connection c17;
+
     @Before
     public void setUp() throws Exception {
         trace = new Trace();
@@ -39,9 +54,29 @@ public class TraceTest {
         trace.addConnection(p21, p43);
         trace.addConnection(p61, p43);
         trace.addConnection(p61, p72);
+
         p32 = trace.nearPoint(p32);
         p52 = trace.nearPoint(p52);
 
+        // base
+        c12 = p12.connectedTo(p21);
+        c13 = p12.connectedTo(p32);
+        c23 = p21.connectedTo(p32);
+        c34 = p32.connectedTo(p43);
+        c35 = p32.connectedTo(p52);
+        c45 = p43.connectedTo(p52);
+        c56 = p52.connectedTo(p61);
+        c57 = p52.connectedTo(p72);
+        c67 = p61.connectedTo(p72);
+
+        // level 2
+        c15 = p12.connectedTo(p52);
+        c24 = p21.connectedTo(p43);
+        c37 = p32.connectedTo(p72);
+        c46 = p43.connectedTo(p61);
+
+        // level 3
+        c17 = p12.connectedTo(p72);
     }
 
     @Test
@@ -113,25 +148,6 @@ public class TraceTest {
 
     @Test
     public void testSuperConnections() {
-        // base
-        Connection c12 = p12.connectedTo(p21);
-        Connection c13 = p12.connectedTo(p32);
-        Connection c23 = p21.connectedTo(p32);
-        Connection c34 = p32.connectedTo(p43);
-        Connection c35 = p32.connectedTo(p52);
-        Connection c45 = p43.connectedTo(p52);
-        Connection c56 = p52.connectedTo(p61);
-        Connection c57 = p52.connectedTo(p72);
-        Connection c67 = p61.connectedTo(p72);
-
-        // level 2
-        Connection c15 = p12.connectedTo(p52);
-        Connection c24 = p21.connectedTo(p43);
-        Connection c37 = p32.connectedTo(p72);
-        Connection c46 = p43.connectedTo(p61);
-
-        // level 3
-        Connection c17 = p12.connectedTo(p72);
 
         assertTrue(c12.getSubConnections().isEmpty());
         assertTrue(c13.getSubConnections().isEmpty());

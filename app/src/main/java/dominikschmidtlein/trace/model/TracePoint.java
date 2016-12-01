@@ -1,5 +1,6 @@
 package dominikschmidtlein.trace.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,15 +11,15 @@ public class TracePoint {
     double x;
     double y;
 
-    private List<Connection> connections;
+    private List<Connection> connections = new ArrayList<>();
 
     public TracePoint(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    public void createConnection(TracePoint tracePoint) {
-
+    public void addConnection(Connection connection) {
+        connections.add(connection);
     }
 
     public Connection connectedTo(TracePoint tracePoint) {
