@@ -264,7 +264,7 @@ public class TraceTest {
     }
 
     @Test
-    public void testIsComplete() throws Exception {
+    public void testIsCompleteTrue() {
         c12.setOccupied();
         c24.setOccupied();
         c45.setOccupied();
@@ -276,8 +276,44 @@ public class TraceTest {
     }
 
     @Test
-    public void testReset() throws Exception {
+    public void testIsCompleteFalse() {
+        assertFalse(trace.isComplete());
+        c24.setOccupied();
+        c45.setOccupied();
+        c56.setOccupied();
+        c67.setOccupied();
+        c71.setOccupied();
+        assertFalse(trace.isComplete());
+    }
 
+    @Test
+    public void testReset() {
+        c34.setOccupied();
+        c45.setOccupied();
+        c57.setOccupied();
+        c76.setOccupied();
+        c65.setOccupied();
+        c51.setOccupied();
+        c12.setOccupied();
+        c23.setOccupied();
+
+        assertTrue(trace.isComplete());
+        trace.reset();
+        assertFalse(trace.isComplete());
+        assertTrue(c12.isFree());
+        assertTrue(c13.isFree());
+        assertTrue(c23.isFree());
+        assertTrue(c34.isFree());
+        assertTrue(c35.isFree());
+        assertTrue(c45.isFree());
+        assertTrue(c56.isFree());
+        assertTrue(c57.isFree());
+        assertTrue(c67.isFree());
+        assertTrue(c15.isFree());
+        assertTrue(c24.isFree());
+        assertTrue(c37.isFree());
+        assertTrue(c46.isFree());
+        assertTrue(c17.isFree());
     }
 
     @Test
