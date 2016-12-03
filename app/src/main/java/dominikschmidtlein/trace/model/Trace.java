@@ -15,10 +15,6 @@ public class Trace {
 
     }
 
-    public void addPoint(TracePoint tracePoint) {
-
-    }
-
     public void addConnection(TracePoint p1, TracePoint p2) {
 
     }
@@ -36,6 +32,10 @@ public class Trace {
      */
     public void reset() {
 
+    }
+
+    public boolean isLegal() {
+        return false;
     }
 
 }
