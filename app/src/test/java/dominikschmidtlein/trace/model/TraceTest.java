@@ -265,7 +265,14 @@ public class TraceTest {
 
     @Test
     public void testIsComplete() throws Exception {
+        c12.setOccupied();
+        c24.setOccupied();
+        c45.setOccupied();
+        c56.setOccupied();
+        c67.setOccupied();
+        c71.setOccupied();
 
+        assertTrue(trace.isComplete());
     }
 
     @Test
