@@ -15,15 +15,23 @@ public class TracePointTest {
     Connection connection;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         point1 = new TracePoint(100, 100);
         point2 = new TracePoint(200, 100);
         connection = new Connection(point1, point2);
     }
 
     @Test
-    public void testConnectedTo() throws Exception {
+    public void testConnectedTo() {
         assertNotNull(point1.connectedTo(point2));
         assertNotNull(point2.connectedTo(point1));
     }
+
+    @Test
+    public void testEquals() {
+        assertNotEquals(point1, point2);
+        assertEquals(point1, new TracePoint(100, 200));
+        assertEquals(point1, point1);
+    }
+
 }
