@@ -11,8 +11,8 @@ public class BuilderEngine implements Engine {
      * @return
      */
     @Override
-    public boolean down(TracePoint touchPoint) {
-        return false;
+    public void down(TracePoint touchPoint) {
+
     }
 
     /**
@@ -22,18 +22,17 @@ public class BuilderEngine implements Engine {
      * @return
      */
     @Override
-    public boolean move(TracePoint touchPoint) {
-        return false;
+    public void move(TracePoint touchPoint) {
+
     }
 
     /**
      * Remove current line.
-     * @param touchPoint
      * @return
      */
     @Override
-    public boolean up(TracePoint touchPoint) {
-        return false;
+    public void up() {
+
     }
 
 }

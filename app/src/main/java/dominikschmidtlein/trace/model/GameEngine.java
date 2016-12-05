@@ -5,9 +5,11 @@ package dominikschmidtlein.trace.model;
  */
 public class GameEngine implements Engine{
 
-    TracePoint startPoint;
-    TracePoint endPoint;
-    Trace trace;
+    private TracePoint startPoint = null;
+    private TracePoint endPoint = null;
+    private Trace trace;
+    private TouchState state = TouchState.NOT_TOUCHING;
+
 
     public GameEngine(Trace trace) {
         setTrace(trace);
@@ -25,20 +27,22 @@ public class GameEngine implements Engine{
         return endPoint;
     }
 
+    public boolean isTouching() {
+        return state == TouchState.TOUCHING;
+    }
+
     /**
      * Check if the touchPoint is in the trace. If so, initialize start/end points.
      * @param touchPoint
      */
     @Override
-    public boolean down(TracePoint touchPoint) {
+    public void down(TracePoint touchPoint) {
         TracePoint nearPoint = trace.nearPoint(touchPoint);
 
         if (nearPoint != null) {
             startPoint = nearPoint;
             endPoint = touchPoint;
-            return true;
         }
-        return false;
     }
 
     /**
@@ -47,7 +51,7 @@ public class GameEngine implements Engine{
      * @param touchPoint
      */
     @Override
-    public boolean move(TracePoint touchPoint) {
+    public void move(TracePoint touchPoint) {
         TracePoint nearPoint = trace.nearPoint(touchPoint);
 
         if (nearPoint != null) {
@@ -60,20 +64,23 @@ public class GameEngine implements Engine{
             }
         }
         endPoint = touchPoint;
-        return true;
     }
 
     /**
-     * Check if trace is fully occupied, notify win event listeners if necessary. Reset trace.
-     * @param touchPoint
+     * Check if trace is fully occupied, notify win event listeners if necessary. Reset trace. Returns
+     * whether there was a win (for testing)
      */
     @Override
-    public boolean up(TracePoint touchPoint) {
+    public void up() {
         if (trace.isComplete()) {
             // notify win event
         }
         trace.reset();
-        return false;
+    }
+
+    private enum TouchState {
+        TOUCHING,
+        NOT_TOUCHING
     }
 
 }

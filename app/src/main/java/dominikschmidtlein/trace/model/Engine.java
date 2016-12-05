@@ -5,8 +5,8 @@ package dominikschmidtlein.trace.model;
  */
 public interface Engine {
 
-    boolean down(TracePoint touchPoint);
-    boolean move(TracePoint touchPoint);
-    boolean up(TracePoint touchPoint);
+    void down(TracePoint touchPoint);
+    void move(TracePoint touchPoint);
+    void up();
 
 }
