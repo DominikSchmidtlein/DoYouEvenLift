@@ -42,18 +42,40 @@ public class GameEngineTest {
     @Test
     public void testDown() throws Exception {
         TracePoint temp = new TracePoint(101, 201);
-        assertTrue(engine.down(temp));
+        engine.down(temp);
         assertEquals(engine.getStartPoint(), p12);
         assertEquals(engine.getEndPoint(), temp);
+
+        engine.up();
+
+        temp = new TracePoint(0, 0);
+        engine.down(temp);
+        assertNull(engine.getStartPoint());
+        assertNull(engine.getEndPoint());
     }
 
     @Test
     public void testMove() {
+        engine.move(p21);
+        assertNull(engine.getStartPoint());
+        assertNull(engine.getEndPoint());
 
+        engine.down(p12);
+        engine.move(p21);
+        engine.move(new TracePoint(0, 0));
+        assertEquals(engine.getStartPoint(), p21);
+        assertEquals(engine.getEndPoint(), new TracePoint(0, 0));
     }
 
     @Test
     public void testUp() {
-
+        engine.down(p12);
+        engine.move(p72);
+        engine.move(p61);
+        engine.move(p43);
+        engine.move(p21);
+        engine.move(p12);
+        engine.up();
+        // receive win event
     }
 }
