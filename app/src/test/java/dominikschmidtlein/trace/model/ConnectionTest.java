@@ -175,4 +175,13 @@ public class ConnectionTest {
         assertEquals(c1, new Connection(new TracePoint(100, 100), new TracePoint(200, 200)));
     }
 
+    @Test
+    public void testConnects() {
+        assertFalse(c1.connects(null));
+        assertTrue(c1.connects(p1));
+        assertTrue(c1.connects(p2));
+        assertTrue(c1.connects(new TracePoint(100, 100)));
+        assertTrue(c1.connects(new TracePoint(200, 200)));
+    }
+
 }

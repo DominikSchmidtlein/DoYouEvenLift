@@ -1,15 +1,16 @@
 package dominikschmidtlein.trace.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by domin_2o9sb4z on 2016-11-23.
  */
-public class    Connection {
+public class Connection {
 
-    private TracePoint point1;
-    private TracePoint point2;
+    private Set<TracePoint> points;
 
     private List<Connection> subConnections = new ArrayList<>();
     private List<Connection> superConnections = new ArrayList<>();
@@ -17,9 +18,9 @@ public class    Connection {
     private State state = State.FREE;
 
     public Connection(TracePoint p1, TracePoint p2) {
-        point1 = p1;
-        point2 = p2;
-
+        points = new HashSet<>(3, 1);
+        points.add(p1);
+        points.add(p2);
     }
 
     private void addSubConnection(Connection connection) {
@@ -62,6 +63,9 @@ public class    Connection {
         return superConnections;
     }
 
+    public boolean connects(TracePoint tracePoint) {
+        return points.contains(tracePoint);
+    }
     /**
      * Sets current connection to occupied, subconnections to occupied and superconnections to
      * blocked.
@@ -90,6 +94,15 @@ public class    Connection {
                 connection.setBlocked();
             }
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Connection)) {
+            return false;
+        }
+        Connection c = (Connection) o;
+        return points.equals(c.points);
     }
 
     private enum State {
