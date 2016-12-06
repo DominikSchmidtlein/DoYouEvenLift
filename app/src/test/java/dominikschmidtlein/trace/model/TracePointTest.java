@@ -29,8 +29,9 @@ public class TracePointTest {
 
     @Test
     public void testEquals() {
+        assertNotEquals(point1, null);
         assertNotEquals(point1, point2);
-        assertEquals(point1, new TracePoint(100, 200));
+        assertEquals(point1, new TracePoint(100, 100));
         assertEquals(point1, point1);
     }
 
