@@ -1,7 +1,9 @@
 package dominikschmidtlein.trace.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by domin_2o9sb4z on 2016-11-23.
@@ -11,11 +13,18 @@ public class TracePoint {
     double x;
     double y;
 
-    private List<Connection> connections = new ArrayList<>();
+    private Set<Connection> connections;
+
+    public static final int DEFAULT_CAPACITY = 4;
 
     public TracePoint(double x, double y) {
+        this(x, y, DEFAULT_CAPACITY);
+    }
+
+    public TracePoint(double x, double y, int capacity) {
         this.x = x;
         this.y = y;
+        this.connections = new HashSet<>(capacity);
     }
 
     public double getX() {
@@ -31,6 +40,11 @@ public class TracePoint {
     }
 
     public Connection connectedTo(TracePoint tracePoint) {
+        for (Connection connection : connections) {
+            if (connection.connects(this, tracePoint)) {
+                return connection;
+            }
+        }
         return null;
     }
 
@@ -45,6 +59,6 @@ public class TracePoint {
 
     @Override
     public int hashCode() {
-        return (int)(x * 1000 + y);
+        return (int)(x * 997 + y * 83);
     }
 }

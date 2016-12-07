@@ -1,5 +1,8 @@
 package dominikschmidtlein.trace.model;
 
+import android.support.annotation.NonNull;
+
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -17,10 +20,15 @@ public class Connection {
 
     private State state = State.FREE;
 
-    public Connection(TracePoint p1, TracePoint p2) {
-        points = new HashSet<>(3, 1);
+    public Connection(@NonNull TracePoint p1, @NonNull TracePoint p2) {
+        if (p1.equals(p2)) {
+            throw new InvalidParameterException();
+        }
+        points = new HashSet<>();
         points.add(p1);
         points.add(p2);
+        p1.addConnection(this);
+        p2.addConnection(this);
     }
 
     private void addSubConnection(Connection connection) {
@@ -63,8 +71,13 @@ public class Connection {
         return superConnections;
     }
 
-    public boolean connects(TracePoint tracePoint) {
-        return points.contains(tracePoint);
+    public boolean connects(TracePoint point1, TracePoint point2) {
+        for (TracePoint point : points) {
+            if (!point.equals(point1) && !point.equals(point2)) {
+                return false;
+            }
+        }
+        return true;
     }
     /**
      * Sets current connection to occupied, subconnections to occupied and superconnections to
@@ -103,6 +116,15 @@ public class Connection {
         }
         Connection c = (Connection) o;
         return points.equals(c.points);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        for (TracePoint point : points) {
+            hash += point.hashCode();
+        }
+        return hash * 733;
     }
 
     private enum State {

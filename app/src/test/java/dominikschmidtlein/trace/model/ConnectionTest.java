@@ -177,11 +177,14 @@ public class ConnectionTest {
 
     @Test
     public void testConnects() {
-        assertFalse(c1.connects(null));
-        assertTrue(c1.connects(p1));
-        assertTrue(c1.connects(p2));
-        assertTrue(c1.connects(new TracePoint(100, 100)));
-        assertTrue(c1.connects(new TracePoint(200, 200)));
+        assertFalse(c1.connects(null, null));
+        assertFalse(c1.connects(null, p1));
+        assertFalse(c1.connects(p1, p1));
+        assertTrue(c1.connects(p1, p2));
+        assertTrue(c1.connects(p2, p1));
+        assertTrue(c1.connects(p2, new TracePoint(100, 100)));
+        assertTrue(c1.connects(new TracePoint(200, 200), p1));
+        assertTrue(c1.connects(new TracePoint(200, 200), new TracePoint(100, 100)));
     }
 
 }

@@ -23,8 +23,11 @@ public class TracePointTest {
 
     @Test
     public void testConnectedTo() {
+        assertNull(point1.connectedTo(null));
+        assertNull(point1.connectedTo(point1));
         assertNotNull(point1.connectedTo(point2));
         assertNotNull(point2.connectedTo(point1));
+        assertNotNull(point2.connectedTo(new TracePoint(100, 100)));
     }
 
     @Test
