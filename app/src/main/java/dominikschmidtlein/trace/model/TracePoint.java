@@ -1,8 +1,6 @@
 package dominikschmidtlein.trace.model;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -10,12 +8,12 @@ import java.util.Set;
  */
 public class TracePoint {
 
-    double x;
-    double y;
+    private double x;
+    private double y;
 
     private Set<Connection> connections;
 
-    public static final int DEFAULT_CAPACITY = 4;
+    public static final int DEFAULT_CAPACITY = 16;
 
     public TracePoint(double x, double y) {
         this(x, y, DEFAULT_CAPACITY);
