@@ -3,9 +3,7 @@ package dominikschmidtlein.trace.model;
 import android.support.annotation.NonNull;
 
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -15,8 +13,8 @@ public class Connection {
 
     private Set<TracePoint> points;
 
-    private List<Connection> subConnections = new ArrayList<>();
-    private List<Connection> superConnections = new ArrayList<>();
+    private Set<Connection> subConnections = new HashSet<>();
+    private Set<Connection> superConnections = new HashSet<>();
 
     private State state = State.FREE;
 
@@ -63,11 +61,11 @@ public class Connection {
         return state;
     }
 
-    public List<Connection> getSubConnections() {
+    public Set<Connection> getSubConnections() {
         return subConnections;
     }
 
-    public List<Connection> getSuperConnections() {
+    public Set<Connection> getSuperConnections() {
         return superConnections;
     }
 
