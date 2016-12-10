@@ -5,6 +5,10 @@ package dominikschmidtlein.trace.model;
  */
 public class TracePointMap {
 
+    public TracePointMap(int width, int height, double margin, int xbins, int ybins) {
+
+    }
+
     public TracePoint nearPoint(TracePoint tracePoint) {
         return null;
     }
