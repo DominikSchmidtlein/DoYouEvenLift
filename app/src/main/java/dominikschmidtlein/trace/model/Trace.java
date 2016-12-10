@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public class Trace {
 
-    private Map<TracePoint, TracePoint> points;
+    private TracePointMap tracePointMap;
     private List<Connection> baseConnections;
 
     public Trace() {
