@@ -26,7 +26,7 @@ public class TracePointMap {
         this.ybins = ybins;
 
         points = new HashMap<>(bins);
-        for (int i = 0; i < bins; i ++) {
+        for (int i = 0; i < bins; i++) {
             points.put(i, new HashSet<TracePoint>());
         }
     }
@@ -70,7 +70,7 @@ public class TracePointMap {
         if (y == height) {
             y -= 1;
         }
-        return (int)(y/height*ybins)*xbins + (int)(x/width*xbins);
+        return (int) (y / height * ybins) * xbins + (int) (x / width * xbins);
     }
 
     public int calculateBinUL(TracePoint tracePoint) {
