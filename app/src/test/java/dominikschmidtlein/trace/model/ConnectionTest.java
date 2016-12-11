@@ -177,8 +177,6 @@ public class ConnectionTest {
 
     @Test
     public void testConnects() {
-        assertFalse(c1.connects(null, null));
-        assertFalse(c1.connects(null, p1));
         assertFalse(c1.connects(p1, p1));
         assertTrue(c1.connects(p1, p2));
         assertTrue(c1.connects(p2, p1));

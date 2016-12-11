@@ -11,7 +11,7 @@ import java.util.Set;
  */
 public class Connection {
 
-    private Set<TracePoint> points;
+    private Set<TracePoint> points = new HashSet<>();
 
     private Set<Connection> subConnections = new HashSet<>();
     private Set<Connection> superConnections = new HashSet<>();
@@ -20,9 +20,8 @@ public class Connection {
 
     public Connection(@NonNull TracePoint p1, @NonNull TracePoint p2) {
         if (p1.equals(p2)) {
-            throw new InvalidParameterException();
+            throw new IllegalArgumentException();
         }
-        points = new HashSet<>();
         points.add(p1);
         points.add(p2);
         p1.addConnection(this);
@@ -34,9 +33,6 @@ public class Connection {
     }
 
     public void addSuperConnection(Connection connection) {
-        if (connection == null) {
-            return;
-        }
         superConnections.add(connection);
         connection.addSubConnection(this);
     }
@@ -71,7 +67,7 @@ public class Connection {
 
     public boolean connects(TracePoint point1, TracePoint point2) {
         for (TracePoint point : points) {
-            if (!point.equals(point1) && !point.equals(point2)) {
+            if (!point1.equals(point) && !point2.equals(point)) {
                 return false;
             }
         }
