@@ -31,6 +31,20 @@ public class TracePointTest {
     }
 
     @Test
+    public void testDistanceTo() {
+        assertEquals(point1.distanceTo(point1), 0, 0.0000001);
+        assertEquals(point1.distanceTo(point2), 100, 0.0000001);
+        assertEquals(point1.distanceTo(new TracePoint(100, 150)), 50, 0.0000001);
+        assertEquals(point1.distanceTo(new TracePoint(100, 50)), 50, 0.0000001);
+        assertEquals(point1.distanceTo(new TracePoint(50, 100)), 50, 0.0000001);
+        assertEquals(point1.distanceTo(new TracePoint(150, 100)), 50, 0.0000001);
+        assertEquals(point1.distanceTo(new TracePoint(50, 50)), 70.7106781187, 0.0000001);
+        assertEquals(point1.distanceTo(new TracePoint(50, 150)), 70.7106781187, 0.0000001);
+        assertEquals(point1.distanceTo(new TracePoint(150, 50)), 70.7106781187, 0.0000001);
+        assertEquals(point1.distanceTo(new TracePoint(150, 150)), 70.7106781187, 0.0000001);
+    }
+
+        @Test
     public void testEquals() {
         assertNotEquals(point1, null);
         assertNotEquals(point1, point2);

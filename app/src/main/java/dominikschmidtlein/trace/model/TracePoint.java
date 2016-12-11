@@ -1,5 +1,7 @@
 package dominikschmidtlein.trace.model;
 
+import android.support.annotation.NonNull;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -44,6 +46,10 @@ public class TracePoint {
             }
         }
         return null;
+    }
+
+    public double distanceTo(@NonNull TracePoint tracePoint) {
+        return -1;
     }
 
     @Override
