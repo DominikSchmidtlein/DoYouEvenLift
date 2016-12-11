@@ -56,4 +56,24 @@ public class TracePointMapTest {
         assertEquals(tracePointMap.nearPoint(new TracePoint(WIDTH/XBINS*2+1, HEIGHT/YBINS*2+1)), pBinBorder);
     }
 
+    @Test
+    public void testCalculateBin() {
+        assertEquals(tracePointMap.calculateBin(0, 0), 0);
+        assertEquals(tracePointMap.calculateBin(100, 75), 1);
+        assertEquals(tracePointMap.calculateBin(299, 149), 2);
+        assertEquals(tracePointMap.calculateBin(301, 149), 3);
+        assertEquals(tracePointMap.calculateBin(50, 225), 4);
+        assertEquals(tracePointMap.calculateBin(101, 151), 5);
+        assertEquals(tracePointMap.calculateBin(201, 299), 6);
+        assertEquals(tracePointMap.calculateBin(400, 150), 7);
+        assertEquals(tracePointMap.calculateBin(0, 300), 8);
+        assertEquals(tracePointMap.calculateBin(100, 449), 9);
+        assertEquals(tracePointMap.calculateBin(299, 300), 10);
+        assertEquals(tracePointMap.calculateBin(400, 375), 11);
+        assertEquals(tracePointMap.calculateBin(0, 600), 12);
+        assertEquals(tracePointMap.calculateBin(100, 600), 13);
+        assertEquals(tracePointMap.calculateBin(299, 600), 14);
+        assertEquals(tracePointMap.calculateBin(400, 600), 15);
+    }
+
 }
