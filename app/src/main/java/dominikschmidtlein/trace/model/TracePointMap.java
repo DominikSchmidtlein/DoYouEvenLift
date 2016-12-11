@@ -11,9 +11,17 @@ import java.util.Set;
 public class TracePointMap {
 
     private Map<Integer, Set<TracePoint>> points;
+    private int width;
+    private int height;
+    private int xbins;
+    private int ybins;
 
     public TracePointMap(int width, int height, double margin, int xbins, int ybins) {
         int bins = xbins * ybins;
+        this.width = width;
+        this.height = height;
+        this.xbins = xbins;
+        this.ybins = ybins;
         points = new HashMap<>(bins);
         for (int i = 0; i < bins; i ++) {
             points.put(i, new HashSet<TracePoint>());
@@ -33,7 +41,16 @@ public class TracePointMap {
     }
 
     public int calculateBin(double x, double y) {
-        return -1;
+        if (x < 0 || x > width || y < 0 || y > height) {
+            throw new IllegalArgumentException();
+        }
+        if (x == width) {
+            x -= 1;
+        }
+        if (y == height) {
+            y -= 1;
+        }
+        return (int)(y/height*ybins)*xbins + (int)(x/width*xbins);
     }
 
 }
