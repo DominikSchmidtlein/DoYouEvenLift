@@ -49,6 +49,9 @@ public class TracePointMapTest {
         assertEquals(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS / 2 + RADIUS / Math.sqrt(2) - 1, HEIGHT / YBINS / 2 + RADIUS / Math.sqrt(2) - 1)), pInBin);
         assertEquals(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS, HEIGHT / YBINS)), pMargin);
         assertEquals(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS + 1, HEIGHT / YBINS + 1)), pMargin);
+
+        assertEquals(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS - RADIUS*0.75 - 1, HEIGHT / YBINS - RADIUS*0.75 - 1)), pMarginBorder);
+        assertEquals(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS - RADIUS*0.75 + 1, HEIGHT / YBINS - RADIUS*0.75 + 1)), pMargin);
     }
 
     @Test
