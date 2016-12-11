@@ -49,7 +49,7 @@ public class TracePoint {
     }
 
     public double distanceTo(@NonNull TracePoint tracePoint) {
-        return -1;
+        return Math.hypot(getX() - tracePoint.getX(), getY() - tracePoint.getY());
     }
 
     @Override
