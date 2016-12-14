@@ -10,6 +10,9 @@ import java.util.Set;
  */
 public class TracePointMap {
 
+    public static final int DEFAULT_XBINS = 4;
+    public static final int DEFAULT_YBINS = 4;
+
     private Map<Integer, Set<TracePoint>> points;
     private int width;
     private int height;
@@ -29,6 +32,10 @@ public class TracePointMap {
         for (int i = 0; i < bins; i++) {
             points.put(i, new HashSet<TracePoint>());
         }
+    }
+
+    public TracePointMap(int width, int height, double margin) {
+        this(width, height, margin, DEFAULT_XBINS, DEFAULT_YBINS);
     }
 
     public TracePoint nearPoint(TracePoint tracePoint) {
@@ -56,7 +63,7 @@ public class TracePointMap {
         points.get(calculateBinDR(tracePoint)).add(tracePoint);
     }
 
-    public int calculateBin(TracePoint tracePoint) {
+    private int calculateBin(TracePoint tracePoint) {
         return calculateBin(tracePoint.getX(), tracePoint.getY());
     }
 
@@ -73,19 +80,19 @@ public class TracePointMap {
         return (int) (y / height * ybins) * xbins + (int) (x / width * xbins);
     }
 
-    public int calculateBinUL(TracePoint tracePoint) {
+    private int calculateBinUL(TracePoint tracePoint) {
         return calculateBin(tracePoint.getX() - margin, tracePoint.getY() - margin);
     }
 
-    public int calculateBinUR(TracePoint tracePoint) {
+    private int calculateBinUR(TracePoint tracePoint) {
         return calculateBin(tracePoint.getX() + margin, tracePoint.getY() - margin);
     }
 
-    public int calculateBinDL(TracePoint tracePoint) {
+    private int calculateBinDL(TracePoint tracePoint) {
         return calculateBin(tracePoint.getX() - margin, tracePoint.getY() + margin);
     }
 
-    public int calculateBinDR(TracePoint tracePoint) {
+    private int calculateBinDR(TracePoint tracePoint) {
         return calculateBin(tracePoint.getX() + margin, tracePoint.getY() + margin);
     }
 

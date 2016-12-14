@@ -17,6 +17,7 @@ public class GameEngine implements Engine{
 
     public void setTrace(Trace trace) {
         this.trace = trace;
+        this.trace.reset();
     }
 
     public TracePoint getStartPoint() {

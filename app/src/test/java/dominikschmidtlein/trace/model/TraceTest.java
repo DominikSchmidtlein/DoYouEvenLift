@@ -52,7 +52,7 @@ public class TraceTest {
 
     @Before
     public void setUp() {
-        trace = new Trace();
+        trace = new Trace(new TracePointMap(800, 400, 50));
         p12 = new TracePoint(100, 200);
         p21 = new TracePoint(200, 100);
         p32 = new TracePoint(300, 200);
@@ -321,14 +321,14 @@ public class TraceTest {
         assertTrue(trace.isLegal());
 
         // 4 points with odd # connections
-        Trace trace1 = new Trace();
+        Trace trace1 = new Trace(new TracePointMap(800, 400, 50));
         trace1.addConnection(p12, p21);
         trace1.addConnection(p12, p32);
         trace1.addConnection(p12, p43);
         assertFalse(trace1.isLegal());
 
         // 2 separate shapes
-        Trace trace2 = new Trace();
+        Trace trace2 = new Trace(new TracePointMap(800, 400, 50));
         trace2.addConnection(p12, p21);
         trace2.addConnection(p12, p32);
         trace2.addConnection(p32, p21);

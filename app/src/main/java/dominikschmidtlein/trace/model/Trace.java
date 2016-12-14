@@ -11,11 +11,12 @@ public class Trace {
     private TracePointMap tracePointMap;
     private List<Connection> baseConnections;
 
-    public Trace() {
-
+    public Trace(TracePointMap tracePointMap) {
+        this.tracePointMap = tracePointMap;
     }
 
     public void addConnection(TracePoint p1, TracePoint p2) {
+        tracePointMap.addTracePoint(p1);
 
     }
 

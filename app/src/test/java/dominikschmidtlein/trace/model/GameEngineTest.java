@@ -22,7 +22,7 @@ public class GameEngineTest {
 
     @Before
     public void setUp() {
-        trace = new Trace();
+        trace = new Trace(new TracePointMap(800, 400, 50));
         p12 = new TracePoint(100, 200);
         p21 = new TracePoint(200, 100);
         p32 = new TracePoint(300, 200);
@@ -40,7 +40,7 @@ public class GameEngineTest {
     }
 
     @Test
-    public void testDown() throws Exception {
+    public void testDown() {
         TracePoint temp = new TracePoint(101, 201);
         engine.down(temp);
         assertEquals(engine.getStartPoint(), p12);
