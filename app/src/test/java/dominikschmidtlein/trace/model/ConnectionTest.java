@@ -40,32 +40,32 @@ public class ConnectionTest {
         c3 = new Connection(p3, p4);
         c4 = new Connection(p4, p5);
         c5 = new Connection(p1, p3);
-        c6 = new Connection(p3, p5);
-        c7 = new Connection(p2, p4);
-        c8 = new Connection(p1, p4);
-        c9 = new Connection(p2, p5);
-        c10 = new Connection(p1, p5);
+//        c6 = new Connection(p3, p5);
+//        c7 = new Connection(p2, p4);
+//        c8 = new Connection(p1, p4);
+//        c9 = new Connection(p2, p5);
+//        c10 = new Connection(p1, p5);
 
-        c1.addSuperConnection(c5);
-
-        c2.addSuperConnection(c5);
-        c2.addSuperConnection(c7);
-
-        c3.addSuperConnection(c6);
-        c3.addSuperConnection(c7);
-
-        c4.addSuperConnection(c6);
-
-        c5.addSuperConnection(c8);
-
-        c6.addSuperConnection(c9);
-
-        c7.addSuperConnection(c8);
-        c7.addSuperConnection(c9);
-
-        c8.addSuperConnection(c10);
-
-        c9.addSuperConnection(c10);
+//        c1.addSuperConnection(c5);
+//
+//        c2.addSuperConnection(c5);
+//        c2.addSuperConnection(c7);
+//
+//        c3.addSuperConnection(c6);
+//        c3.addSuperConnection(c7);
+//
+//        c4.addSuperConnection(c6);
+//
+//        c5.addSuperConnection(c8);
+//
+//        c6.addSuperConnection(c9);
+//
+//        c7.addSuperConnection(c8);
+//        c7.addSuperConnection(c9);
+//
+//        c8.addSuperConnection(c10);
+//
+//        c9.addSuperConnection(c10);
     }
 
     @Test
