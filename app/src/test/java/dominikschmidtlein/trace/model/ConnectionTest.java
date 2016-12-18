@@ -185,4 +185,23 @@ public class ConnectionTest {
         assertTrue(c1.connects(new TracePoint(200, 200), new TracePoint(100, 100)));
     }
 
+    @Test
+    public void testConcat() {
+        assertNull(c1.concat(c3));
+        assertNull(c1.concat(c4));
+        assertNull(c1.concat(c5));
+        assertNull(c2.concat(c4));
+        assertNull(c2.concat(c5));
+        assertNull(c3.concat(c5));
+        assertNull(c3.concat(c3));
+        assertEquals(c1.concat(c2), new Connection(p3, p1));
+        assertEquals(c2.concat(c3), new Connection(p3, p2));
+        assertEquals(c4.concat(c3), new Connection(p3, p4));
+        assertEquals(c4.concat(c5), new Connection(p4, p5));
+        assertEquals(c1.concat(c2).concat(c3), new Connection(p1, p3));
+        assertEquals(c5.concat(c4).concat(c3), new Connection(p5, p3));
+        assertEquals(c1.concat(c2).concat(c3).concat(c4).concat(c5), new Connection(p1, p5));
+        assertEquals(c3.concat(c2).concat(c1).concat(c4.concat(c5)), new Connection(p1, p5));
+    }
+
 }

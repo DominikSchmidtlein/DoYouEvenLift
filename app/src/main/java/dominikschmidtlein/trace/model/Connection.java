@@ -18,6 +18,12 @@ public class Connection {
 
     private State state = State.FREE;
 
+    /**
+     * Add this connection to both points. Check if this connection can be combined with another
+     * connection of p1 or p2 to create a superconnection.
+     * @param p1
+     * @param p2
+     */
     public Connection(@NonNull TracePoint p1, @NonNull TracePoint p2) {
         if (p1.equals(p2)) {
             throw new IllegalArgumentException();
@@ -101,6 +107,10 @@ public class Connection {
                 connection.setBlocked();
             }
         }
+    }
+
+    public Connection concat(Connection connection) {
+        return null;
     }
 
     @Override
