@@ -39,7 +39,7 @@ public class ConnectionTest {
         c2 = new Connection(p2, p3);
         c3 = new Connection(p3, p4);
         c4 = new Connection(p4, p5);
-        c5 = new Connection(p1, p3);
+//        c5 = new Connection(p1, p3);
 //        c6 = new Connection(p3, p5);
 //        c7 = new Connection(p2, p4);
 //        c8 = new Connection(p1, p4);
@@ -66,6 +66,25 @@ public class ConnectionTest {
 //        c8.addSuperConnection(c10);
 //
 //        c9.addSuperConnection(c10);
+    }
+
+    @Test
+    public void testConstructorHorizontal() {
+        assertEquals(p1.connectedTo(p2), new Connection(p1, p2, false));
+        assertEquals(p1.connectedTo(p3), new Connection(p1, p3, false));
+        assertEquals(p1.connectedTo(p4), new Connection(p1, p4, false));
+        assertEquals(p1.connectedTo(p5), new Connection(p1, p5, false));
+        assertEquals(p2.connectedTo(p3), new Connection(p2, p3, false));
+        assertEquals(p2.connectedTo(p4), new Connection(p2, p4, false));
+        assertEquals(p2.connectedTo(p5), new Connection(p2, p5, false));
+        assertEquals(p3.connectedTo(p4), new Connection(p3, p4, false));
+        assertEquals(p3.connectedTo(p5), new Connection(p3, p5, false));
+        assertEquals(p4.connectedTo(p5), new Connection(p4, p5, false));
+    }
+
+    @Test
+    public void testConstructorVertical() {
+
     }
 
     @Test
@@ -171,8 +190,8 @@ public class ConnectionTest {
         assertNotEquals(c1, c8);
         assertNotEquals(c1, c10);
         assertEquals(c1, c1);
-        assertEquals(c1, new Connection(p1, p2));
-        assertEquals(c1, new Connection(new TracePoint(100, 100), new TracePoint(200, 200)));
+        assertEquals(c1, new Connection(p1, p2, false));
+        assertEquals(c1, new Connection(new TracePoint(100, 100), new TracePoint(200, 200), false));
     }
 
     @Test
@@ -186,22 +205,42 @@ public class ConnectionTest {
     }
 
     @Test
+    public void testOtherEnd() {
+        assertEquals(c1.otherEnd(p1), p2);
+        assertEquals(c1.otherEnd(p2), p1);
+        assertEquals(c2.otherEnd(p2), p3);
+        assertEquals(c2.otherEnd(p3), p2);
+        assertEquals(c3.otherEnd(p3), p4);
+        assertEquals(c3.otherEnd(p4), p3);
+        assertEquals(c4.otherEnd(p4), p5);
+        assertEquals(c4.otherEnd(p5), p4);
+    }
+
+    @Test
+    public void testDirectionFrom() {
+        assertEquals(c1.directionFrom(p1), new Point(0.70710678118, 0.70710678118));
+        assertEquals(c1.directionFrom(p2), new Point(-0.70710678118, -0.70710678118));
+    }
+
+    @Test
     public void testConcat() {
         assertNull(c1.concat(c3));
         assertNull(c1.concat(c4));
-        assertNull(c1.concat(c5));
         assertNull(c2.concat(c4));
-        assertNull(c2.concat(c5));
-        assertNull(c3.concat(c5));
+        assertNull(c1.concat(c1));
+        assertNull(c2.concat(c2));
         assertNull(c3.concat(c3));
-        assertEquals(c1.concat(c2), new Connection(p3, p1));
-        assertEquals(c2.concat(c3), new Connection(p3, p2));
-        assertEquals(c4.concat(c3), new Connection(p3, p4));
-        assertEquals(c4.concat(c5), new Connection(p4, p5));
-        assertEquals(c1.concat(c2).concat(c3), new Connection(p1, p3));
-        assertEquals(c5.concat(c4).concat(c3), new Connection(p5, p3));
-        assertEquals(c1.concat(c2).concat(c3).concat(c4).concat(c5), new Connection(p1, p5));
-        assertEquals(c3.concat(c2).concat(c1).concat(c4.concat(c5)), new Connection(p1, p5));
+        assertNull(c4.concat(c4));
+        assertNull(c2.concat(new Connection(p1, p4, false)));
+        assertNull(c1.concat(new Connection(p1, p3, false)));
+        assertNull(c2.concat(new Connection(p1, p3, false)));
+
+        assertEquals(c1.concat(c2), new Connection(p3, p1, false));
+        assertEquals(c2.concat(c3), new Connection(p4, p2, false));
+        assertEquals(c4.concat(c3), new Connection(p3, p5, false));
+        assertEquals(c1.concat(c2).concat(c3), new Connection(p1, p4, false));
+        assertEquals(c2.concat(c3).concat(c1).concat(c4), new Connection(p1, p5, false));
+
     }
 
 }

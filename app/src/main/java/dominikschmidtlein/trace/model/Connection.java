@@ -2,14 +2,13 @@ package dominikschmidtlein.trace.model;
 
 import android.support.annotation.NonNull;
 
-import java.security.InvalidParameterException;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Created by domin_2o9sb4z on 2016-11-23.
  */
-public class Connection {
+class Connection {
 
     private Set<TracePoint> points = new HashSet<>();
 
@@ -24,21 +23,33 @@ public class Connection {
      * @param p1
      * @param p2
      */
-    public Connection(@NonNull TracePoint p1, @NonNull TracePoint p2) {
+    Connection(@NonNull TracePoint p1, @NonNull TracePoint p2) {
+        this(p1, p2, true);
+    }
+
+    Connection(@NonNull TracePoint p1, @NonNull TracePoint p2, boolean smart) {
         if (p1.equals(p2)) {
             throw new IllegalArgumentException();
         }
         points.add(p1);
         points.add(p2);
-        p1.addConnection(this);
-        p2.addConnection(this);
+        if (smart) {
+            p1.addConnection(this);
+            p2.addConnection(this);
+            for (Connection connection : p1.getConnections()) {
+                connection.concat(this);
+            }
+            for (Connection connection : p2.getConnections()) {
+                connection.concat(this);
+            }
+        }
     }
 
     private void addSubConnection(Connection connection) {
         subConnections.add(connection);
     }
 
-    public void addSuperConnection(Connection connection) {
+    void addSuperConnection(Connection connection) {
         superConnections.add(connection);
         connection.addSubConnection(this);
     }
@@ -63,15 +74,15 @@ public class Connection {
         return state;
     }
 
-    public Set<Connection> getSubConnections() {
+    Set<Connection> getSubConnections() {
         return subConnections;
     }
 
-    public Set<Connection> getSuperConnections() {
+    Set<Connection> getSuperConnections() {
         return superConnections;
     }
 
-    public boolean connects(TracePoint point1, TracePoint point2) {
+    boolean connects(TracePoint point1, TracePoint point2) {
         for (TracePoint point : points) {
             if (!point1.equals(point) && !point2.equals(point)) {
                 return false;
@@ -83,7 +94,7 @@ public class Connection {
      * Sets current connection to occupied, subconnections to occupied and superconnections to
      * blocked.
      */
-    public void setOccupied() {
+    void setOccupied() {
         State prevState = getState();
 
         if (prevState == State.BLOCKED || prevState == State.FREE) {
@@ -109,9 +120,58 @@ public class Connection {
         }
     }
 
-    public Connection concat(Connection connection) {
+    /**
+     * Check if connections have points in common. Then check if direction from common point is
+     * opposite.
+     * @param connection
+     * @return
+     */
+    Connection concat(Connection connection) {
+        if (connection.equals(this)) {
+            return null;
+        }
+        TracePoint commonPoint = this.commonPoint(connection);
+        if (commonPoint == null) {
+            return null;
+        }
+        if (directionFrom(commonPoint).isOppositeOrigin(connection.directionFrom(commonPoint))) {
+            return new Connection(otherEnd(commonPoint), connection.otherEnd(commonPoint));
+        }
         return null;
     }
+
+    TracePoint commonPoint(Connection connection) {
+        for (TracePoint point : connection.points) {
+            if (points.contains(point)) {
+                return point;
+            }
+        }
+        return null;
+    }
+
+    TracePoint otherEnd(TracePoint tracePoint) {
+        TracePoint otherEnd = null;
+        TracePoint thisEnd = null;
+
+        for (TracePoint point : points) {
+            if (tracePoint.equals(point)) {
+                thisEnd = point;
+            } else {
+              otherEnd = point;
+            }
+        }
+        return thisEnd == null ? null : otherEnd;
+    }
+
+    Point directionFrom(TracePoint tracePoint) {
+        if (!points.contains(tracePoint)) {
+            return null;
+        }
+        TracePoint otherEnd = otherEnd(tracePoint);
+        Point direction = new Point(otherEnd.getX() - tracePoint.getX(), otherEnd.getY() - tracePoint.getY());
+        return direction.unitMagnitude();
+    }
+
 
     @Override
     public boolean equals(Object o) {
