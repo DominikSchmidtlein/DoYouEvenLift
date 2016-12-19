@@ -8,10 +8,10 @@ import java.util.Set;
 /**
  * Created by domin_2o9sb4z on 2016-12-09.
  */
-public class TracePointMap {
+class TracePointMap {
 
-    public static final int DEFAULT_XBINS = 4;
-    public static final int DEFAULT_YBINS = 4;
+    static final int DEFAULT_XBINS = 4;
+    static final int DEFAULT_YBINS = 4;
 
     private Map<Integer, Set<TracePoint>> points;
     private int width;
@@ -20,7 +20,7 @@ public class TracePointMap {
     private int ybins;
     private double margin;
 
-    public TracePointMap(int width, int height, double margin, int xbins, int ybins) {
+    TracePointMap(int width, int height, double margin, int xbins, int ybins) {
         int bins = xbins * ybins;
         this.width = width;
         this.height = height;
@@ -34,11 +34,11 @@ public class TracePointMap {
         }
     }
 
-    public TracePointMap(int width, int height, double margin) {
+    TracePointMap(int width, int height, double margin) {
         this(width, height, margin, DEFAULT_XBINS, DEFAULT_YBINS);
     }
 
-    public TracePoint nearPoint(TracePoint tracePoint) {
+    TracePoint nearPoint(TracePoint tracePoint) {
         int binNumber = calculateBin(tracePoint);
         Set<TracePoint> bin = points.get(binNumber);
 
@@ -55,7 +55,7 @@ public class TracePointMap {
         return nearPoint;
     }
 
-    public void addTracePoint(TracePoint tracePoint) {
+    void addTracePoint(TracePoint tracePoint) {
         points.get(calculateBin(tracePoint)).add(tracePoint);
         points.get(calculateBinUL(tracePoint)).add(tracePoint);
         points.get(calculateBinUR(tracePoint)).add(tracePoint);
@@ -67,7 +67,7 @@ public class TracePointMap {
         return calculateBin(tracePoint.getX(), tracePoint.getY());
     }
 
-    public int calculateBin(double x, double y) {
+    int calculateBin(double x, double y) {
         if (x < 0 || x > width || y < 0 || y > height) {
             throw new IllegalArgumentException();
         }
