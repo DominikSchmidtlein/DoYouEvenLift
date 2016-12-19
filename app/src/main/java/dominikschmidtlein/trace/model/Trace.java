@@ -6,36 +6,36 @@ import java.util.Map;
 /**
  * Created by domin_2o9sb4z on 2016-11-23.
  */
-public class Trace {
+class Trace {
 
     private TracePointMap tracePointMap;
     private List<Connection> baseConnections;
 
-    public Trace(TracePointMap tracePointMap) {
+    Trace(TracePointMap tracePointMap) {
         this.tracePointMap = tracePointMap;
     }
 
-    public void addConnection(TracePoint p1, TracePoint p2) {
+    void addConnection(TracePoint p1, TracePoint p2) {
         tracePointMap.addTracePoint(p1);
-
+        tracePointMap.addTracePoint(p2);
     }
 
-    public TracePoint nearPoint(TracePoint tracePoint) {
-        return null;
+    TracePoint nearPoint(TracePoint tracePoint) {
+        return tracePointMap.nearPoint(tracePoint);
     }
 
-    public boolean isComplete() {
+    boolean isComplete() {
         return false;
     }
 
     /**
      * Sets all connections to unoccupied.
      */
-    public void reset() {
+    void reset() {
 
     }
 
-    public boolean isLegal() {
+    boolean isLegal() {
         return false;
     }
 
