@@ -39,52 +39,83 @@ public class ConnectionTest {
         c2 = new Connection(p2, p3);
         c3 = new Connection(p3, p4);
         c4 = new Connection(p4, p5);
-//        c5 = new Connection(p1, p3);
-//        c6 = new Connection(p3, p5);
-//        c7 = new Connection(p2, p4);
-//        c8 = new Connection(p1, p4);
-//        c9 = new Connection(p2, p5);
-//        c10 = new Connection(p1, p5);
-
-//        c1.addSuperConnection(c5);
-//
-//        c2.addSuperConnection(c5);
-//        c2.addSuperConnection(c7);
-//
-//        c3.addSuperConnection(c6);
-//        c3.addSuperConnection(c7);
-//
-//        c4.addSuperConnection(c6);
-//
-//        c5.addSuperConnection(c8);
-//
-//        c6.addSuperConnection(c9);
-//
-//        c7.addSuperConnection(c8);
-//        c7.addSuperConnection(c9);
-//
-//        c8.addSuperConnection(c10);
-//
-//        c9.addSuperConnection(c10);
+        c5 = new Connection(p1, p3, false);
+        c6 = new Connection(p3, p5, false);
+        c7 = new Connection(p2, p4, false);
+        c8 = new Connection(p1, p4, false);
+        c9 = new Connection(p2, p5, false);
+        c10 = new Connection(p1, p5, false);
     }
 
     @Test
     public void testConstructorHorizontal() {
-        assertEquals(p1.connectedTo(p2), new Connection(p1, p2, false));
-        assertEquals(p1.connectedTo(p3), new Connection(p1, p3, false));
-        assertEquals(p1.connectedTo(p4), new Connection(p1, p4, false));
-        assertEquals(p1.connectedTo(p5), new Connection(p1, p5, false));
-        assertEquals(p2.connectedTo(p3), new Connection(p2, p3, false));
-        assertEquals(p2.connectedTo(p4), new Connection(p2, p4, false));
-        assertEquals(p2.connectedTo(p5), new Connection(p2, p5, false));
-        assertEquals(p3.connectedTo(p4), new Connection(p3, p4, false));
-        assertEquals(p3.connectedTo(p5), new Connection(p3, p5, false));
-        assertEquals(p4.connectedTo(p5), new Connection(p4, p5, false));
+        assertEquals(p1.connectedTo(p2), c1);
+        assertEquals(p1.connectedTo(p3), c5);
+        assertEquals(p1.connectedTo(p4), c8);
+        assertEquals(p1.connectedTo(p5), c10);
+        assertEquals(p2.connectedTo(p3), c2);
+        assertEquals(p2.connectedTo(p4), c7);
+        assertEquals(p2.connectedTo(p5), c9);
+        assertEquals(p3.connectedTo(p4), c3);
+        assertEquals(p3.connectedTo(p5), c6);
+        assertEquals(p4.connectedTo(p5), c4);
     }
 
     @Test
     public void testConstructorVertical() {
+        assertTrue(c1.getSubConnections().isEmpty());
+        assertTrue(c1.getSuperConnections().contains(c5));
+        assertEquals(c1.getSuperConnections().size(), 1);
 
+        assertTrue(c2.getSubConnections().isEmpty());
+        assertTrue(c2.getSuperConnections().contains(c5));
+        assertTrue(c2.getSuperConnections().contains(c7));
+        assertEquals(c2.getSuperConnections().size(), 2);
+
+        assertTrue(c3.getSubConnections().isEmpty());
+        assertTrue(c3.getSuperConnections().contains(c6));
+        assertTrue(c3.getSuperConnections().contains(c7));
+        assertEquals(c3.getSuperConnections().size(), 2);
+
+        assertTrue(c4.getSubConnections().isEmpty());
+        assertTrue(c4.getSuperConnections().contains(c6));
+        assertEquals(c4.getSuperConnections().size(), 1);
+
+        assertTrue(c5.getSubConnections().contains(c1));
+        assertTrue(c5.getSubConnections().contains(c2));
+        assertEquals(c5.getSubConnections().size(), 2);
+        assertTrue(c5.getSuperConnections().contains(c8));
+        assertEquals(c5.getSuperConnections().size(), 1);
+
+        assertTrue(c6.getSubConnections().contains(c3));
+        assertTrue(c6.getSubConnections().contains(c4));
+        assertEquals(c6.getSubConnections().size(), 2);
+        assertTrue(c6.getSuperConnections().contains(c9));
+        assertEquals(c6.getSuperConnections().size(), 1);
+
+        assertTrue(c7.getSubConnections().contains(c2));
+        assertTrue(c7.getSubConnections().contains(c3));
+        assertEquals(c7.getSubConnections().size(), 2);
+        assertTrue(c7.getSuperConnections().contains(c8));
+        assertTrue(c7.getSuperConnections().contains(c9));
+        assertEquals(c7.getSuperConnections().size(), 2);
+
+        assertTrue(c8.getSubConnections().contains(c5));
+        assertTrue(c8.getSubConnections().contains(c7));
+        assertEquals(c8.getSubConnections().size(), 2);
+        assertTrue(c8.getSuperConnections().contains(c10));
+        assertEquals(c8.getSuperConnections().size(), 1);
+
+        assertTrue(c9.getSubConnections().contains(c7));
+        assertTrue(c9.getSubConnections().contains(c6));
+        assertEquals(c9.getSubConnections().size(), 2);
+        assertTrue(c9.getSuperConnections().contains(c10));
+        assertEquals(c9.getSuperConnections().size(), 1);
+
+        assertTrue(c10.getSubConnections().contains(c9));
+        assertTrue(c10.getSubConnections().contains(c8));
+        assertEquals(c10.getSubConnections().size(), 2);
+        assertTrue(c10.getSuperConnections().isEmpty());
     }
 
     @Test
