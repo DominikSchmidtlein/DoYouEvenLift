@@ -6,7 +6,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by domin_2o9sb4z on 2016-11-23.
+ * Created by Dominik Schmidtlein on 2016-11-23.
+ *
+ * Connection is a orderless set of 2 unequal points that are connected together.
  */
 class Connection {
 
@@ -18,40 +20,52 @@ class Connection {
     private State state = State.FREE;
 
     /**
-     * Add this connection to both points. Check if this connection can be combined with another
-     * connection of p1 or p2 to create a superconnection.
+     * Creates a connection between 2 unique points. Checks if this connection can be concatenated with
+     * other connections. If so, creates a new connection and sets super/subconnections accordingly.
+     *
+     * Intended use is to create base connections and all other connections will be automatically
+     * generated.
      * @param p1
      * @param p2
      */
     Connection(@NonNull TracePoint p1, @NonNull TracePoint p2) {
-        this(p1, p2, true);
-    }
-
-    Connection(@NonNull TracePoint p1, @NonNull TracePoint p2, boolean smart) {
         if (p1.equals(p2)) {
             throw new IllegalArgumentException();
         }
         points.add(p1);
         points.add(p2);
-        if (smart) {
-            p1.addConnection(this);
-            p2.addConnection(this);
-            for (Connection connection : p1.getConnections()) {
-                connection.concat(this);
-            }
-            for (Connection connection : p2.getConnections()) {
-                connection.concat(this);
-            }
+
+        p1.addConnection(this);
+        p2.addConnection(this);
+        for (Connection connection : p1.getConnections()) {
+            connection.concat(this);
+        }
+        for (Connection connection : p2.getConnections()) {
+            connection.concat(this);
         }
     }
 
-    private void addSubConnection(Connection connection) {
-        subConnections.add(connection);
-    }
-
-    void addSuperConnection(Connection connection) {
-        superConnections.add(connection);
-        connection.addSubConnection(this);
+    /**
+     * Superconnection is a connection that:
+     *  - shares 1 point with this point
+     *  - covers this connection
+     *  - is larger than this connection (cannot be superconnection of self)
+     * @param superConnection the potential superconnection
+     * @return true if this is a superconnection else false
+     */
+    boolean addSuperConnection(Connection superConnection) {
+        TracePoint commonPoint = commonPoint(superConnection);
+        if (commonPoint != null) {
+            if (directionFrom(commonPoint).equals(superConnection.directionFrom(commonPoint))) {
+                if (commonPoint.distanceTo(otherEnd(commonPoint)) <
+                        commonPoint.distanceTo(superConnection.otherEnd(commonPoint))) {
+                    superConnections.add(superConnection);
+                    superConnection.subConnections.add(this);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     boolean isFree() {
@@ -82,13 +96,14 @@ class Connection {
         return superConnections;
     }
 
+    /**
+     * Checks if this is a connection between these 2 unique points.
+     * @param point1
+     * @param point2
+     * @return
+     */
     boolean connects(TracePoint point1, TracePoint point2) {
-        for (TracePoint point : points) {
-            if (!point1.equals(point) && !point2.equals(point)) {
-                return false;
-            }
-        }
-        return true;
+        return points.contains(point1) && points.contains(point2) && !point1.equals(point2);
     }
     /**
      * Sets current connection to occupied, subconnections to occupied and superconnections to
@@ -127,23 +142,30 @@ class Connection {
      * @return
      */
     Connection concat(Connection connection) {
-        if (connection.equals(this)) {
-            return null;
-        }
         TracePoint commonPoint = this.commonPoint(connection);
-        if (commonPoint == null) {
-            return null;
-        }
-        if (directionFrom(commonPoint).isOppositeOrigin(connection.directionFrom(commonPoint))) {
-            return new Connection(otherEnd(commonPoint), connection.otherEnd(commonPoint));
+        if (commonPoint != null) {
+            if (directionFrom(commonPoint).isOppositeOrigin(connection.directionFrom(commonPoint))) {
+                Connection concatConnection = new Connection(otherEnd(commonPoint), connection.otherEnd(commonPoint));
+                this.addSuperConnection(concatConnection);
+                connection.addSuperConnection(concatConnection);
+                return concatConnection;
+            }
         }
         return null;
     }
 
+
+    /**
+     * Returns a point iff the 2 connections have this 1 point in common.
+     * @param connection
+     * @return
+     */
     TracePoint commonPoint(Connection connection) {
-        for (TracePoint point : connection.points) {
-            if (points.contains(point)) {
-                return point;
+        if (!connection.equals(this)) {
+            for (TracePoint point : connection.points) {
+                if (points.contains(point)) {
+                    return point;
+                }
             }
         }
         return null;
@@ -163,6 +185,11 @@ class Connection {
         return thisEnd == null ? null : otherEnd;
     }
 
+    /**
+     * Returns a point whose x and y coordinates represent a direction with a magnitude 1.
+     * @param tracePoint the starting point for the direction calculation
+     * @return
+     */
     Point directionFrom(TracePoint tracePoint) {
         if (!points.contains(tracePoint)) {
             return null;
@@ -172,7 +199,11 @@ class Connection {
         return direction.unitMagnitude();
     }
 
-
+    /**
+     * Connections are equal if they connect the same points together.
+     * @param o
+     * @return True if equal, False otherwise
+     */
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Connection)) {

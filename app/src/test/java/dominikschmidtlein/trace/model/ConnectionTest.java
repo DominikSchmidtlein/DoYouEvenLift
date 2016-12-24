@@ -252,6 +252,21 @@ public class ConnectionTest {
     }
 
     @Test
+    public void testAddSuperConnection() {
+        assertFalse(c1.addSuperConnection(c3));
+        assertFalse(c1.addSuperConnection(c2));
+        assertFalse(c8.addSuperConnection(c9));
+        assertFalse(c5.addSuperConnection(c1));
+        assertFalse(c10.addSuperConnection(c2));
+        assertFalse(c1.addSuperConnection(c1));
+        assertFalse(c2.addSuperConnection(c10));
+
+        assertTrue(c1.addSuperConnection(c5));
+        assertTrue(c1.addSuperConnection(c8));
+        assertTrue(c1.addSuperConnection(c10));
+    }
+
+    @Test
     public void testOtherEnd() {
         assertEquals(c1.otherEnd(p1), p2);
         assertEquals(c1.otherEnd(p2), p1);
