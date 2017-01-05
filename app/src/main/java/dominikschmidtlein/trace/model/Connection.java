@@ -32,23 +32,21 @@ class Connection {
         if (p1.equals(p2)) {
             throw new IllegalArgumentException();
         }
-        points.add(p1);
-        points.add(p2);
+        addPoint(p1);
+        addPoint(p2);
 
         p1.addConnection(this);
         p2.addConnection(this);
-        for (Connection connection : p1.getConnections()) {
-            connection.concat(this);
-        }
-        for (Connection connection : p2.getConnections()) {
-            connection.concat(this);
-        }
+    }
+
+    private boolean addPoint(TracePoint point) {
+        return points.add(point);
     }
 
     /**
      * Superconnection is a connection that:
      *  - shares 1 point with this point
-     *  - covers this connection
+     *  - has the same direction from the common point
      *  - is larger than this connection (cannot be superconnection of self)
      * @param superConnection the potential superconnection
      * @return true if this is a superconnection else false
@@ -145,7 +143,10 @@ class Connection {
         TracePoint commonPoint = this.commonPoint(connection);
         if (commonPoint != null) {
             if (directionFrom(commonPoint).isOppositeOrigin(connection.directionFrom(commonPoint))) {
-                Connection concatConnection = new Connection(otherEnd(commonPoint), connection.otherEnd(commonPoint));
+                Connection concatConnection = otherEnd(commonPoint).connectedTo(connection.otherEnd(commonPoint));
+                if (concatConnection == null) {
+                    concatConnection = new Connection(otherEnd(commonPoint), connection.otherEnd(commonPoint));
+                }
                 this.addSuperConnection(concatConnection);
                 connection.addSuperConnection(concatConnection);
                 return concatConnection;

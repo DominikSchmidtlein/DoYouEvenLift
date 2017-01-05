@@ -28,6 +28,9 @@ class TracePoint extends Point{
 
     void addConnection(Connection connection) {
         connections.add(connection);
+        for (Connection existingConnection : getConnections()) {
+            existingConnection.concat(connection);
+        }
     }
 
     Connection connectedTo(TracePoint tracePoint) {
