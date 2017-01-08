@@ -38,6 +38,23 @@ class TracePointMap {
         this(width, height, margin, DEFAULT_XBINS, DEFAULT_YBINS);
     }
 
+    /**
+     * If a point at the same location already exists it is returned otherwise null.
+     * @param tracePoint
+     * @return
+     */
+    TracePoint equalPoint(TracePoint tracePoint) {
+        int binNumber = calculateBin(tracePoint);
+        Set<TracePoint> bin = points.get(binNumber);
+
+        for (TracePoint point : bin) {
+            if (point.equals(tracePoint)) {
+                return point;
+            }
+        }
+        return null;
+    }
+
     TracePoint nearPoint(TracePoint tracePoint) {
         int binNumber = calculateBin(tracePoint);
         Set<TracePoint> bin = points.get(binNumber);
@@ -55,12 +72,20 @@ class TracePointMap {
         return nearPoint;
     }
 
-    void addTracePoint(TracePoint tracePoint) {
-        points.get(calculateBin(tracePoint)).add(tracePoint);
-        points.get(calculateBinUL(tracePoint)).add(tracePoint);
-        points.get(calculateBinUR(tracePoint)).add(tracePoint);
-        points.get(calculateBinDL(tracePoint)).add(tracePoint);
-        points.get(calculateBinDR(tracePoint)).add(tracePoint);
+    TracePoint addTracePoint(TracePoint tracePoint) {
+        if (!pointInBounds(tracePoint)) {
+            throw new IllegalArgumentException();
+        }
+        TracePoint existingPoint = equalPoint(tracePoint);
+        if (existingPoint == null) {
+            points.get(calculateBin(tracePoint)).add(tracePoint);
+            points.get(calculateBinUL(tracePoint)).add(tracePoint);
+            points.get(calculateBinUR(tracePoint)).add(tracePoint);
+            points.get(calculateBinDL(tracePoint)).add(tracePoint);
+            points.get(calculateBinDR(tracePoint)).add(tracePoint);
+            return tracePoint;
+        }
+        return existingPoint;
     }
 
     private int calculateBin(TracePoint tracePoint) {
@@ -94,6 +119,11 @@ class TracePointMap {
 
     private int calculateBinDR(TracePoint tracePoint) {
         return calculateBin(tracePoint.getX() + margin, tracePoint.getY() + margin);
+    }
+
+    boolean pointInBounds(TracePoint tracePoint) {
+        return tracePoint.getX() >= 0 && tracePoint.getX() <= width &&
+                tracePoint.getY() >= 0 && tracePoint.getY() <= height;
     }
 
 }
