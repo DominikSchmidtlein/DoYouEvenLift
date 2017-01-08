@@ -10,6 +10,8 @@ import static org.junit.Assert.*;
  */
 public class TraceTest {
 
+    public static final boolean FIND_POINTS = false;
+
     Trace trace;
     TracePoint p12;
     TracePoint p21;
@@ -60,11 +62,23 @@ public class TraceTest {
         p52 = new TracePoint(500, 200);
         p61 = new TracePoint(600, 100);
         p72 = new TracePoint(700, 200);
-        trace.addConnection(p12, p21);
-        trace.addConnection(p12, p72);
-        trace.addConnection(p21, p43);
-        trace.addConnection(p61, p43);
-        trace.addConnection(p61, p72);
+        if (FIND_POINTS) {
+            trace.addConnection(p12, p21);
+            trace.addConnection(p12, p72);
+            trace.addConnection(p21, p43);
+            trace.addConnection(p61, p43);
+            trace.addConnection(p61, p72);
+        } else {
+            trace.addConnection(p12, p21);
+            trace.addConnection(p12, p32);
+            trace.addConnection(p32, p21);
+            trace.addConnection(p43, p32);
+            trace.addConnection(p43, p52);
+            trace.addConnection(p52, p32);
+            trace.addConnection(p72, p61);
+            trace.addConnection(p61, p52);
+            trace.addConnection(p52, p72);
+        }
 
         p12 = trace.nearPoint(p12);
         p21 = trace.nearPoint(p21);
@@ -186,7 +200,8 @@ public class TraceTest {
 
         assertTrue(c13.getSubConnections().isEmpty());
         assertTrue(c13.getSuperConnections().contains(c15));
-        assertTrue(c13.getSuperConnections().size() == 1);
+        assertTrue(c13.getSuperConnections().contains(c17));
+        assertTrue(c13.getSuperConnections().size() == 2);
 
         assertTrue(c23.getSubConnections().isEmpty());
         assertTrue(c23.getSuperConnections().contains(c24));
@@ -210,8 +225,9 @@ public class TraceTest {
         assertTrue(c56.getSuperConnections().size() == 1);
 
         assertTrue(c57.getSubConnections().isEmpty());
+        assertTrue(c57.getSuperConnections().contains(c17));
         assertTrue(c57.getSuperConnections().contains(c37));
-        assertTrue(c57.getSuperConnections().size() == 1);
+        assertTrue(c57.getSuperConnections().size() == 2);
 
         assertTrue(c67.getSubConnections().isEmpty());
         assertTrue(c67.getSuperConnections().isEmpty());
@@ -238,9 +254,11 @@ public class TraceTest {
         assertTrue(c46.getSubConnections().size() == 2);
         assertTrue(c46.getSuperConnections().isEmpty());
 
+        assertTrue(c17.getSubConnections().contains(c13));
         assertTrue(c17.getSubConnections().contains(c15));
         assertTrue(c17.getSubConnections().contains(c37));
-        assertTrue(c17.getSubConnections().size() == 2);
+        assertTrue(c17.getSubConnections().contains(c57));
+        assertTrue(c17.getSubConnections().size() == 4);
         assertTrue(c17.getSuperConnections().isEmpty());
     }
 
@@ -255,12 +273,12 @@ public class TraceTest {
         assertNotNull(trace.nearPoint(new TracePoint(199, 101)));
         assertNotNull(trace.nearPoint(new TracePoint(399, 299)));
 
-        assertNull(trace.nearPoint(new TracePoint(200, 150)));
-        assertNull(trace.nearPoint(new TracePoint(400, 250)));
-        assertNull(trace.nearPoint(new TracePoint(600, 150)));
-        assertNull(trace.nearPoint(new TracePoint(150, 150)));
-        assertNull(trace.nearPoint(new TracePoint(400, 200)));
-        assertNull(trace.nearPoint(new TracePoint(550, 150)));
+        assertNull(trace.nearPoint(new TracePoint(100, 100)));
+        assertNull(trace.nearPoint(new TracePoint(300, 100)));
+        assertNull(trace.nearPoint(new TracePoint(500, 10)));
+        assertNull(trace.nearPoint(new TracePoint(700, 100)));
+        assertNull(trace.nearPoint(new TracePoint(250, 201)));
+        assertNull(trace.nearPoint(new TracePoint(450, 250)));
     }
 
     @Test
