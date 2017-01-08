@@ -42,8 +42,12 @@ class Trace implements Iterable<TracePoint> {
         return false;
     }
 
+    TracePoint getPoint() {
+        return tracePointMap.getPoint();
+    }
+
     @Override
     public Iterator<TracePoint> iterator() {
-        return new TraceIterator();
+        return new TraceIterator(this);
     }
 }
