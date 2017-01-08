@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 /**
  * Created by domin_2o9sb4z on 2017-01-07.
  */
-public class TraceIteratorTest {
+public class TracePointIteratorTest {
 
     TracePoint p1;
     TracePoint p2;
@@ -20,7 +20,7 @@ public class TraceIteratorTest {
     TracePoint p5;
 
     Trace trace;
-    TraceIterator traceIterator;
+    TracePointIterator tracePointIterator;
 
     @Before
     public void setUp() throws Exception {
@@ -31,12 +31,10 @@ public class TraceIteratorTest {
         p5 = new TracePoint(150, 150);
 
         trace = new Trace(new TracePointMap(500, 500, 50));
-
-        traceIterator = new TraceIterator(trace);
     }
 
     @Test
-    public void foreachLoopTest() {
+    public void testForeachLoop() {
         trace.addConnection(p1, p2);
         trace.addConnection(p1, p3);
         trace.addConnection(p1, p5);
@@ -45,6 +43,8 @@ public class TraceIteratorTest {
         trace.addConnection(p3, p4);
         trace.addConnection(p3, p5);
         trace.addConnection(p4, p5);
+
+        tracePointIterator = trace.tracePointIterator();
 
         Set<TracePoint> expectedSet = new HashSet<>();
         expectedSet.add(p1);
@@ -55,7 +55,9 @@ public class TraceIteratorTest {
 
         Set<TracePoint> actualSet = new HashSet<>();
 
-        for (TracePoint tracePoint : trace) {
+
+        for (TracePoint tracePoint; tracePointIterator.hasNext(); ) {
+            tracePoint = tracePointIterator.next();
             actualSet.add(tracePoint);
         }
 
@@ -63,12 +65,14 @@ public class TraceIteratorTest {
     }
 
     @Test
-    public void foreachLoopTestSplit() {
+    public void testForeachLoopSplit() {
         trace.addConnection(p1, p2);
         trace.addConnection(p3, p4);
+        tracePointIterator = trace.tracePointIterator();
 
         int count = 0;
-        for (TracePoint tracePoint : trace) {
+        for (TracePoint tracePoint; tracePointIterator.hasNext(); ) {
+            tracePoint = tracePointIterator.next();
             count ++;
         }
         assertEquals(count, 2);

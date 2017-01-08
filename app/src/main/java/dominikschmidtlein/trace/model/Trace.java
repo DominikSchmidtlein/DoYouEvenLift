@@ -1,13 +1,11 @@
 package dominikschmidtlein.trace.model;
 
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by domin_2o9sb4z on 2016-11-23.
  */
-class Trace implements Iterable<TracePoint> {
+class Trace {
 
     private TracePointMap tracePointMap;
 
@@ -42,12 +40,7 @@ class Trace implements Iterable<TracePoint> {
         return false;
     }
 
-    TracePoint getPoint() {
-        return tracePointMap.getPoint();
-    }
-
-    @Override
-    public Iterator<TracePoint> iterator() {
-        return new TraceIterator(this);
+    public TracePointIterator tracePointIterator() {
+        return new TracePointIterator(tracePointMap.getPoint());
     }
 }

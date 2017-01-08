@@ -19,6 +19,7 @@ class TracePointMap {
     private int xbins;
     private int ybins;
     private double margin;
+    private int count = 0;
 
     TracePointMap(int width, int height, double margin, int xbins, int ybins) {
         int bins = xbins * ybins;
@@ -83,6 +84,7 @@ class TracePointMap {
             points.get(calculateBinUR(tracePoint)).add(tracePoint);
             points.get(calculateBinDL(tracePoint)).add(tracePoint);
             points.get(calculateBinDR(tracePoint)).add(tracePoint);
+            count++;
             return tracePoint;
         }
         return existingPoint;

@@ -9,17 +9,15 @@ import java.util.Set;
 /**
  * Created by domin_2o9sb4z on 2017-01-07.
  */
-public class TraceIterator implements Iterator<TracePoint> {
+public class TracePointIterator implements Iterator<TracePoint> {
 
-    private Trace trace;
     private Set<TracePoint> visitedPoints;
     private Queue<TracePoint> nextPoints;
 
-    TraceIterator(Trace trace) {
-        this.trace = trace;
+    TracePointIterator(TracePoint tracePoint) {
         visitedPoints = new HashSet<>();
         nextPoints = new LinkedList<>();
-        nextPoints.add(trace.getPoint());
+        nextPoints.add(tracePoint);
     }
 
     @Override
