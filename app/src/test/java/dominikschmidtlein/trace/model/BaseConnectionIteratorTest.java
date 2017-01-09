@@ -58,10 +58,13 @@ public class BaseConnectionIteratorTest {
 
         Set<Connection> actualConnections = new HashSet<>();
 
+        int count = 0;
         for (Connection connection; baseConnectionIterator.hasNext(); ) {
             connection = baseConnectionIterator.next();
             actualConnections.add(connection);
+            count++;
         }
         assertEquals(expectedConnections, actualConnections);
+        assertEquals(8, count);
     }
 }

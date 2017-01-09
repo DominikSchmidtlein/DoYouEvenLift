@@ -38,6 +38,7 @@ public class BaseConnectionIterator implements Iterator<Connection> {
             }
         }
         newConnections.removeAll(visitedConnections);
+        newConnections.removeAll(nextConnections);
         nextConnections.addAll(newConnections);
         return connection;
     }
