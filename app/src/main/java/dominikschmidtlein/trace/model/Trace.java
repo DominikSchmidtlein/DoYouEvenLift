@@ -44,14 +44,10 @@ class Trace {
         for (TracePoint tracePoint;  tracePointIterator.hasNext(); ) {
             tracePoint = tracePointIterator.next();
             pointCount++;
-            System.out.println("x: "+tracePoint.getX()+", y: "+tracePoint.getY()+", connections: "+tracePoint.getConnections().size());
             if (tracePoint.getBaseConnections().size() % 2 == 1) {
                 oddConnectionCount++;
             }
         }
-        System.out.println("pointCount: " + pointCount);
-        System.out.println("tracePointMap.getCount(): " + tracePointMap.getCount());
-        System.out.println("oddConnectionCount: " + oddConnectionCount);
         return pointCount == tracePointMap.getCount() && (oddConnectionCount == 0 || oddConnectionCount == 2);
     }
 
