@@ -94,6 +94,10 @@ class Connection {
         return superConnections;
     }
 
+    Set<TracePoint> getPoints() {
+        return points;
+    }
+
     /**
      * Checks if this is a connection between these 2 unique points.
      * @param point1

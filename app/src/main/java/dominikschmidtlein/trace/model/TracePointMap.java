@@ -89,16 +89,7 @@ class TracePointMap {
         }
         return existingPoint;
     }
-
-    TracePoint getPoint() {
-        for (Set<TracePoint> bin : points.values()) {
-            for (TracePoint point : bin) {
-                return point;
-            }
-        }
-        return null;
-    }
-
+    
     private int calculateBin(TracePoint tracePoint) {
         return calculateBin(tracePoint.getX(), tracePoint.getY());
     }

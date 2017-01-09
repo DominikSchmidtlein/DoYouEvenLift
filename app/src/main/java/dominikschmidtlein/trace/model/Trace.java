@@ -1,13 +1,13 @@
 package dominikschmidtlein.trace.model;
 
-import java.util.Iterator;
-
 /**
  * Created by domin_2o9sb4z on 2016-11-23.
  */
 class Trace {
 
     private TracePointMap tracePointMap;
+    private TracePoint recentTracePoint;
+    private Connection recentConnection;
 
     Trace(TracePointMap tracePointMap) {
         this.tracePointMap = tracePointMap;
@@ -17,7 +17,8 @@ class Trace {
         p1 = tracePointMap.addTracePoint(p1);
         p2 = tracePointMap.addTracePoint(p2);
         if (p1.connectedTo(p2) == null) {
-            new Connection(p1, p2);
+            recentTracePoint = p2;
+            recentConnection = new Connection(p1, p2);
         }
     }
 
@@ -40,7 +41,15 @@ class Trace {
         return false;
     }
 
-    public TracePointIterator tracePointIterator() {
-        return new TracePointIterator(tracePointMap.getPoint());
+    TracePointIterator tracePointIterator() {
+        return new TracePointIterator(recentTracePoint);
     }
+
+    BaseConnectionIterator baseConnectionIterator() {
+        while (!recentConnection.getSubConnections().isEmpty()) {
+            recentConnection = recentConnection.getSubConnections().iterator().next();
+        }
+        return new BaseConnectionIterator(recentConnection);
+    }
+
 }
