@@ -111,6 +111,16 @@ class Connection {
     boolean connects(TracePoint point1, TracePoint point2) {
         return points.contains(point1) && points.contains(point2) && !point1.equals(point2);
     }
+
+    void setFree() {
+        if (getState() != State.FREE) {
+            setState(State.FREE);
+            for (Connection connection : subConnections) {
+                connection.setFree();
+            }
+        }
+    }
+
     /**
      * Sets current connection to occupied, subconnections to occupied and superconnections to
      * blocked.

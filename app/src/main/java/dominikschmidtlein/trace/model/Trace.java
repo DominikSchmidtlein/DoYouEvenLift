@@ -41,6 +41,11 @@ class Trace {
      * Sets all connections to unoccupied.
      */
     void reset() {
+        ConnectionIterator connectionIterator = connectionIterator();
+        for (Connection connection; connectionIterator.hasNext(); ) {
+            connection = connectionIterator.next();
+            connection.setFree();
+        }
     }
 
     boolean isLegal() {
