@@ -89,7 +89,7 @@ class TracePointMap {
         }
         return existingPoint;
     }
-    
+
     private int calculateBin(TracePoint tracePoint) {
         return calculateBin(tracePoint.getX(), tracePoint.getY());
     }
@@ -128,4 +128,7 @@ class TracePointMap {
                 tracePoint.getY() >= 0 && tracePoint.getY() <= height;
     }
 
+    int getCount() {
+        return count;
+    }
 }

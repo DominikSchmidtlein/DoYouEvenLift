@@ -10,9 +10,6 @@ import java.util.Set;
  */
 class TracePoint extends Point{
 
-    private double x;
-    private double y;
-
     private Set<Connection> connections;
 
     static final int DEFAULT_CAPACITY = 16;
@@ -42,7 +39,17 @@ class TracePoint extends Point{
         return null;
     }
 
-    public Set<Connection> getConnections() {
+    Set<Connection> getConnections() {
         return connections;
+    }
+
+    Set<Connection> getBaseConnections() {
+        Set<Connection> baseConnections = new HashSet<>();
+        for (Connection connection : getConnections()) {
+            if (connection.getSubConnections().isEmpty()) {
+                baseConnections.add(connection);
+            }
+        }
+        return baseConnections;
     }
 }
