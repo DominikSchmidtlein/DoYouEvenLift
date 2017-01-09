@@ -22,7 +22,7 @@ public class TracePointIterator implements Iterator<TracePoint> {
 
     @Override
     public boolean hasNext() {
-        return nextPoints.peek() != null;
+        return !nextPoints.isEmpty();
     }
 
     @Override
