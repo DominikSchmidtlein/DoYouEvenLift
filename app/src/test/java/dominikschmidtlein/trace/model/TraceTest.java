@@ -66,7 +66,8 @@ public class TraceTest {
             trace.addConnection(p12, p21);
             trace.addConnection(p12, p72);
             trace.addConnection(p21, p43);
-            trace.addConnection(p61, p43);
+            trace.addConnection(p52, p43);
+            trace.addConnection(p61, p52);
             trace.addConnection(p61, p72);
         } else {
             trace.addConnection(p12, p21);
