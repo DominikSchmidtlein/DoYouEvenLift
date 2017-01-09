@@ -337,23 +337,36 @@ public class TraceTest {
     @Test
     public void testIsLegal() {
         assertTrue(trace.isLegal());
+    }
 
-        // 4 points with odd # connections
-        Trace trace1 = new Trace(new TracePointMap(800, 400, 50));
-        trace1.addConnection(p12, p21);
-        trace1.addConnection(p12, p32);
-        trace1.addConnection(p12, p43);
-        assertFalse(trace1.isLegal());
+    @Test
+    public void testIsLegalFalse() {
+        TracePoint p12 = new TracePoint(100, 200);
+        TracePoint p21 = new TracePoint(200, 100);
+        TracePoint p32 = new TracePoint(300, 200);
+        TracePoint p43 = new TracePoint(400, 300);
+        Trace testTrace = new Trace(new TracePointMap(800, 400, 50));
+        testTrace.addConnection(p12, p21);
+        testTrace.addConnection(p12, p32);
+        testTrace.addConnection(p12, p43);
+        assertFalse(testTrace.isLegal());
+    }
 
-        // 2 separate shapes
-        Trace trace2 = new Trace(new TracePointMap(800, 400, 50));
-        trace2.addConnection(p12, p21);
-        trace2.addConnection(p12, p32);
-        trace2.addConnection(p32, p21);
-        trace2.addConnection(p52, p61);
-        trace2.addConnection(p52, p72);
-        trace2.addConnection(p72, p61);
-        assertFalse(trace2.isLegal());
-
+    @Test
+    public void testIsLegalSplit() {
+        TracePoint p12 = new TracePoint(100, 200);
+        TracePoint p21 = new TracePoint(200, 100);
+        TracePoint p32 = new TracePoint(300, 200);
+        TracePoint p52 = new TracePoint(500, 200);
+        TracePoint p61 = new TracePoint(600, 100);
+        TracePoint p72 = new TracePoint(700, 200);
+        Trace testTrace = new Trace(new TracePointMap(800, 400, 50));
+        testTrace.addConnection(p12, p21);
+        testTrace.addConnection(p12, p32);
+        testTrace.addConnection(p32, p21);
+        testTrace.addConnection(p52, p61);
+        testTrace.addConnection(p52, p72);
+        testTrace.addConnection(p72, p61);
+        assertFalse(testTrace.isLegal());
     }
 }
