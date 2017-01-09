@@ -1,48 +1,23 @@
 package dominikschmidtlein.trace.model;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Set;
-
 /**
  * Created by domin_2o9sb4z on 2017-01-07.
  */
-public class TracePointIterator implements Iterator<TracePoint> {
-
-    private Set<TracePoint> visitedPoints;
-    private Queue<TracePoint> nextPoints;
+public class TracePointIterator extends GraphIterator<TracePoint> {
 
     TracePointIterator(TracePoint tracePoint) {
-        if (tracePoint == null) {
-            throw new IllegalArgumentException();
-        }
-        visitedPoints = new HashSet<>();
-        nextPoints = new LinkedList<>();
-        nextPoints.add(tracePoint);
-    }
-
-    @Override
-    public boolean hasNext() {
-        return !nextPoints.isEmpty();
+        super(tracePoint);
     }
 
     @Override
     public TracePoint next() {
-        TracePoint nextPoint = nextPoints.remove();
-        visitedPoints.add(nextPoint);
+        TracePoint nextPoint = super.next();
         for (Connection connection : nextPoint.getConnections()) {
-            if (!visitedPoints.contains(connection.otherEnd(nextPoint)) &&
-                    !nextPoints.contains(connection.otherEnd(nextPoint))) {
-                nextPoints.add(connection.otherEnd(nextPoint));
+            if (!visitedElements.contains(connection.otherEnd(nextPoint)) &&
+                    !nextElements.contains(connection.otherEnd(nextPoint))) {
+                nextElements.add(connection.otherEnd(nextPoint));
             }
         }
         return nextPoint;
-    }
-
-    @Override
-    public void remove() {
-        throw new UnsupportedOperationException();
     }
 }

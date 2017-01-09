@@ -46,7 +46,7 @@ class TracePoint extends Point{
     Set<Connection> getBaseConnections() {
         Set<Connection> baseConnections = new HashSet<>();
         for (Connection connection : getConnections()) {
-            if (connection.getSubConnections().isEmpty()) {
+            if (connection.isBaseConnection()) {
                 baseConnections.add(connection);
             }
         }

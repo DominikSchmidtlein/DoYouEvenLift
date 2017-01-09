@@ -98,6 +98,10 @@ class Connection {
         return points;
     }
 
+    boolean isBaseConnection() {
+        return getSubConnections().isEmpty();
+    }
+
     /**
      * Checks if this is a connection between these 2 unique points.
      * @param point1

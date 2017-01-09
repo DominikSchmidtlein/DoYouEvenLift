@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 /**
  * Created by domin_2o9sb4z on 2017-01-08.
  */
-public class BaseConnectionIteratorTest {
+public class ConnectionIteratorTest {
 
     TracePoint p1;
     TracePoint p2;
@@ -20,7 +20,6 @@ public class BaseConnectionIteratorTest {
     TracePoint p5;
 
     Trace trace;
-    BaseConnectionIterator baseConnectionIterator;
 
     @Before
     public void setUp() {
@@ -34,7 +33,7 @@ public class BaseConnectionIteratorTest {
     }
 
     @Test
-    public void testConnectionIterator() {
+    public void testConnectionIteratorTrue() {
         trace.addConnection(p1, p2);
         trace.addConnection(p1, p3);
         trace.addConnection(p1, p5);
@@ -44,7 +43,7 @@ public class BaseConnectionIteratorTest {
         trace.addConnection(p3, p5);
         trace.addConnection(p4, p5);
 
-        baseConnectionIterator = trace.baseConnectionIterator();
+        ConnectionIterator baseConnectionIterator = trace.baseConnectionIterator();
 
         Set<Connection> expectedConnections = new HashSet<>();
         expectedConnections.add(p1.connectedTo(p2));
@@ -66,5 +65,42 @@ public class BaseConnectionIteratorTest {
         }
         assertEquals(expectedConnections, actualConnections);
         assertEquals(8, count);
+    }
+
+    @Test
+    public void testConnectionIteratorFalse() {
+        trace.addConnection(p1, p2);
+        trace.addConnection(p1, p3);
+        trace.addConnection(p1, p5);
+        trace.addConnection(p2, p4);
+        trace.addConnection(p2, p5);
+        trace.addConnection(p3, p4);
+        trace.addConnection(p3, p5);
+        trace.addConnection(p4, p5);
+
+        ConnectionIterator connectionIterator = trace.connectionIterator();
+
+        Set<Connection> expectedConnections = new HashSet<>();
+        expectedConnections.add(p1.connectedTo(p2));
+        expectedConnections.add(p1.connectedTo(p3));
+        expectedConnections.add(p1.connectedTo(p5));
+        expectedConnections.add(p2.connectedTo(p4));
+        expectedConnections.add(p2.connectedTo(p5));
+        expectedConnections.add(p3.connectedTo(p4));
+        expectedConnections.add(p3.connectedTo(p5));
+        expectedConnections.add(p4.connectedTo(p5));
+        expectedConnections.add(p1.connectedTo(p4));
+        expectedConnections.add(p2.connectedTo(p3));
+
+        Set<Connection> actualConnections = new HashSet<>();
+
+        int count = 0;
+        for (Connection connection; connectionIterator.hasNext(); ) {
+            connection = connectionIterator.next();
+            actualConnections.add(connection);
+            count++;
+        }
+        assertEquals(expectedConnections, actualConnections);
+        assertEquals(10, count);
     }
 }

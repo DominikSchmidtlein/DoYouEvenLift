@@ -27,14 +27,20 @@ class Trace {
     }
 
     boolean isComplete() {
-        return false;
+        ConnectionIterator connectionIterator = baseConnectionIterator();
+        for (Connection connection; connectionIterator.hasNext(); ) {
+            connection = connectionIterator.next();
+            if (!connection.isOccupied()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
      * Sets all connections to unoccupied.
      */
     void reset() {
-
     }
 
     boolean isLegal() {
@@ -55,11 +61,15 @@ class Trace {
         return new TracePointIterator(recentTracePoint);
     }
 
-    BaseConnectionIterator baseConnectionIterator() {
-        while (!recentConnection.getSubConnections().isEmpty()) {
+    ConnectionIterator baseConnectionIterator() {
+        while (!recentConnection.isBaseConnection()) {
             recentConnection = recentConnection.getSubConnections().iterator().next();
         }
-        return new BaseConnectionIterator(recentConnection);
+        return new ConnectionIterator(recentConnection, true);
+    }
+
+    ConnectionIterator connectionIterator() {
+        return new ConnectionIterator(recentConnection, false);
     }
 
 }
