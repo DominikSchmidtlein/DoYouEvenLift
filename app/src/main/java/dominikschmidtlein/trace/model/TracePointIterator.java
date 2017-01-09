@@ -15,6 +15,9 @@ public class TracePointIterator implements Iterator<TracePoint> {
     private Queue<TracePoint> nextPoints;
 
     TracePointIterator(TracePoint tracePoint) {
+        if (tracePoint == null) {
+            throw new IllegalArgumentException();
+        }
         visitedPoints = new HashSet<>();
         nextPoints = new LinkedList<>();
         nextPoints.add(tracePoint);
@@ -30,7 +33,8 @@ public class TracePointIterator implements Iterator<TracePoint> {
         TracePoint nextPoint = nextPoints.remove();
         visitedPoints.add(nextPoint);
         for (Connection connection : nextPoint.getConnections()) {
-            if (!visitedPoints.contains(connection.otherEnd(nextPoint))) {
+            if (!visitedPoints.contains(connection.otherEnd(nextPoint)) &&
+                    !nextPoints.contains(connection.otherEnd(nextPoint))) {
                 nextPoints.add(connection.otherEnd(nextPoint));
             }
         }

@@ -55,13 +55,15 @@ public class TracePointIteratorTest {
 
         Set<TracePoint> actualSet = new HashSet<>();
 
-
+        int count = 0;
         for (TracePoint tracePoint; tracePointIterator.hasNext(); ) {
             tracePoint = tracePointIterator.next();
             actualSet.add(tracePoint);
+            count++;
         }
 
         assertEquals(expectedSet, actualSet);
+        assertEquals(5, count);
     }
 
     @Test
