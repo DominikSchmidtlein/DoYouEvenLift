@@ -23,7 +23,7 @@ public class TracePointIteratorTest {
     TracePointIterator tracePointIterator;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         p1 = new TracePoint(100, 100);
         p2 = new TracePoint(100, 200);
         p3 = new TracePoint(200, 100);
