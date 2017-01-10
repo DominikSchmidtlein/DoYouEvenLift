@@ -1,9 +1,13 @@
 package dominikschmidtlein.trace.model;
 
+import android.os.Build;
 import android.support.annotation.NonNull;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
+
+import dominikschmidtlein.trace.BuildConfig;
 
 /**
  * Created by Dominik Schmidtlein on 2016-11-23.
@@ -29,17 +33,16 @@ class Connection {
      * @param p2
      */
     Connection(@NonNull TracePoint p1, @NonNull TracePoint p2) {
-        if (p1.equals(p2)) {
-            throw new IllegalArgumentException();
-        }
         addPoint(p1);
         addPoint(p2);
-
-        p1.addConnection(this);
-        p2.addConnection(this);
     }
 
     private boolean addPoint(TracePoint point) {
+        if (BuildConfig.DEBUG) {
+            if (points.contains(point)) throw new IllegalArgumentException();
+            if (points.size() > 2) throw new IllegalArgumentException();
+            if (point == null) throw new IllegalArgumentException();
+        }
         return points.add(point);
     }
 
@@ -51,14 +54,18 @@ class Connection {
      * @param superConnection the potential superconnection
      * @return true if this is a superconnection else false
      */
-    boolean addSuperConnection(Connection superConnection) {
+    void addSuperConnection(Connection superConnection) {
+        if (BuildConfig.DEBUG) if (!isSuperConnection(superConnection)) throw new IllegalArgumentException();
+        superConnections.add(superConnection);
+        superConnection.subConnections.add(this);
+    }
+
+    boolean isSuperConnection(Connection superConnection) {
         TracePoint commonPoint = commonPoint(superConnection);
         if (commonPoint != null) {
             if (directionFrom(commonPoint).equals(superConnection.directionFrom(commonPoint))) {
                 if (commonPoint.distanceTo(otherEnd(commonPoint)) <
                         commonPoint.distanceTo(superConnection.otherEnd(commonPoint))) {
-                    superConnections.add(superConnection);
-                    superConnection.subConnections.add(this);
                     return true;
                 }
             }
@@ -82,24 +89,27 @@ class Connection {
         this.state = state;
     }
 
-    private State getState() {
-        return state;
-    }
-
     Set<Connection> getSubConnections() {
-        return subConnections;
+        return new HashSet<>(subConnections);
     }
 
     Set<Connection> getSuperConnections() {
-        return superConnections;
+        return new HashSet<>(superConnections);
     }
 
     Set<TracePoint> getPoints() {
-        return points;
+        return new HashSet<>(points);
     }
 
     boolean isBaseConnection() {
-        return getSubConnections().isEmpty();
+        return subConnections.isEmpty();
+    }
+
+    Connection getBaseConnection() {
+        if (isBaseConnection()) {
+            return this;
+        }
+        return subConnections.iterator().next().getBaseConnection();
     }
 
     /**
@@ -112,8 +122,14 @@ class Connection {
         return points.contains(point1) && points.contains(point2) && !point1.equals(point2);
     }
 
+    Connection existingConnection() {
+        TracePoint point = getPoint();
+        TracePoint otherPoint = otherEnd(point);
+        return point.connectedTo(otherPoint);
+    }
+
     void setFree() {
-        if (getState() != State.FREE) {
+        if (!isFree()) {
             setState(State.FREE);
             for (Connection connection : subConnections) {
                 connection.setFree();
@@ -126,15 +142,13 @@ class Connection {
      * blocked.
      */
     void setOccupied() {
-        State prevState = getState();
-
+        State prevState = state;
         if (prevState == State.BLOCKED || prevState == State.FREE) {
             for (Connection connection : subConnections) {
                 connection.setOccupied();
             }
             this.setState(State.OCCUPIED);
         }
-
         if (prevState == State.FREE) {
             for (Connection connection : superConnections) {
                 connection.setBlocked();
@@ -143,7 +157,7 @@ class Connection {
     }
 
     private void setBlocked() {
-        if (getState() == State.FREE) {
+        if (isFree()) {
             this.setState(State.BLOCKED);
             for (Connection connection: superConnections) {
                 connection.setBlocked();
@@ -160,19 +174,12 @@ class Connection {
     Connection concat(Connection connection) {
         TracePoint commonPoint = this.commonPoint(connection);
         if (commonPoint != null) {
-            if (directionFrom(commonPoint).isOppositeOrigin(connection.directionFrom(commonPoint))) {
-                Connection concatConnection = otherEnd(commonPoint).connectedTo(connection.otherEnd(commonPoint));
-                if (concatConnection == null) {
-                    concatConnection = new Connection(otherEnd(commonPoint), connection.otherEnd(commonPoint));
-                }
-                this.addSuperConnection(concatConnection);
-                connection.addSuperConnection(concatConnection);
-                return concatConnection;
+            if (this.directionFrom(commonPoint).isOppositeOrigin(connection.directionFrom(commonPoint))) {
+                return new Connection(this.otherEnd(commonPoint), connection.otherEnd(commonPoint));
             }
         }
         return null;
     }
-
 
     /**
      * Returns a point iff the 2 connections have this 1 point in common.
@@ -190,7 +197,12 @@ class Connection {
         return null;
     }
 
+    TracePoint getPoint() {
+        return points.iterator().next();
+    }
+
     TracePoint otherEnd(TracePoint tracePoint) {
+        if (BuildConfig.DEBUG) if (!points.contains(tracePoint)) throw new IllegalArgumentException();
         TracePoint otherEnd = null;
         TracePoint thisEnd = null;
 
@@ -198,7 +210,7 @@ class Connection {
             if (tracePoint.equals(point)) {
                 thisEnd = point;
             } else {
-              otherEnd = point;
+                otherEnd = point;
             }
         }
         return thisEnd == null ? null : otherEnd;

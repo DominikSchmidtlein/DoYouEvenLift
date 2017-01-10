@@ -27,6 +27,8 @@ public class ConnectionTest {
     Connection c9;
     Connection c10;
 
+    TraceApi traceApi;
+
     @Before
     public void setUp() {
         p1 = new TracePoint(100, 100);
@@ -39,6 +41,13 @@ public class ConnectionTest {
         c2 = new Connection(p2, p3);
         c3 = new Connection(p3, p4);
         c4 = new Connection(p4, p5);
+
+        traceApi = new TraceApi();
+        traceApi.addConnection(c1);
+        traceApi.addConnection(c2);
+        traceApi.addConnection(c3);
+        traceApi.addConnection(c4);
+
         c5 = p1.connectedTo(p3);
         c6 = p3.connectedTo(p5);
         c7 = p2.connectedTo(p4);
@@ -237,7 +246,6 @@ public class ConnectionTest {
         assertNotEquals(c1, c8);
         assertNotEquals(c1, c10);
         assertEquals(c1, c1);
-        assertEquals(c1, new Connection(p1, p2));
         assertEquals(c1, new Connection(new TracePoint(100, 100), new TracePoint(200, 200)));
     }
 
@@ -252,18 +260,18 @@ public class ConnectionTest {
     }
 
     @Test
-    public void testAddSuperConnection() {
-        assertFalse(c1.addSuperConnection(c3));
-        assertFalse(c1.addSuperConnection(c2));
-        assertFalse(c8.addSuperConnection(c9));
-        assertFalse(c5.addSuperConnection(c1));
-        assertFalse(c10.addSuperConnection(c2));
-        assertFalse(c1.addSuperConnection(c1));
-        assertFalse(c2.addSuperConnection(c10));
+    public void testIsSuperConnection() {
+        assertFalse(c1.isSuperConnection(c3));
+        assertFalse(c1.isSuperConnection(c2));
+        assertFalse(c8.isSuperConnection(c9));
+        assertFalse(c5.isSuperConnection(c1));
+        assertFalse(c10.isSuperConnection(c2));
+        assertFalse(c1.isSuperConnection(c1));
+        assertFalse(c2.isSuperConnection(c10));
 
-        assertTrue(c1.addSuperConnection(c5));
-        assertTrue(c1.addSuperConnection(c8));
-        assertTrue(c1.addSuperConnection(c10));
+        assertTrue(c1.isSuperConnection(c5));
+        assertTrue(c1.isSuperConnection(c8));
+        assertTrue(c1.isSuperConnection(c10));
     }
 
     @Test

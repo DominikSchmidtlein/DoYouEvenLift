@@ -13,12 +13,15 @@ public class TracePointTest {
     TracePoint point1;
     TracePoint point2;
     Connection connection;
+    TraceApi traceApi;
 
     @Before
     public void setUp() {
         point1 = new TracePoint(100, 100);
         point2 = new TracePoint(200, 100);
         connection = new Connection(point1, point2);
+        traceApi = new TraceApi();
+        traceApi.addConnection(connection);
     }
 
     @Test

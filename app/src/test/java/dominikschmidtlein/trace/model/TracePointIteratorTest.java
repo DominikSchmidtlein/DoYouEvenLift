@@ -19,7 +19,7 @@ public class TracePointIteratorTest {
     TracePoint p4;
     TracePoint p5;
 
-    Trace trace;
+    TraceApi traceApi;
     TracePointIterator tracePointIterator;
 
     @Before
@@ -30,21 +30,20 @@ public class TracePointIteratorTest {
         p4 = new TracePoint(200, 200);
         p5 = new TracePoint(150, 150);
 
-        trace = new Trace(new TracePointMap(500, 500, 50));
+        traceApi = new TraceApi();
+        tracePointIterator = new TracePointIterator(p1);
     }
 
     @Test
     public void testForeachLoop() {
-        trace.addConnection(p1, p2);
-        trace.addConnection(p1, p3);
-        trace.addConnection(p1, p5);
-        trace.addConnection(p2, p4);
-        trace.addConnection(p2, p5);
-        trace.addConnection(p3, p4);
-        trace.addConnection(p3, p5);
-        trace.addConnection(p4, p5);
-
-        tracePointIterator = trace.tracePointIterator();
+        traceApi.addConnection(new Connection(p1, p2));
+        traceApi.addConnection(new Connection(p1, p3));
+        traceApi.addConnection(new Connection(p1, p5));
+        traceApi.addConnection(new Connection(p2, p4));
+        traceApi.addConnection(new Connection(p2, p5));
+        traceApi.addConnection(new Connection(p3, p4));
+        traceApi.addConnection(new Connection(p3, p5));
+        traceApi.addConnection(new Connection(p4, p5));
 
         Set<TracePoint> expectedSet = new HashSet<>();
         expectedSet.add(p1);
@@ -68,9 +67,8 @@ public class TracePointIteratorTest {
 
     @Test
     public void testForeachLoopSplit() {
-        trace.addConnection(p1, p2);
-        trace.addConnection(p3, p4);
-        tracePointIterator = trace.tracePointIterator();
+        traceApi.addConnection(new Connection(p1, p2));
+        traceApi.addConnection(new Connection(p3, p4));
 
         int count = 0;
         for (TracePoint tracePoint; tracePointIterator.hasNext(); ) {

@@ -6,20 +6,16 @@ package dominikschmidtlein.trace.model;
 class Trace {
 
     private TracePointMap tracePointMap;
-    private TracePoint recentTracePoint;
-    private Connection recentConnection;
+    private TraceApi traceApi = new TraceApi();
 
     Trace(TracePointMap tracePointMap) {
         this.tracePointMap = tracePointMap;
     }
 
     void addConnection(TracePoint p1, TracePoint p2) {
-        p1 = tracePointMap.addTracePoint(p1);
-        p2 = tracePointMap.addTracePoint(p2);
-        if (p1.connectedTo(p2) == null) {
-            recentTracePoint = p2;
-            recentConnection = new Connection(p1, p2);
-        }
+        tracePointMap.addTracePoint(p1);
+        tracePointMap.addTracePoint(p2);
+        traceApi.addConnection(new Connection(p1, p2));
     }
 
     TracePoint nearPoint(TracePoint tracePoint) {
@@ -63,18 +59,16 @@ class Trace {
     }
 
     TracePointIterator tracePointIterator() {
-        return new TracePointIterator(recentTracePoint);
+        return new TracePointIterator(tracePointMap.getTracePoint());
     }
 
     ConnectionIterator baseConnectionIterator() {
-        while (!recentConnection.isBaseConnection()) {
-            recentConnection = recentConnection.getSubConnections().iterator().next();
-        }
-        return new ConnectionIterator(recentConnection, true);
+        Connection connection = tracePointMap.getTracePoint().getConnection().getBaseConnection();
+        return new ConnectionIterator(connection, true);
     }
 
     ConnectionIterator connectionIterator() {
-        return new ConnectionIterator(recentConnection, false);
+        return new ConnectionIterator(tracePointMap.getTracePoint().getConnection(), false);
     }
 
 }

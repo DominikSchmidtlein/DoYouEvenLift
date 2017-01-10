@@ -131,4 +131,13 @@ class TracePointMap {
     int getCount() {
         return count;
     }
+
+    TracePoint getTracePoint() {
+        for (Set<TracePoint> tracePoints : points.values()) {
+            for (TracePoint tracePoint : tracePoints) {
+                return tracePoint;
+            }
+        }
+        return null;
+    }
 }

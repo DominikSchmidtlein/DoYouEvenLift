@@ -19,7 +19,7 @@ public class ConnectionIteratorTest {
     TracePoint p4;
     TracePoint p5;
 
-    Trace trace;
+    TraceApi traceApi;
 
     @Before
     public void setUp() {
@@ -29,21 +29,21 @@ public class ConnectionIteratorTest {
         p4 = new TracePoint(200, 200);
         p5 = new TracePoint(150, 150);
 
-        trace = new Trace(new TracePointMap(500, 500, 50));
+        traceApi = new TraceApi();
     }
 
     @Test
     public void testConnectionIteratorTrue() {
-        trace.addConnection(p1, p2);
-        trace.addConnection(p1, p3);
-        trace.addConnection(p1, p5);
-        trace.addConnection(p2, p4);
-        trace.addConnection(p2, p5);
-        trace.addConnection(p3, p4);
-        trace.addConnection(p3, p5);
-        trace.addConnection(p4, p5);
+        traceApi.addConnection(new Connection(p1, p2));
+        traceApi.addConnection(new Connection(p1, p3));
+        traceApi.addConnection(new Connection(p1, p5));
+        traceApi.addConnection(new Connection(p2, p4));
+        traceApi.addConnection(new Connection(p2, p5));
+        traceApi.addConnection(new Connection(p3, p4));
+        traceApi.addConnection(new Connection(p3, p5));
+        traceApi.addConnection(new Connection(p4, p5));
 
-        ConnectionIterator baseConnectionIterator = trace.baseConnectionIterator();
+        ConnectionIterator baseConnectionIterator = new ConnectionIterator(p1.connectedTo(p2), true);
 
         Set<Connection> expectedConnections = new HashSet<>();
         expectedConnections.add(p1.connectedTo(p2));
@@ -69,16 +69,16 @@ public class ConnectionIteratorTest {
 
     @Test
     public void testConnectionIteratorFalse() {
-        trace.addConnection(p1, p2);
-        trace.addConnection(p1, p3);
-        trace.addConnection(p1, p5);
-        trace.addConnection(p2, p4);
-        trace.addConnection(p2, p5);
-        trace.addConnection(p3, p4);
-        trace.addConnection(p3, p5);
-        trace.addConnection(p4, p5);
+        traceApi.addConnection(new Connection(p1, p2));
+        traceApi.addConnection(new Connection(p1, p3));
+        traceApi.addConnection(new Connection(p1, p5));
+        traceApi.addConnection(new Connection(p2, p4));
+        traceApi.addConnection(new Connection(p2, p5));
+        traceApi.addConnection(new Connection(p3, p4));
+        traceApi.addConnection(new Connection(p3, p5));
+        traceApi.addConnection(new Connection(p4, p5));
 
-        ConnectionIterator connectionIterator = trace.connectionIterator();
+        ConnectionIterator connectionIterator = new ConnectionIterator(p1.connectedTo(p2), false);
 
         Set<Connection> expectedConnections = new HashSet<>();
         expectedConnections.add(p1.connectedTo(p2));

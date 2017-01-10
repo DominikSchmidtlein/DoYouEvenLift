@@ -3,7 +3,7 @@ package dominikschmidtlein.trace.model;
 /**
  * Created by domin_2o9sb4z on 2017-01-07.
  */
-public class TracePointIterator extends GraphIterator<TracePoint> {
+class TracePointIterator extends GraphIterator<TracePoint> {
 
     TracePointIterator(TracePoint tracePoint) {
         super(tracePoint);
