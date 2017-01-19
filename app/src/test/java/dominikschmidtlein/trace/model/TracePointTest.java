@@ -32,4 +32,15 @@ public class TracePointTest {
         assertEquals(point2.connectedTo(new TracePoint(100, 100)), connection);
     }
 
+    @Test
+    public void testOn() {
+        assertFalse(point1.on(connection));
+        assertFalse(point1.on(new Connection(new TracePoint(100, 200), new TracePoint(200, 100))));
+        assertFalse(point1.on(new Connection(new TracePoint(0, 0), new TracePoint(200, 100))));
+        assertTrue(point1.on(new Connection(new TracePoint(0, 0), new TracePoint(200, 200))));
+        assertTrue(point1.on(new Connection(new TracePoint(0, 200), new TracePoint(200, 0))));
+        assertTrue(point1.on(new Connection(new TracePoint(100, 0), new TracePoint(100, 200))));
+        assertTrue(point1.on(new Connection(new TracePoint(0, 100), new TracePoint(200, 100))));
+    }
+
 }

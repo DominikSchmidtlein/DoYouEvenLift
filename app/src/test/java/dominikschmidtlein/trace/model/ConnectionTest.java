@@ -310,7 +310,56 @@ public class ConnectionTest {
         assertEquals(c4.concat(c3), c6);
         assertEquals(c1.concat(c2).concat(c3), c8);
         assertEquals(c2.concat(c3).concat(c1).concat(c4), c10);
+    }
 
+    @Test
+    public void testSquareContains() {
+        assertFalse(c1.squareContains(new Point(99, 99)));
+        assertFalse(c1.squareContains(new Point(99, 101)));
+        assertFalse(c1.squareContains(new Point(99, 199)));
+        assertFalse(c1.squareContains(new Point(99, 201)));
+        assertFalse(c1.squareContains(new Point(101, 99)));
+        assertFalse(c1.squareContains(new Point(101, 201)));
+        assertFalse(c1.squareContains(new Point(199, 99)));
+        assertFalse(c1.squareContains(new Point(199, 201)));
+        assertFalse(c1.squareContains(new Point(201, 99)));
+        assertFalse(c1.squareContains(new Point(201, 101)));
+        assertFalse(c1.squareContains(new Point(201, 199)));
+        assertFalse(c1.squareContains(new Point(201, 201)));
+        assertTrue(c1.squareContains(new Point(100, 100)));
+        assertTrue(c1.squareContains(new Point(100, 200)));
+        assertTrue(c1.squareContains(new Point(200, 100)));
+        assertTrue(c1.squareContains(new Point(200, 200)));
+        assertTrue(c1.squareContains(new Point(150, 150)));
+    }
+
+    @Test
+    public void testIntersects() {
+        assertNull(c1.intersects(new Connection(new TracePoint(100, 100), new TracePoint(100, 200))));
+        assertNull(c1.intersects(new Connection(new TracePoint(100, 120), new TracePoint(180, 200))));
+        assertNull(c1.intersects(new Connection(new TracePoint(100, 200), new TracePoint(200, 200))));
+        assertNull(c1.intersects(c2));
+        assertEquals(new TracePoint(150, 150), c1.intersects(new Connection(new TracePoint(200, 150), new TracePoint(150, 150))));
+        assertEquals(new TracePoint(150, 150), c1.intersects(new Connection(new TracePoint(150, 100), new TracePoint(150, 150))));
+        assertEquals(new TracePoint(120, 120), c1.intersects(new Connection(new TracePoint(120, 100), new TracePoint(120, 200))));
+        assertEquals(new TracePoint(180, 180), c1.intersects(new Connection(new TracePoint(100, 180), new TracePoint(200, 180))));
+        assertEquals(new TracePoint(150, 150), c1.intersects(new Connection(new TracePoint(200, 100), new TracePoint(100, 200))));
+    }
+
+    @Test
+    public void testSlope() {
+        assertEquals(0, new Connection(new TracePoint(100, 100), new TracePoint(200, 100)).slope(), Point.EPSILON);
+        assertEquals(Double.POSITIVE_INFINITY, new Connection(new TracePoint(100, 100), new TracePoint(100, 200)).slope(), Point.EPSILON);
+        assertEquals(1, new Connection(new TracePoint(100, 100), new TracePoint(200, 200)).slope(), Point.EPSILON);
+        assertEquals(-1, new Connection(new TracePoint(200, 100), new TracePoint(100, 200)).slope(), Point.EPSILON);
+    }
+
+    @Test
+    public void testYIntercept() {
+        assertEquals(100, new Connection(new TracePoint(100, 100), new TracePoint(200, 100)).yIntercept(), Point.EPSILON);
+        assertEquals(Double.POSITIVE_INFINITY, new Connection(new TracePoint(100, 100), new TracePoint(100, 200)).yIntercept(), Point.EPSILON);
+        assertEquals(0, new Connection(new TracePoint(100, 100), new TracePoint(200, 200)).yIntercept(), Point.EPSILON);
+        assertEquals(300, new Connection(new TracePoint(200, 100), new TracePoint(100, 200)).yIntercept(), Point.EPSILON);
     }
 
 }

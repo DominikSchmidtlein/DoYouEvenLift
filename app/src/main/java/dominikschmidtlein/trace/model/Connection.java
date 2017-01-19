@@ -230,6 +230,70 @@ class Connection {
         return direction.unitMagnitude();
     }
 
+    double slope() {
+        TracePoint p1 = getPoint();
+        TracePoint p2 = otherEnd(p1);
+        if (p1.getX() == p2.getX()) {
+            return Double.POSITIVE_INFINITY;
+        }
+        return (p1.getY() - p2.getY()) / (p1.getX() - p2.getX());
+    }
+
+    double yIntercept() {
+        double m = slope();
+        if (m == Double.POSITIVE_INFINITY) return Double.POSITIVE_INFINITY;
+        TracePoint p = getPoint();
+        return p.getY() - p.getX() * m;
+    }
+
+    /**
+     * Inclusive
+     * @param p
+     * @return
+     */
+    boolean squareContains(Point p) {
+        TracePoint p1 = getPoint();
+        TracePoint p2 = otherEnd(p1);
+        return !(p.getX() < p1.getX() && p.getX() < p2.getX()) &&
+                !(p.getX() > p1.getX() && p.getX() > p2.getX()) &&
+                !(p.getY() < p1.getY() && p.getY() < p2.getY()) &&
+                !(p.getY() > p1.getY() && p.getY() > p2.getY());
+    }
+
+    /**
+     * Will return null if connections are connected
+     * @param connection
+     * @return
+     */
+    TracePoint intersects(Connection connection) {
+        if (connection.equals(this)) return null;
+        if (null != connection.commonPoint(this)) return null;
+        double m1 = slope();
+        double m2 = connection.slope();
+        if (m1 == m2) return null;
+        double b1 = yIntercept();
+        double b2 = connection.yIntercept();
+
+        double x;
+        double y;
+
+        if(m1 == Float.POSITIVE_INFINITY) {
+            x = getPoint().getX();
+            y = m2 * x + b2;
+        } else if(m2 == Float.POSITIVE_INFINITY) {
+            x = connection.getPoint().getX();
+            y = m1 * x + b1;
+        } else {
+            x = (b2 - b1)/(m1 - m2);
+            y = m1 * x + b1;
+        }
+        TracePoint intersectionPoint = new TracePoint(x, y);
+
+        if(!squareContains(intersectionPoint)) return null;
+        if(!connection.squareContains(intersectionPoint)) return null;
+        return intersectionPoint;
+    }
+
     /**
      * Connections are equal if they connect the same points together.
      * @param o

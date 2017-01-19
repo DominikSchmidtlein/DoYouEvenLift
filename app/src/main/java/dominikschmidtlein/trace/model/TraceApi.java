@@ -1,6 +1,5 @@
 package dominikschmidtlein.trace.model;
 
-import java.util.Iterator;
 import java.util.Set;
 
 import dominikschmidtlein.trace.BuildConfig;

@@ -38,6 +38,13 @@ class TracePoint extends Point{
         return null;
     }
 
+    boolean on(Connection connection) {
+        if (connection.squareContains(this)) {
+//            return getY() - connection.slo
+        }
+        return false;
+    }
+
     Set<Connection> getConnections() {
         return new HashSet<>(connections);
     }
