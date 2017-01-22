@@ -1,21 +1,17 @@
 package dominikschmidtlein.trace.model;
 
+import dominikschmidtlein.trace.Log;
+
 /**
  * Created by domin_2o9sb4z on 2016-11-23.
  */
 class Trace {
 
+    private static final String TAG = "Trace";
     private TracePointMap tracePointMap;
-    private TraceApi traceApi = new TraceApi();
 
     Trace(TracePointMap tracePointMap) {
         this.tracePointMap = tracePointMap;
-    }
-
-    void addConnection(TracePoint p1, TracePoint p2) {
-        tracePointMap.addTracePoint(p1);
-        tracePointMap.addTracePoint(p2);
-        traceApi.addConnection(new Connection(p1, p2));
     }
 
     TracePoint nearPoint(TracePoint tracePoint) {
@@ -54,6 +50,16 @@ class Trace {
             if (tracePoint.getBaseConnections().size() % 2 == 1) {
                 oddConnectionCount++;
             }
+            Log.d(TAG, tracePoint + " has " + tracePoint.getBaseConnections().size() + " connections");
+        }
+        boolean legality = true;
+        if (pointCount != tracePointMap.getCount()) {
+            legality = false;
+            Log.i(TAG, "Illegal trace: Not all points are connected. Traversal: " + pointCount + ", Map: " + tracePointMap.getCount());
+        }
+        if (!(oddConnectionCount == 0 || oddConnectionCount == 2)) {
+            legality = false;
+            Log.i(TAG, "Illegal trace: " + oddConnectionCount + " points with odd number of connections");
         }
         return pointCount == tracePointMap.getCount() && (oddConnectionCount == 0 || oddConnectionCount == 2);
     }

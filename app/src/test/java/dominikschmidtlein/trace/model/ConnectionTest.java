@@ -27,8 +27,6 @@ public class ConnectionTest {
     Connection c9;
     Connection c10;
 
-    TraceApi traceApi;
-
     @Before
     public void setUp() {
         p1 = new TracePoint(100, 100);
@@ -41,19 +39,66 @@ public class ConnectionTest {
         c2 = new Connection(p2, p3);
         c3 = new Connection(p3, p4);
         c4 = new Connection(p4, p5);
+        c5 = new Connection(p1, p3);
+        c6 = new Connection(p3, p5);
+        c7 = new Connection(p2, p4);
+        c8 = new Connection(p1, p4);
+        c9 = new Connection(p2, p5);
+        c10 = new Connection(p1, p5);
 
-        traceApi = new TraceApi();
-        traceApi.addConnection(c1);
-        traceApi.addConnection(c2);
-        traceApi.addConnection(c3);
-        traceApi.addConnection(c4);
+        p1.addConnection(c1);
+        p1.addConnection(c5);
+        p1.addConnection(c8);
+        p1.addConnection(c10);
 
-        c5 = p1.connectedTo(p3);
-        c6 = p3.connectedTo(p5);
-        c7 = p2.connectedTo(p4);
-        c8 = p1.connectedTo(p4);
-        c9 = p2.connectedTo(p5);
-        c10 = p1.connectedTo(p5);
+        p2.addConnection(c1);
+        p2.addConnection(c2);
+        p2.addConnection(c7);
+        p2.addConnection(c9);
+
+        p3.addConnection(c2);
+        p3.addConnection(c3);
+        p3.addConnection(c5);
+        p3.addConnection(c6);
+
+        p4.addConnection(c3);
+        p4.addConnection(c4);
+        p4.addConnection(c7);
+        p4.addConnection(c8);
+
+        p5.addConnection(c4);
+        p5.addConnection(c6);
+        p5.addConnection(c9);
+        p5.addConnection(c10);
+
+        c1.addSuperConnection(c5);
+        c1.addSuperConnection(c8);
+        c1.addSuperConnection(c10);
+
+        c2.addSuperConnection(c5);
+        c2.addSuperConnection(c7);
+        c2.addSuperConnection(c9);
+
+        c3.addSuperConnection(c6);
+        c3.addSuperConnection(c7);
+        c3.addSuperConnection(c8);
+
+        c4.addSuperConnection(c6);
+        c4.addSuperConnection(c9);
+        c4.addSuperConnection(c10);
+
+        c5.addSuperConnection(c8);
+        c5.addSuperConnection(c10);
+
+        c6.addSuperConnection(c9);
+        c6.addSuperConnection(c10);
+
+        c7.addSuperConnection(c8);
+        c7.addSuperConnection(c9);
+
+        c8.addSuperConnection(c10);
+
+        c9.addSuperConnection(c10);
     }
 
     @Test
@@ -344,6 +389,7 @@ public class ConnectionTest {
         assertEquals(new TracePoint(120, 120), c1.intersects(new Connection(new TracePoint(120, 100), new TracePoint(120, 200))));
         assertEquals(new TracePoint(180, 180), c1.intersects(new Connection(new TracePoint(100, 180), new TracePoint(200, 180))));
         assertEquals(new TracePoint(150, 150), c1.intersects(new Connection(new TracePoint(200, 100), new TracePoint(100, 200))));
+        assertEquals(new TracePoint(200, 200), c1.intersects(new Connection(new TracePoint(100, 200), new TracePoint(300, 200))));
     }
 
     @Test

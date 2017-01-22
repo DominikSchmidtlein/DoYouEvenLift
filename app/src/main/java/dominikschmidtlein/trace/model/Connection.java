@@ -1,13 +1,11 @@
 package dominikschmidtlein.trace.model;
 
-import android.os.Build;
 import android.support.annotation.NonNull;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
-import dominikschmidtlein.trace.BuildConfig;
+import dominikschmidtlein.trace.Log;
 
 /**
  * Created by Dominik Schmidtlein on 2016-11-23.
@@ -15,7 +13,7 @@ import dominikschmidtlein.trace.BuildConfig;
  * Connection is a orderless set of 2 unequal points that are connected together.
  */
 class Connection {
-
+    private static final String TAG = "Connection";
     private Set<TracePoint> points = new HashSet<>();
 
     private Set<Connection> subConnections = new HashSet<>();
@@ -35,14 +33,13 @@ class Connection {
     Connection(@NonNull TracePoint p1, @NonNull TracePoint p2) {
         addPoint(p1);
         addPoint(p2);
+        Log.v(TAG, "Created connection " + this);
     }
 
     private boolean addPoint(TracePoint point) {
-        if (BuildConfig.DEBUG) {
-            if (points.contains(point)) throw new IllegalArgumentException();
-            if (points.size() > 2) throw new IllegalArgumentException();
-            if (point == null) throw new IllegalArgumentException();
-        }
+        if (points.contains(point)) Log.wtf(TAG, "Connection already connects to " + point);
+        if (points.size() >= 2) Log.wtf(TAG, "Connection " + this + " already connects 2 points");
+        if (point == null) Log.wtf(TAG, "Point is null");
         return points.add(point);
     }
 
@@ -55,7 +52,8 @@ class Connection {
      * @return true if this is a superconnection else false
      */
     void addSuperConnection(Connection superConnection) {
-        if (BuildConfig.DEBUG) if (!isSuperConnection(superConnection)) throw new IllegalArgumentException();
+        Log.v(TAG, "Adding superconnection " + superConnection + " to " + this);
+        if (!isSuperConnection(superConnection)) Log.wtf(TAG, "Superconnection is not superconnection");
         superConnections.add(superConnection);
         superConnection.subConnections.add(this);
     }
@@ -122,6 +120,15 @@ class Connection {
         return points.contains(point1) && points.contains(point2) && !point1.equals(point2);
     }
 
+    TracePoint connectsTo(TracePoint point) {
+        for (TracePoint tracePoint : points) {
+            if (point.equals(tracePoint)) {
+                return tracePoint;
+            }
+        }
+        return null;
+    }
+
     Connection existingConnection() {
         TracePoint point = getPoint();
         TracePoint otherPoint = otherEnd(point);
@@ -130,6 +137,7 @@ class Connection {
 
     void setFree() {
         if (!isFree()) {
+            Log.v(TAG, "Setting " + this + " free");
             setState(State.FREE);
             for (Connection connection : subConnections) {
                 connection.setFree();
@@ -147,6 +155,7 @@ class Connection {
             for (Connection connection : subConnections) {
                 connection.setOccupied();
             }
+            Log.v(TAG, "Setting " + this + " occupied");
             this.setState(State.OCCUPIED);
         }
         if (prevState == State.FREE) {
@@ -158,6 +167,7 @@ class Connection {
 
     private void setBlocked() {
         if (isFree()) {
+            Log.v(TAG, "Setting " + this + " free");
             this.setState(State.BLOCKED);
             for (Connection connection: superConnections) {
                 connection.setBlocked();
@@ -202,7 +212,7 @@ class Connection {
     }
 
     TracePoint otherEnd(TracePoint tracePoint) {
-        if (BuildConfig.DEBUG) if (!points.contains(tracePoint)) throw new IllegalArgumentException();
+        if (!points.contains(tracePoint)) Log.wtf(TAG, "OtherEnd passed point that is not in connection");
         TracePoint otherEnd = null;
         TracePoint thisEnd = null;
 
@@ -247,7 +257,7 @@ class Connection {
     }
 
     /**
-     * Inclusive
+     * Inclusive of connection's points
      * @param p
      * @return
      */
@@ -261,7 +271,8 @@ class Connection {
     }
 
     /**
-     * Will return null if connections are connected
+     * Returns point where connections intersect else null. If intersection occurs at a connection
+     * point, return null.
      * @param connection
      * @return
      */
@@ -288,9 +299,9 @@ class Connection {
             y = m1 * x + b1;
         }
         TracePoint intersectionPoint = new TracePoint(x, y);
-
         if(!squareContains(intersectionPoint)) return null;
         if(!connection.squareContains(intersectionPoint)) return null;
+        Log.v(TAG, connection + " intersects " + this + " at " + intersectionPoint);
         return intersectionPoint;
     }
 
@@ -315,6 +326,13 @@ class Connection {
             hash += point.hashCode();
         }
         return hash * 733;
+    }
+
+    @Override
+    public String toString() {
+        TracePoint p1 = getPoint();
+        TracePoint p2 = otherEnd(p1);
+        return "<" + p1 + "," + p2 + ">";
     }
 
     private enum State {

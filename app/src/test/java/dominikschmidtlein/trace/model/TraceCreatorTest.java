@@ -38,7 +38,7 @@ public class TraceCreatorTest {
     @Before
     public void setUp() {
         PowerMockito.mockStatic(Log.class);
-        traceCreator = new TraceCreator();
+//        traceCreator = new TraceCreator();
         p1 = new TracePoint(100, 100);
         p2 = new TracePoint(100, 200);
         p3 = new TracePoint(200, 100);

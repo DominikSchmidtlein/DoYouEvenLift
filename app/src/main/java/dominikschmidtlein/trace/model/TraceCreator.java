@@ -7,19 +7,32 @@ import java.util.Set;
  */
 class TraceCreator {
 
-    TraceCreator() {
+    private TracePointMap tracePointMap;
+    private Trace trace;
 
+    TraceCreator(int width, int height, double margin) {
+        tracePointMap = new TracePointMap(width, height, margin);
+        trace = new Trace(tracePointMap);
     }
 
-    void addConnection(Connection connection) {
+    Trace getTrace() {
+        return trace;
+    }
+
+    /** Returns whether or not this operation modified the underlying trace.
+     * @param connection
+     * @return
+     */
+    boolean addConnection(Connection connection) {
         for (TracePoint tracePoint : connection.getPoints()) {
             tracePoint.addConnection(connection);
         }
         checkSuperConnections(connection);
         checkIntersectionConnection(connection);
+        return true;
     }
 
-    void checkSuperConnections(Connection connection) {
+    private void checkSuperConnections(Connection connection) {
         TracePoint point1 = connection.getPoint();
         Set<Connection> extensionConnections = point1.getConnections();
         extensionConnections.addAll(connection.otherEnd(point1).getConnections());
@@ -38,14 +51,14 @@ class TraceCreator {
         }
     }
 
-    void checkIntersectionConnection(Connection connection) {
+    private void checkIntersectionConnection(Connection connection) {
         ConnectionIterator connectionIterator = new ConnectionIterator(connection, true);
         for (Connection intersectConnection; connectionIterator.hasNext(); ) {
             intersectConnection = connectionIterator.next();
             TracePoint intersectionPoint = connection.intersects(intersectConnection);
 
             if (null != intersectionPoint) {
-                if (!intersectConnection.connectsTo(intersectionPoint)) {
+                if (null == intersectConnection.connectsTo(intersectionPoint)) {
                     TracePoint p1 = intersectConnection.getPoint();
                     TracePoint p2 = intersectConnection.otherEnd(p1);
                     Connection c1 = new Connection(p1, intersectionPoint);
@@ -57,7 +70,7 @@ class TraceCreator {
                         addConnection(new Connection(p2, intersectionPoint));
                     }
                 }
-                if (!connection.connectsTo(intersectionPoint)) {
+                if (null == connection.connectsTo(intersectionPoint)) {
                     TracePoint p1 = connection.getPoint();
                     TracePoint p2 = connection.otherEnd(p1);
                     Connection c1 = new Connection(p1, intersectionPoint);
@@ -73,11 +86,11 @@ class TraceCreator {
         }
     }
 
-    Connection concatConnections(Connection connection1, Connection connection2) {
+    private Connection concatConnections(Connection connection1, Connection connection2) {
         return connection1.concat(connection2);
     }
 
-    void removeConnection(Connection connection) {
-
+    boolean removeConnection(Connection connection) {
+        return false;
     }
 }
