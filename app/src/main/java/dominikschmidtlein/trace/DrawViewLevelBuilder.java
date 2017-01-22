@@ -11,7 +11,7 @@ import android.util.AttributeSet;
  */
 public class DrawViewLevelBuilder extends DrawView {
 
-    private TraceBuilder traceBuilder;
+//    private TraceBuilder traceBuilder;
 
     private Paint pointPaint;
     private Paint linePaint;
@@ -36,11 +36,11 @@ public class DrawViewLevelBuilder extends DrawView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        canvas.drawPoints(pointsAsFloats(traceBuilder.getPoints()), pointPaint);
-        if(traceBuilder.getShape() != null)
-            canvas.drawLines(linesAsFloats(traceBuilder.getShape()), linePaint);
-        if(traceBuilder.getProblemPoints() != null)
-            canvas.drawPoints(pointsAsFloats(traceBuilder.getProblemPoints()), problemPaint);
+//        canvas.drawPoints(pointsAsFloats(traceBuilder.getPoints()), pointPaint);
+//        if(traceBuilder.getShape() != null)
+//            canvas.drawLines(linesAsFloats(traceBuilder.getShape()), linePaint);
+//        if(traceBuilder.getProblemPoints() != null)
+//            canvas.drawPoints(pointsAsFloats(traceBuilder.getProblemPoints()), problemPaint);
     }
 
     @Override
@@ -56,8 +56,8 @@ public class DrawViewLevelBuilder extends DrawView {
         problemPaint.setStrokeWidth(50);
     }
 
-    public void addModel(TraceBuilder traceBuilder){
-        this.traceBuilder = traceBuilder;
-        this.traceBuilder.addObserver(this);
-    }
+//    public void addModel(TraceBuilder traceBuilder){
+//        this.traceBuilder = traceBuilder;
+//        this.traceBuilder.addObserver(this);
+//    }
 }

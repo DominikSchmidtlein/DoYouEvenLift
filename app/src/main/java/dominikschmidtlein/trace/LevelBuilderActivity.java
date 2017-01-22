@@ -12,7 +12,7 @@ import android.view.View;
 
 public class LevelBuilderActivity extends AppCompatActivity implements View.OnTouchListener {
 
-    TraceBuilder traceBuilder;
+//    TraceBuilder traceBuilder;
     FloatingActionButton fab;
     FabListener fabListener;
 
@@ -28,9 +28,9 @@ public class LevelBuilderActivity extends AppCompatActivity implements View.OnTo
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!traceBuilder.logLevel())
-                    Snackbar.make(view, "Cannot add illegal shape", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
+//                if (!traceBuilder.logLevel())
+//                    Snackbar.make(view, "Cannot add illegal shape", Snackbar.LENGTH_LONG)
+//                            .setAction("Action", null).show();
             }
         });
         fabListener = new FabListener();
@@ -42,11 +42,11 @@ public class LevelBuilderActivity extends AppCompatActivity implements View.OnTo
 
         int actionBarHeight = (int) getApplicationContext().getTheme().obtainStyledAttributes(new int[]{android.R.attr.actionBarSize}).getDimension(0, 0);
 
-        traceBuilder = new TraceBuilder(this, size, actionBarHeight, TraceBuilder.Mode.ISOMETRIC);
-
-        DrawViewLevelBuilder drawViewLevelBuilder = (DrawViewLevelBuilder) findViewById(R.id.level_builder_draw_view);
-        drawViewLevelBuilder.addModel(traceBuilder);
-        drawViewLevelBuilder.setOnTouchListener(this);
+//        traceBuilder = new TraceBuilder(this, size, actionBarHeight, TraceBuilder.Mode.ISOMETRIC);
+//
+//        DrawViewLevelBuilder drawViewLevelBuilder = (DrawViewLevelBuilder) findViewById(R.id.level_builder_draw_view);
+//        drawViewLevelBuilder.addModel(traceBuilder);
+//        drawViewLevelBuilder.setOnTouchListener(this);
     }
 
     @Override
@@ -61,10 +61,10 @@ public class LevelBuilderActivity extends AppCompatActivity implements View.OnTo
 
         switch (id) {
             case R.id.action_reset:
-                traceBuilder.clear();
+//                traceBuilder.clear();
                 break;
             case R.id.action_grid_toggle:
-                traceBuilder.toggleGrid();
+//                traceBuilder.toggleGrid();
                 break;
             default:
                 return super.onOptionsItemSelected(item);
@@ -75,16 +75,17 @@ public class LevelBuilderActivity extends AppCompatActivity implements View.OnTo
     @Override
     public boolean onTouch(View v, MotionEvent event) {
 
-        boolean ret = traceBuilder.onTouch(v, event);
-        if ((event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) && ret) {
-            fabListener.setShown(false);
-            fab.hide(fabListener);
-        }
-        if (!ret || event.getAction() == MotionEvent.ACTION_UP) {
-            fabListener.setShown(true);
-            fab.show(fabListener);
-        }
-        return ret;
+//        boolean ret = traceBuilder.onTouch(v, event);
+//        if ((event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) && ret) {
+//            fabListener.setShown(false);
+//            fab.hide(fabListener);
+//        }
+//        if (!ret || event.getAction() == MotionEvent.ACTION_UP) {
+//            fabListener.setShown(true);
+//            fab.show(fabListener);
+//        }
+//        return ret;
+        return false;
     }
 
     private class FabListener extends FloatingActionButton.OnVisibilityChangedListener {

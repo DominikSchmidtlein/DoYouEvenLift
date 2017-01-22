@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 
 public class DrawViewGame extends DrawView {
 
-    private TraceGame trace;
+//    private TraceGame trace;
 
     private Paint shapeLines;
     private Paint traceLines;
@@ -34,11 +34,11 @@ public class DrawViewGame extends DrawView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if(trace.getShape() == null || trace.getTrace() == null)
-            return;
-
-        canvas.drawLines(linesAsFloats(trace.getShape()), shapeLines);
-        canvas.drawLines(linesAsFloats(trace.getTrace()), traceLines);
+//        if(trace.getShape() == null || trace.getTrace() == null)
+//            return;
+//
+//        canvas.drawLines(linesAsFloats(trace.getShape()), shapeLines);
+//        canvas.drawLines(linesAsFloats(trace.getTrace()), traceLines);
     }
 
     @Override
@@ -53,8 +53,8 @@ public class DrawViewGame extends DrawView {
     }
 
 
-    public void addModel(TraceGame trace) {
-        this.trace = trace;
-        trace.addObserver(this);
-    }
+//    public void addModel(TraceGame trace) {
+//        this.trace = trace;
+//        trace.addObserver(this);
+//    }
 }

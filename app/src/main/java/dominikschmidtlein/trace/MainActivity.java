@@ -10,7 +10,7 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity implements NextLevelDialogFragment.NextLevelDialogListener {
 
-    private GameController gameController;
+//    private GameController gameController;
     Toolbar myToolbar;
 
     private final String currentLevelKey = "currentlevel";
@@ -31,19 +31,19 @@ public class MainActivity extends AppCompatActivity implements NextLevelDialogFr
         ScreenDimensions dim = new ScreenDimensions(size.x, size.y - actionBarHeight - 25);
 
         // read state from files
-        LevelState state = new StateLoader(this).loadState(new LevelLoader(this, dim).getNumberOfLevels());
-
-        // set state saver to listen for state changes
-        state.setLevelChangedListener(new StateSaver(this));
-//        state.resetState();
-
-        TraceGame traceGame = new TraceGame(this, state, new LevelLoader(this, dim));
-        DrawViewGame drawViewGame = (DrawViewGame) findViewById(R.id.draw_view);
-        gameController = new GameController(this, traceGame, drawViewGame);
-
-        drawViewGame.addModel(traceGame);
-        drawViewGame.setOnTouchListener(gameController);
-        traceGame.setWinEventListener(gameController);
+//        LevelState state = new StateLoader(this).loadState(new LevelLoader(this, dim).getNumberOfLevels());
+//
+//        // set state saver to listen for state changes
+//        state.setLevelChangedListener(new StateSaver(this));
+////        state.resetState();
+//
+//        TraceGame traceGame = new TraceGame(this, state, new LevelLoader(this, dim));
+//        DrawViewGame drawViewGame = (DrawViewGame) findViewById(R.id.draw_view);
+//        gameController = new GameController(this, traceGame, drawViewGame);
+//
+//        drawViewGame.addModel(traceGame);
+//        drawViewGame.setOnTouchListener(gameController);
+//        traceGame.setWinEventListener(gameController);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements NextLevelDialogFr
     }
 
     public void onDialogNextLevelClick(DialogFragment dialogFragment) {
-        gameController.nextLevelSelected();
+//        gameController.nextLevelSelected();
     }
 
     public void onDialogRetryClick(DialogFragment dialogFragment) {

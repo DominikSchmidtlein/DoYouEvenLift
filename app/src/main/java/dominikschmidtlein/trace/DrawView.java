@@ -15,7 +15,7 @@ import java.util.Observer;
  */
 public abstract class DrawView extends View implements Observer {
 
-    protected Trace trace;
+//    protected Trace trace;
 
     public DrawView(Context context) {
         super(context);
@@ -41,29 +41,29 @@ public abstract class DrawView extends View implements Observer {
         super.onDraw(canvas);
     }
 
-    protected float[] linesAsFloats(ArrayList<Line> lines) {
-        float[] floats = new float[lines.size() * 4];
-        int i = 0;
-        for (Line line : lines) {
-            floats[i] = line.getP1().getX();
-            floats[i + 1] = line.getP1().getY();
-            floats[i + 2] = line.getP2().getX();
-            floats[i + 3] = line.getP2().getY();
-            i += 4;
-        }
-        return floats;
-    }
+//    protected float[] linesAsFloats(ArrayList<Line> lines) {
+//        float[] floats = new float[lines.size() * 4];
+//        int i = 0;
+//        for (Line line : lines) {
+//            floats[i] = line.getP1().getX();
+//            floats[i + 1] = line.getP1().getY();
+//            floats[i + 2] = line.getP2().getX();
+//            floats[i + 3] = line.getP2().getY();
+//            i += 4;
+//        }
+//        return floats;
+//    }
 
-    protected float[] pointsAsFloats(Collection<Point> points) {
-        float[] floats = new float[points.size() * 2];
-        int i = 0;
-        for (Point point : points) {
-            floats[i] = point.getX();
-            floats[i + 1] = point.getY();
-            i += 2;
-        }
-        return floats;
-    }
+//    protected float[] pointsAsFloats(Collection<Point> points) {
+//        float[] floats = new float[points.size() * 2];
+//        int i = 0;
+//        for (Point point : points) {
+//            floats[i] = point.getX();
+//            floats[i + 1] = point.getY();
+//            i += 2;
+//        }
+//        return floats;
+//    }
 
 
     @Override
