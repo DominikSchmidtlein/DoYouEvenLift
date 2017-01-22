@@ -1,15 +1,24 @@
 package dominikschmidtlein.trace.model;
 
+import android.util.Log;
+
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+
 
 import static org.junit.Assert.*;
 
 /**
  * Created by domin_2o9sb4z on 2017-01-09.
  */
-public class TraceApiTest {
-    TraceApi traceApi;
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({Log.class})
+public class TraceCreatorTest {
+    TraceCreator traceCreator;
     TracePoint p1;
     TracePoint p2;
     TracePoint p3;
@@ -28,7 +37,8 @@ public class TraceApiTest {
 
     @Before
     public void setUp() {
-        traceApi = new TraceApi();
+        PowerMockito.mockStatic(Log.class);
+        traceCreator = new TraceCreator();
         p1 = new TracePoint(100, 100);
         p2 = new TracePoint(100, 200);
         p3 = new TracePoint(200, 100);
@@ -46,10 +56,10 @@ public class TraceApiTest {
         c35 = new Connection(p3, p5);
         c45 = new Connection(p4, p5);
 
-        traceApi.addConnection(c12);
-        traceApi.addConnection(c13);
-        traceApi.addConnection(c24);
-        traceApi.addConnection(c34);
+        traceCreator.addConnection(c12);
+        traceCreator.addConnection(c13);
+        traceCreator.addConnection(c24);
+        traceCreator.addConnection(c34);
     }
 
     public void checkTrace() {
@@ -67,48 +77,48 @@ public class TraceApiTest {
 
     @Test
     public void testAddConnectionSuper() {
-        traceApi.addConnection(c15);
-        traceApi.addConnection(c25);
-        traceApi.addConnection(c35);
-        traceApi.addConnection(c45);
+        traceCreator.addConnection(c15);
+        traceCreator.addConnection(c25);
+        traceCreator.addConnection(c35);
+        traceCreator.addConnection(c45);
 
         checkTrace();
     }
 
     @Test
     public void testAddConnectionIntersectPointPThenC() {
-        traceApi.addConnection(c25);
-        traceApi.addConnection(c14);
-        traceApi.addConnection(c35);
+        traceCreator.addConnection(c25);
+        traceCreator.addConnection(c14);
+        traceCreator.addConnection(c35);
 
         checkTrace();
     }
 
     @Test
     public void testAddConnectionIntersectPointCThenP() {
-        traceApi.addConnection(c14);
-        traceApi.addConnection(c25);
-        traceApi.addConnection(c35);
+        traceCreator.addConnection(c14);
+        traceCreator.addConnection(c25);
+        traceCreator.addConnection(c35);
 
         checkTrace();
     }
 
     @Test
     public void testAddConnectionIntersectConnection() {
-        traceApi.addConnection(c14);
-        traceApi.addConnection(c23);
+        traceCreator.addConnection(c14);
+        traceCreator.addConnection(c23);
 
         checkTrace();
     }
 
     @Test
     public void testRemoveConnection() {
-        traceApi.addConnection(c15);
-        traceApi.addConnection(c25);
-        traceApi.addConnection(c35);
-        traceApi.addConnection(c45);
+        traceCreator.addConnection(c15);
+        traceCreator.addConnection(c25);
+        traceCreator.addConnection(c35);
+        traceCreator.addConnection(c45);
 
-        traceApi.removeConnection(c12);
+        traceCreator.removeConnection(c12);
 
         assertNull(p1.connectedTo(p2));
         assertEquals(p1.connectedTo(p3), c13);
@@ -124,12 +134,12 @@ public class TraceApiTest {
 
     @Test
     public void testRemoveConnectionSuper() {
-        traceApi.addConnection(c15);
-        traceApi.addConnection(c25);
-        traceApi.addConnection(c35);
-        traceApi.addConnection(c45);
+        traceCreator.addConnection(c15);
+        traceCreator.addConnection(c25);
+        traceCreator.addConnection(c35);
+        traceCreator.addConnection(c45);
 
-        traceApi.removeConnection(c14);
+        traceCreator.removeConnection(c14);
 
         assertEquals(p1.connectedTo(p2), c12);
         assertEquals(p1.connectedTo(p3), c13);
