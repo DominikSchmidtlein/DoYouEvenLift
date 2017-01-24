@@ -15,8 +15,6 @@ import static org.junit.Assert.*;
 /**
  * Created by domin_2o9sb4z on 2017-01-09.
  */
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({Log.class})
 public class TraceCreatorTest {
     TraceCreator traceCreator;
     TracePoint p1;
@@ -37,8 +35,6 @@ public class TraceCreatorTest {
 
     @Before
     public void setUp() {
-        PowerMockito.mockStatic(Log.class);
-//        traceCreator = new TraceCreator();
         p1 = new TracePoint(100, 100);
         p2 = new TracePoint(100, 200);
         p3 = new TracePoint(200, 100);
@@ -56,6 +52,7 @@ public class TraceCreatorTest {
         c35 = new Connection(p3, p5);
         c45 = new Connection(p4, p5);
 
+        traceCreator = new TraceCreator(300, 300, 20);
         traceCreator.addConnection(c12);
         traceCreator.addConnection(c13);
         traceCreator.addConnection(c24);
@@ -73,6 +70,44 @@ public class TraceCreatorTest {
         assertEquals(p3.connectedTo(p4), c34);
         assertEquals(p3.connectedTo(p5), c35);
         assertEquals(p4.connectedTo(p5), c45);
+
+        assertEquals(0, c12.getSubConnectionCount());
+        assertEquals(0, c12.getSuperConnectionCount());
+
+        assertEquals(0, c13.getSubConnectionCount());
+        assertEquals(0, c13.getSuperConnectionCount());
+
+        assertEquals(2, c14.getSubConnectionCount());
+        assertTrue(c14.getSuperConnections().contains(c15));
+        assertTrue(c14.getSuperConnections().contains(c45));
+        assertEquals(0, c14.getSuperConnectionCount());
+
+        assertEquals(0, c15.getSubConnectionCount());
+        assertEquals(1, c15.getSuperConnectionCount());
+        assertTrue(c15.getSuperConnections().contains(c14));
+
+        assertEquals(2, c23.getSubConnectionCount());
+        assertTrue(c23.getSuperConnections().contains(c25));
+        assertTrue(c23.getSuperConnections().contains(c35));
+        assertEquals(0, c23.getSuperConnectionCount());
+
+        assertEquals(0, c24.getSubConnectionCount());
+        assertEquals(0, c24.getSuperConnectionCount());
+
+        assertEquals(0, c25.getSubConnectionCount());
+        assertEquals(1, c25.getSuperConnectionCount());
+        assertTrue(c25.getSuperConnections().contains(c23));
+
+        assertEquals(0, c34.getSubConnectionCount());
+        assertEquals(0, c34.getSuperConnectionCount());
+
+        assertEquals(0, c35.getSubConnectionCount());
+        assertEquals(1, c35.getSuperConnectionCount());
+        assertTrue(c35.getSuperConnections().contains(c23));
+
+        assertEquals(0, c45.getSubConnectionCount());
+        assertEquals(1, c45.getSuperConnectionCount());
+        assertTrue(c45.getSuperConnections().contains(c14));
     }
 
     @Test
@@ -113,23 +148,13 @@ public class TraceCreatorTest {
 
     @Test
     public void testRemoveConnection() {
-        traceCreator.addConnection(c15);
-        traceCreator.addConnection(c25);
-        traceCreator.addConnection(c35);
-        traceCreator.addConnection(c45);
+        traceCreator.addConnection(c14);
 
-        traceCreator.removeConnection(c12);
+        traceCreator.removeConnection(c14);
 
-        assertNull(p1.connectedTo(p2));
-        assertEquals(p1.connectedTo(p3), c13);
-        assertEquals(p1.connectedTo(p4), c14);
-        assertEquals(p1.connectedTo(p5), c15);
-        assertEquals(p2.connectedTo(p3), c23);
-        assertEquals(p2.connectedTo(p4), c24);
-        assertEquals(p2.connectedTo(p5), c25);
-        assertEquals(p3.connectedTo(p4), c34);
-        assertEquals(p3.connectedTo(p5), c35);
-        assertEquals(p4.connectedTo(p5), c45);
+        traceCreator.addConnection(c23);
+
+        checkTraceRemove();
     }
 
     @Test
@@ -141,16 +166,70 @@ public class TraceCreatorTest {
 
         traceCreator.removeConnection(c14);
 
+        checkTraceRemove();
+    }
+
+    @Test
+    public void testRemoveConnectionSub() {
+        traceCreator.addConnection(c15);
+        traceCreator.addConnection(c25);
+        traceCreator.addConnection(c35);
+        traceCreator.addConnection(c45);
+
+        traceCreator.removeConnection(c15);
+        traceCreator.removeConnection(c45);
+
+        checkTraceRemove();
+    }
+
+    public void checkTraceRemove() {
         assertEquals(p1.connectedTo(p2), c12);
         assertEquals(p1.connectedTo(p3), c13);
         assertNull(p1.connectedTo(p4));
         assertNull(p1.connectedTo(p5));
         assertEquals(p2.connectedTo(p3), c23);
         assertEquals(p2.connectedTo(p4), c24);
-        assertEquals(p2.connectedTo(p5), c25);
+        assertNull(p2.connectedTo(p5));
         assertEquals(p3.connectedTo(p4), c34);
-        assertEquals(p3.connectedTo(p5), c35);
+        assertNull(p3.connectedTo(p5));
         assertNull(p4.connectedTo(p5));
-    }
 
+        assertEquals(0, c12.getSubConnectionCount());
+        assertEquals(0, c12.getSuperConnectionCount());
+
+        assertEquals(0, c13.getSubConnectionCount());
+        assertEquals(0, c13.getSuperConnectionCount());
+
+        assertEquals(0, c14.getSubConnectionCount());
+//        assertTrue(c14.getSuperConnections().contains(c15));
+//        assertTrue(c14.getSuperConnections().contains(c45));
+        assertEquals(0, c14.getSuperConnectionCount());
+
+        assertEquals(0, c15.getSubConnectionCount());
+        assertEquals(0, c15.getSuperConnectionCount());
+//        assertTrue(c15.getSuperConnections().contains(c14));
+
+        assertEquals(0, c23.getSubConnectionCount());
+//        assertTrue(c23.getSuperConnections().contains(c25));
+//        assertTrue(c23.getSuperConnections().contains(c35));
+        assertEquals(0, c23.getSuperConnectionCount());
+
+        assertEquals(0, c24.getSubConnectionCount());
+        assertEquals(0, c24.getSuperConnectionCount());
+
+        assertEquals(0, c25.getSubConnectionCount());
+        assertEquals(0, c25.getSuperConnectionCount());
+//        assertTrue(c25.getSuperConnections().contains(c23));
+
+        assertEquals(0, c34.getSubConnectionCount());
+        assertEquals(0, c34.getSuperConnectionCount());
+
+        assertEquals(0, c35.getSubConnectionCount());
+        assertEquals(0, c35.getSuperConnectionCount());
+//        assertTrue(c35.getSuperConnections().contains(c23));
+
+        assertEquals(0, c45.getSubConnectionCount());
+        assertEquals(0, c45.getSuperConnectionCount());
+//        assertTrue(c45.getSuperConnections().contains(c14));
+    }
 }

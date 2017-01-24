@@ -91,8 +91,16 @@ class Connection {
         return new HashSet<>(subConnections);
     }
 
+    int getSubConnectionCount() {
+        return subConnections.size();
+    }
+
     Set<Connection> getSuperConnections() {
         return new HashSet<>(superConnections);
+    }
+
+    int getSuperConnectionCount() {
+        return superConnections.size();
     }
 
     Set<TracePoint> getPoints() {
