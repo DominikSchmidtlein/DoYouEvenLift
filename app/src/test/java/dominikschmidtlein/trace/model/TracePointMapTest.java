@@ -17,19 +17,19 @@ public class TracePointMapTest {
     int YBINS = 4;
 
     TracePointMap tracePointMap;
-    TracePoint pInBin;
-    TracePoint pBinBorder;
-    TracePoint pMarginBorder;
-    TracePoint pMargin;
+    Point pInBin;
+    Point pBinBorder;
+    Point pMarginBorder;
+    Point pMargin;
 
     @Before
     public void setUp() {
         tracePointMap = new TracePointMap(WIDTH, HEIGHT, RADIUS, XBINS, YBINS);
 
-        pInBin = new TracePoint(WIDTH / XBINS / 2, HEIGHT / YBINS / 2);
-        pBinBorder = new TracePoint(WIDTH / XBINS * 2, HEIGHT / YBINS * 2);
-        pMarginBorder = new TracePoint(WIDTH / XBINS - RADIUS, HEIGHT / YBINS - RADIUS);
-        pMargin = new TracePoint(WIDTH / XBINS - RADIUS / 2, HEIGHT / YBINS - RADIUS / 2);
+        pInBin = new Point(WIDTH / XBINS / 2, HEIGHT / YBINS / 2);
+        pBinBorder = new Point(WIDTH / XBINS * 2, HEIGHT / YBINS * 2);
+        pMarginBorder = new Point(WIDTH / XBINS - RADIUS, HEIGHT / YBINS - RADIUS);
+        pMargin = new Point(WIDTH / XBINS - RADIUS / 2, HEIGHT / YBINS - RADIUS / 2);
 
         tracePointMap.addTracePoint(pInBin);
         tracePointMap.addTracePoint(pBinBorder);
@@ -39,50 +39,50 @@ public class TracePointMapTest {
 
     @Test
     public void testNearPoint() {
-        assertNull(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS / 2, HEIGHT / YBINS * 3)));
-        assertNull(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS * 3, HEIGHT / YBINS * 3)));
-        assertNull(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS * 1.5, HEIGHT / YBINS * 1.5)));
+        assertNull(tracePointMap.nearPoint(new Point(WIDTH / XBINS / 2, HEIGHT / YBINS * 3)));
+        assertNull(tracePointMap.nearPoint(new Point(WIDTH / XBINS * 3, HEIGHT / YBINS * 3)));
+        assertNull(tracePointMap.nearPoint(new Point(WIDTH / XBINS * 1.5, HEIGHT / YBINS * 1.5)));
         assertEquals(tracePointMap.nearPoint(pInBin), pInBin);
         assertEquals(tracePointMap.nearPoint(pBinBorder), pBinBorder);
         assertEquals(tracePointMap.nearPoint(pMarginBorder), pMarginBorder);
         assertEquals(tracePointMap.nearPoint(pMargin), pMargin);
-        assertEquals(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS / 2 + RADIUS / Math.sqrt(2) - 1, HEIGHT / YBINS / 2 + RADIUS / Math.sqrt(2) - 1)), pInBin);
-        assertEquals(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS, HEIGHT / YBINS)), pMargin);
-        assertEquals(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS + 1, HEIGHT / YBINS + 1)), pMargin);
+        assertEquals(tracePointMap.nearPoint(new Point(WIDTH / XBINS / 2 + RADIUS / Math.sqrt(2) - 1, HEIGHT / YBINS / 2 + RADIUS / Math.sqrt(2) - 1)), pInBin);
+        assertEquals(tracePointMap.nearPoint(new Point(WIDTH / XBINS, HEIGHT / YBINS)), pMargin);
+        assertEquals(tracePointMap.nearPoint(new Point(WIDTH / XBINS + 1, HEIGHT / YBINS + 1)), pMargin);
 
-        assertEquals(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS - RADIUS * 0.75 - 1, HEIGHT / YBINS - RADIUS * 0.75 - 1)), pMarginBorder);
-        assertEquals(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS - RADIUS * 0.75 + 1, HEIGHT / YBINS - RADIUS * 0.75 + 1)), pMargin);
+        assertEquals(tracePointMap.nearPoint(new Point(WIDTH / XBINS - RADIUS * 0.75 - 1, HEIGHT / YBINS - RADIUS * 0.75 - 1)), pMarginBorder);
+        assertEquals(tracePointMap.nearPoint(new Point(WIDTH / XBINS - RADIUS * 0.75 + 1, HEIGHT / YBINS - RADIUS * 0.75 + 1)), pMargin);
     }
 
     @Test
     public void testNearPointBinBorder() {
-        assertNull(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS * 2 - RADIUS, HEIGHT / YBINS * 2 - RADIUS)));
-        assertNull(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS * 2 - RADIUS, HEIGHT / YBINS * 2 + RADIUS)));
-        assertNull(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS * 2 + RADIUS, HEIGHT / YBINS * 2 - RADIUS)));
-        assertNull(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS * 2 + RADIUS, HEIGHT / YBINS * 2 + RADIUS)));
+        assertNull(tracePointMap.nearPoint(new Point(WIDTH / XBINS * 2 - RADIUS, HEIGHT / YBINS * 2 - RADIUS)));
+        assertNull(tracePointMap.nearPoint(new Point(WIDTH / XBINS * 2 - RADIUS, HEIGHT / YBINS * 2 + RADIUS)));
+        assertNull(tracePointMap.nearPoint(new Point(WIDTH / XBINS * 2 + RADIUS, HEIGHT / YBINS * 2 - RADIUS)));
+        assertNull(tracePointMap.nearPoint(new Point(WIDTH / XBINS * 2 + RADIUS, HEIGHT / YBINS * 2 + RADIUS)));
 
-        assertEquals(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS * 2, HEIGHT / YBINS * 2 - 1)), pBinBorder);
-        assertEquals(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS * 2, HEIGHT / YBINS * 2 + 1)), pBinBorder);
-        assertEquals(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS * 2 - 1, HEIGHT / YBINS * 2)), pBinBorder);
-        assertEquals(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS * 2 + 1, HEIGHT / YBINS * 2)), pBinBorder);
+        assertEquals(tracePointMap.nearPoint(new Point(WIDTH / XBINS * 2, HEIGHT / YBINS * 2 - 1)), pBinBorder);
+        assertEquals(tracePointMap.nearPoint(new Point(WIDTH / XBINS * 2, HEIGHT / YBINS * 2 + 1)), pBinBorder);
+        assertEquals(tracePointMap.nearPoint(new Point(WIDTH / XBINS * 2 - 1, HEIGHT / YBINS * 2)), pBinBorder);
+        assertEquals(tracePointMap.nearPoint(new Point(WIDTH / XBINS * 2 + 1, HEIGHT / YBINS * 2)), pBinBorder);
 
-        assertEquals(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS * 2 - 1, HEIGHT / YBINS * 2 - 1)), pBinBorder);
-        assertEquals(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS * 2 - 1, HEIGHT / YBINS * 2 + 1)), pBinBorder);
-        assertEquals(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS * 2 + 1, HEIGHT / YBINS * 2 - 1)), pBinBorder);
-        assertEquals(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS * 2 + 1, HEIGHT / YBINS * 2 + 1)), pBinBorder);
+        assertEquals(tracePointMap.nearPoint(new Point(WIDTH / XBINS * 2 - 1, HEIGHT / YBINS * 2 - 1)), pBinBorder);
+        assertEquals(tracePointMap.nearPoint(new Point(WIDTH / XBINS * 2 - 1, HEIGHT / YBINS * 2 + 1)), pBinBorder);
+        assertEquals(tracePointMap.nearPoint(new Point(WIDTH / XBINS * 2 + 1, HEIGHT / YBINS * 2 - 1)), pBinBorder);
+        assertEquals(tracePointMap.nearPoint(new Point(WIDTH / XBINS * 2 + 1, HEIGHT / YBINS * 2 + 1)), pBinBorder);
     }
 
     @Test
     public void testNearPointMargin() {
-        assertNull(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS + RADIUS / 2, HEIGHT / YBINS - RADIUS * 1.5)));
-        assertNull(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS + RADIUS / 2, HEIGHT / YBINS + RADIUS / 2)));
-        assertNull(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS - RADIUS * 1.5, HEIGHT / YBINS + RADIUS / 2)));
+        assertNull(tracePointMap.nearPoint(new Point(WIDTH / XBINS + RADIUS / 2, HEIGHT / YBINS - RADIUS * 1.5)));
+        assertNull(tracePointMap.nearPoint(new Point(WIDTH / XBINS + RADIUS / 2, HEIGHT / YBINS + RADIUS / 2)));
+        assertNull(tracePointMap.nearPoint(new Point(WIDTH / XBINS - RADIUS * 1.5, HEIGHT / YBINS + RADIUS / 2)));
 
-        assertEquals(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS, HEIGHT / YBINS)), pMargin);
-        assertEquals(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS - 1, HEIGHT / YBINS - 1)), pMargin);
-        assertEquals(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS - 1, HEIGHT / YBINS + 1)), pMargin);
-        assertEquals(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS + 1, HEIGHT / YBINS - 1)), pMargin);
-        assertEquals(tracePointMap.nearPoint(new TracePoint(WIDTH / XBINS + 1, HEIGHT / YBINS + 1)), pMargin);
+        assertEquals(tracePointMap.nearPoint(new Point(WIDTH / XBINS, HEIGHT / YBINS)), pMargin);
+        assertEquals(tracePointMap.nearPoint(new Point(WIDTH / XBINS - 1, HEIGHT / YBINS - 1)), pMargin);
+        assertEquals(tracePointMap.nearPoint(new Point(WIDTH / XBINS - 1, HEIGHT / YBINS + 1)), pMargin);
+        assertEquals(tracePointMap.nearPoint(new Point(WIDTH / XBINS + 1, HEIGHT / YBINS - 1)), pMargin);
+        assertEquals(tracePointMap.nearPoint(new Point(WIDTH / XBINS + 1, HEIGHT / YBINS + 1)), pMargin);
     }
 
     @Test
@@ -103,6 +103,11 @@ public class TracePointMapTest {
         assertEquals(tracePointMap.calculateBin(100, 600), 13);
         assertEquals(tracePointMap.calculateBin(299, 600), 14);
         assertEquals(tracePointMap.calculateBin(400, 600), 15);
+    }
+
+    @Test
+    public void testGetTracePoint() {
+        assertNotNull(tracePointMap.getTracePoint());
     }
 
 }

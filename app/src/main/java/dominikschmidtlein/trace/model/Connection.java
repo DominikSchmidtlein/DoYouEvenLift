@@ -199,6 +199,12 @@ class Connection {
         return null;
     }
 
+    void addSelfToPoints() {
+        for (TracePoint tracePoint : points) {
+            tracePoint.addConnection(this);
+        }
+    }
+
     /**
      * Returns a point iff the 2 connections have this 1 point in common.
      * @param connection
@@ -284,7 +290,7 @@ class Connection {
      * @param connection
      * @return
      */
-    TracePoint intersects(Connection connection) {
+    Point intersects(Connection connection) {
         if (connection.equals(this)) return null;
         if (null != connection.commonPoint(this)) return null;
         double m1 = slope();
@@ -306,7 +312,7 @@ class Connection {
             x = (b2 - b1)/(m1 - m2);
             y = m1 * x + b1;
         }
-        TracePoint intersectionPoint = new TracePoint(x, y);
+        Point intersectionPoint = new Point(x, y);
         if(!squareContains(intersectionPoint)) return null;
         if(!connection.squareContains(intersectionPoint)) return null;
         Log.v(TAG, connection + " intersects " + this + " at " + intersectionPoint);

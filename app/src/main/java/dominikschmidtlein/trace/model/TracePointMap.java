@@ -5,13 +5,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import dominikschmidtlein.trace.Log;
+
 /**
  * Created by domin_2o9sb4z on 2016-12-09.
  */
 class TracePointMap {
-
-    static final int DEFAULT_XBINS = 4;
-    static final int DEFAULT_YBINS = 4;
+    private static final String TAG = "TracePointMap";
+    private static final int DEFAULT_XBINS = 4;
+    private static final int DEFAULT_YBINS = 4;
 
     private Map<Integer, Set<TracePoint>> points;
     private int width;
@@ -39,59 +41,93 @@ class TracePointMap {
         this(width, height, margin, DEFAULT_XBINS, DEFAULT_YBINS);
     }
 
-    /**
-     * If a point at the same location already exists it is returned otherwise null.
-     * @param tracePoint
-     * @return
-     */
-    TracePoint equalPoint(TracePoint tracePoint) {
-        int binNumber = calculateBin(tracePoint);
-        Set<TracePoint> bin = points.get(binNumber);
-
-        for (TracePoint point : bin) {
-            if (point.equals(tracePoint)) {
-                return point;
-            }
-        }
-        return null;
+    int getWidth() {
+        return width;
     }
 
-    TracePoint nearPoint(TracePoint tracePoint) {
-        int binNumber = calculateBin(tracePoint);
-        Set<TracePoint> bin = points.get(binNumber);
+    int getHeight() {
+        return height;
+    }
 
+    TracePoint nearPoint(Point point) {
+        int binNumber = calculateBin(point);
+        Set<TracePoint> bin = points.get(binNumber);
         TracePoint nearPoint = null;
         double distance = margin;
         double calcDistance;
-        for (TracePoint point : bin) {
+        for (TracePoint tracePoint : bin) {
             calcDistance = tracePoint.distanceTo(point);
             if (calcDistance <= distance) {
-                nearPoint = point;
+                nearPoint = tracePoint;
                 distance = calcDistance;
             }
         }
         return nearPoint;
     }
 
-    TracePoint addTracePoint(TracePoint tracePoint) {
-        if (!pointInBounds(tracePoint)) {
+    TracePoint addTracePoint(Point point) {
+        if (point instanceof TracePoint) {
+            return (TracePoint) point;
+        }
+        if (!pointInBounds(point)) {
+            Log.e(TAG, point + " out of bounds");
             throw new IllegalArgumentException();
         }
-        TracePoint existingPoint = equalPoint(tracePoint);
-        if (existingPoint == null) {
-            points.get(calculateBin(tracePoint)).add(tracePoint);
-            points.get(calculateBinUL(tracePoint)).add(tracePoint);
-            points.get(calculateBinUR(tracePoint)).add(tracePoint);
-            points.get(calculateBinDL(tracePoint)).add(tracePoint);
-            points.get(calculateBinDR(tracePoint)).add(tracePoint);
-            count++;
-            return tracePoint;
+        TracePoint existingPoint = existingPoint(point);
+        if (null != existingPoint) {
+            Log.i(TAG, point + " already exists");
+            return existingPoint;
         }
+        existingPoint = new TracePoint(point.getX(), point.getY());
+        points.get(calculateBin(existingPoint)).add(existingPoint);
+        points.get(calculateBinUL(existingPoint)).add(existingPoint);
+        points.get(calculateBinUR(existingPoint)).add(existingPoint);
+        points.get(calculateBinDL(existingPoint)).add(existingPoint);
+        points.get(calculateBinDR(existingPoint)).add(existingPoint);
+        count++;
         return existingPoint;
     }
 
-    private int calculateBin(TracePoint tracePoint) {
-        return calculateBin(tracePoint.getX(), tracePoint.getY());
+    boolean removeTracePoint(Point point) {
+        return false;
+    }
+
+    int getCount() {
+        return count;
+    }
+
+    TracePoint getTracePoint() {
+        for (Set<TracePoint> tracePoints : points.values()) {
+            for (TracePoint tracePoint : tracePoints) {
+                return tracePoint;
+            }
+        }
+        return null;
+    }
+
+    private boolean pointInBounds(Point point) {
+        return point.getX() >= 0 && point.getX() <= width &&
+                point.getY() >= 0 && point.getY() <= height;
+    }
+
+    /**
+     * If a point at the same location already exists it is returned otherwise null.
+     * @param point
+     * @return
+     */
+    private TracePoint existingPoint(Point point) {
+        int binNumber = calculateBin(point);
+        Set<TracePoint> bin = points.get(binNumber);
+        for (TracePoint tracePoint : bin) {
+            if (point.equals(tracePoint)) {
+                return tracePoint;
+            }
+        }
+        return null;
+    }
+
+    private int calculateBin(Point point) {
+        return calculateBin(point.getX(), point.getY());
     }
 
     int calculateBin(double x, double y) {
@@ -107,37 +143,19 @@ class TracePointMap {
         return (int) (y / height * ybins) * xbins + (int) (x / width * xbins);
     }
 
-    private int calculateBinUL(TracePoint tracePoint) {
-        return calculateBin(tracePoint.getX() - margin, tracePoint.getY() - margin);
+    private int calculateBinUL(Point point) {
+        return calculateBin(point.getX() - margin, point.getY() - margin);
     }
 
-    private int calculateBinUR(TracePoint tracePoint) {
-        return calculateBin(tracePoint.getX() + margin, tracePoint.getY() - margin);
+    private int calculateBinUR(Point point) {
+        return calculateBin(point.getX() + margin, point.getY() - margin);
     }
 
-    private int calculateBinDL(TracePoint tracePoint) {
-        return calculateBin(tracePoint.getX() - margin, tracePoint.getY() + margin);
+    private int calculateBinDL(Point point) {
+        return calculateBin(point.getX() - margin, point.getY() + margin);
     }
 
-    private int calculateBinDR(TracePoint tracePoint) {
-        return calculateBin(tracePoint.getX() + margin, tracePoint.getY() + margin);
-    }
-
-    boolean pointInBounds(TracePoint tracePoint) {
-        return tracePoint.getX() >= 0 && tracePoint.getX() <= width &&
-                tracePoint.getY() >= 0 && tracePoint.getY() <= height;
-    }
-
-    int getCount() {
-        return count;
-    }
-
-    TracePoint getTracePoint() {
-        for (Set<TracePoint> tracePoints : points.values()) {
-            for (TracePoint tracePoint : tracePoints) {
-                return tracePoint;
-            }
-        }
-        return null;
+    private int calculateBinDR(Point point) {
+        return calculateBin(point.getX() + margin, point.getY() + margin);
     }
 }

@@ -1,13 +1,7 @@
 package dominikschmidtlein.trace.model;
 
-import android.util.Log;
-
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 
 import static org.junit.Assert.*;
@@ -59,6 +53,42 @@ public class TraceCreatorTest {
         traceCreator.addConnection(c34);
     }
 
+    @Test
+    public void testAddConnectionSuper() {
+        traceCreator.addConnection(c15);
+        traceCreator.addConnection(c25);
+        traceCreator.addConnection(c35);
+        traceCreator.addConnection(c45);
+
+        checkTrace();
+    }
+
+    @Test
+    public void testAddConnectionIntersectPointPThenC() {
+        traceCreator.addConnection(c25);
+        traceCreator.addConnection(c14);
+        traceCreator.addConnection(c35);
+
+        checkTrace();
+    }
+
+    @Test
+    public void testAddConnectionIntersectPointCThenP() {
+        traceCreator.addConnection(c14);
+        traceCreator.addConnection(c25);
+        traceCreator.addConnection(c35);
+
+        checkTrace();
+    }
+
+    @Test
+    public void testAddConnectionIntersectConnection() {
+        traceCreator.addConnection(c14);
+        traceCreator.addConnection(c23);
+
+        checkTrace();
+    }
+
     public void checkTrace() {
         assertEquals(p1.connectedTo(p2), c12);
         assertEquals(p1.connectedTo(p3), c13);
@@ -108,42 +138,6 @@ public class TraceCreatorTest {
         assertEquals(0, c45.getSubConnectionCount());
         assertEquals(1, c45.getSuperConnectionCount());
         assertTrue(c45.getSuperConnections().contains(c14));
-    }
-
-    @Test
-    public void testAddConnectionSuper() {
-        traceCreator.addConnection(c15);
-        traceCreator.addConnection(c25);
-        traceCreator.addConnection(c35);
-        traceCreator.addConnection(c45);
-
-        checkTrace();
-    }
-
-    @Test
-    public void testAddConnectionIntersectPointPThenC() {
-        traceCreator.addConnection(c25);
-        traceCreator.addConnection(c14);
-        traceCreator.addConnection(c35);
-
-        checkTrace();
-    }
-
-    @Test
-    public void testAddConnectionIntersectPointCThenP() {
-        traceCreator.addConnection(c14);
-        traceCreator.addConnection(c25);
-        traceCreator.addConnection(c35);
-
-        checkTrace();
-    }
-
-    @Test
-    public void testAddConnectionIntersectConnection() {
-        traceCreator.addConnection(c14);
-        traceCreator.addConnection(c23);
-
-        checkTrace();
     }
 
     @Test

@@ -40,22 +40,14 @@ public class TraceTest {
 
     @Before
     public void setUp() {
-        p12 = new TracePoint(100, 200);
-        p21 = new TracePoint(200, 100);
-        p32 = new TracePoint(300, 200);
-        p43 = new TracePoint(400, 300);
-        p52 = new TracePoint(500, 200);
-        p61 = new TracePoint(600, 100);
-        p72 = new TracePoint(700, 200);
-
         tracePointMap = new TracePointMap(800, 400, 50);
-        tracePointMap.addTracePoint(p12);
-        tracePointMap.addTracePoint(p21);
-        tracePointMap.addTracePoint(p32);
-        tracePointMap.addTracePoint(p43);
-        tracePointMap.addTracePoint(p52);
-        tracePointMap.addTracePoint(p61);
-        tracePointMap.addTracePoint(p72);
+        p12 = tracePointMap.addTracePoint(new Point(100, 200));
+        p21 = tracePointMap.addTracePoint(new Point(200, 100));
+        p32 = tracePointMap.addTracePoint(new Point(300, 200));
+        p43 = tracePointMap.addTracePoint(new Point(400, 300));
+        p52 = tracePointMap.addTracePoint(new Point(500, 200));
+        p61 = tracePointMap.addTracePoint(new Point(600, 100));
+        p72 = tracePointMap.addTracePoint(new Point(700, 200));
 
         // base
         c12 = new Connection(p12, p21);
@@ -326,10 +318,11 @@ public class TraceTest {
 
     @Test
     public void testIsLegalFalse() {
-        TracePoint p12 = new TracePoint(100, 200);
-        TracePoint p21 = new TracePoint(200, 100);
-        TracePoint p32 = new TracePoint(300, 200);
-        TracePoint p43 = new TracePoint(400, 300);
+        TracePointMap tracePointMap = new TracePointMap(800, 400, 50);
+        TracePoint p12 = tracePointMap.addTracePoint(new Point(100, 200));
+        TracePoint p21 = tracePointMap.addTracePoint(new Point(200, 100));
+        TracePoint p32 = tracePointMap.addTracePoint(new Point(300, 200));
+        TracePoint p43 = tracePointMap.addTracePoint(new Point(400, 300));
 
         Connection c12 = new Connection(p12, p21);
         p12.addConnection(c12);
@@ -341,11 +334,7 @@ public class TraceTest {
         p12.addConnection(c14);
         p43.addConnection(c14);
 
-        TracePointMap tracePointMap = new TracePointMap(800, 400, 50);
-        tracePointMap.addTracePoint(p12);
-        tracePointMap.addTracePoint(p21);
-        tracePointMap.addTracePoint(p32);
-        tracePointMap.addTracePoint(p43);
+
 
         Trace testTrace = new Trace(tracePointMap);
         assertFalse(testTrace.isLegal());
@@ -353,20 +342,13 @@ public class TraceTest {
 
     @Test
     public void testIsLegalSplit() {
-        TracePoint p12 = new TracePoint(100, 200);
-        TracePoint p21 = new TracePoint(200, 100);
-        TracePoint p32 = new TracePoint(300, 200);
-        TracePoint p52 = new TracePoint(500, 200);
-        TracePoint p61 = new TracePoint(600, 100);
-        TracePoint p72 = new TracePoint(700, 200);
-
         TracePointMap tracePointMap = new TracePointMap(800, 400, 50);
-        tracePointMap.addTracePoint(p12);
-        tracePointMap.addTracePoint(p21);
-        tracePointMap.addTracePoint(p32);
-        tracePointMap.addTracePoint(p52);
-        tracePointMap.addTracePoint(p61);
-        tracePointMap.addTracePoint(p72);
+        TracePoint p12 = tracePointMap.addTracePoint(new Point(100, 200));
+        TracePoint p21 = tracePointMap.addTracePoint(new Point(200, 100));
+        TracePoint p32 = tracePointMap.addTracePoint(new Point(300, 200));
+        TracePoint p52 = tracePointMap.addTracePoint(new Point(500, 200));
+        TracePoint p61 = tracePointMap.addTracePoint(new Point(600, 100));
+        TracePoint p72 = tracePointMap.addTracePoint(new Point(700, 200));
 
         // base
         Connection c12 = new Connection(p12, p21);
