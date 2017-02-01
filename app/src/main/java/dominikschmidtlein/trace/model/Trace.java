@@ -14,8 +14,8 @@ class Trace {
         this.tracePointMap = tracePointMap;
     }
 
-    TracePoint nearPoint(TracePoint tracePoint) {
-        return tracePointMap.nearPoint(tracePoint);
+    TracePoint nearPoint(Point point) {
+        return tracePointMap.nearPoint(point);
     }
 
     boolean isComplete() {

@@ -245,17 +245,17 @@ public class TraceTest {
         assertNotNull(trace.nearPoint(p32));
         assertNotNull(trace.nearPoint(p72));
 
-        assertNotNull(trace.nearPoint(new TracePoint(501, 201)));
-        assertNotNull(trace.nearPoint(new TracePoint(601, 99)));
-        assertNotNull(trace.nearPoint(new TracePoint(199, 101)));
-        assertNotNull(trace.nearPoint(new TracePoint(399, 299)));
+        assertNotNull(trace.nearPoint(new Point(501, 201)));
+        assertNotNull(trace.nearPoint(new Point(601, 99)));
+        assertNotNull(trace.nearPoint(new Point(199, 101)));
+        assertNotNull(trace.nearPoint(new Point(399, 299)));
 
-        assertNull(trace.nearPoint(new TracePoint(100, 100)));
-        assertNull(trace.nearPoint(new TracePoint(300, 100)));
-        assertNull(trace.nearPoint(new TracePoint(500, 10)));
-        assertNull(trace.nearPoint(new TracePoint(700, 100)));
-        assertNull(trace.nearPoint(new TracePoint(250, 201)));
-        assertNull(trace.nearPoint(new TracePoint(450, 250)));
+        assertNull(trace.nearPoint(new Point(100, 100)));
+        assertNull(trace.nearPoint(new Point(300, 100)));
+        assertNull(trace.nearPoint(new Point(500, 10)));
+        assertNull(trace.nearPoint(new Point(700, 100)));
+        assertNull(trace.nearPoint(new Point(250, 201)));
+        assertNull(trace.nearPoint(new Point(450, 250)));
     }
 
     @Test

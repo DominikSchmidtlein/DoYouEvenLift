@@ -30,11 +30,11 @@ public class GameEngineTest {
         p52 = new TracePoint(500, 200);
         p61 = new TracePoint(600, 100);
         p72 = new TracePoint(700, 200);
-//        trace.addConnection(p12, p21);
-//        trace.addConnection(p12, p72);
-//        trace.addConnection(p21, p43);
-//        trace.addConnection(p61, p43);
-//        trace.addConnection(p61, p72);
+//        trace.createConnection(p12, p21);
+//        trace.createConnection(p12, p72);
+//        trace.createConnection(p21, p43);
+//        trace.createConnection(p61, p43);
+//        trace.createConnection(p61, p72);
 
         engine = new GameEngine(trace);
     }

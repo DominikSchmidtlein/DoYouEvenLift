@@ -52,4 +52,9 @@ class Point {
         return (int)(x * 997 + y * 83);
     }
 
+    @Override
+    public String toString() {
+        return "(" + getX() + "," + getY() + ")";
+    }
+
 }

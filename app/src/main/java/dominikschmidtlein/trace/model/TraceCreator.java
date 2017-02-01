@@ -23,17 +23,7 @@ class TraceCreator {
         return trace;
     }
 
-    /** Returns whether or not this operation modified the underlying trace.
-     * @param connection
-     * @return
-     */
-    Connection addConnection(Connection connection) {
-        TracePoint tp1 = connection.getPoint();
-        TracePoint tp2 = connection.otherEnd(tp1);
-        return addConnection(tp1, tp2);
-    }
-
-    Connection addConnection(Point p1, Point p2) {
+    Connection createConnection(Point p1, Point p2) {
         TracePoint tp1 = tracePointMap.addTracePoint(p1);
         TracePoint tp2 = tracePointMap.addTracePoint(p2);
         Connection existingConnection = tp1.connectedTo(tp2);
@@ -49,12 +39,20 @@ class TraceCreator {
         for (Connection extensionConnection : extensionConnections) {
             Connection concatConnection = extensionConnection.concat(connection);
             if (null != concatConnection) {
-                concatConnection = addConnection(concatConnection);
+                concatConnection = createConnection(concatConnection);
                 connection.addSuperConnection(concatConnection);
                 extensionConnection.addSuperConnection(concatConnection);
             }
         }
         return connection;
+    }
+
+    private Connection createConnection(Connection connection) {
+        TracePoint tp1 = connection.getPoint();
+        TracePoint tp2 = connection.otherEnd(tp1);
+        Point p1 = new Point(tp1.getX(), tp1.getY());
+        Point p2 = new Point(tp2.getX(), tp2.getY());
+        return createConnection(p1, p2);
     }
 
 //    private void checkSuperConnections(Connection connection) {
@@ -66,7 +64,7 @@ class TraceCreator {
 //            if (null != concatConnection) {
 //                Connection existingConnection = concatConnection.existingConnection();
 //                if (null == existingConnection) {
-//                    addConnection(concatConnection);
+//                    createConnection(concatConnection);
 //                } else {
 //                    concatConnection = existingConnection;
 //                }
@@ -94,10 +92,10 @@ class TraceCreator {
 //                    Connection c1 = new Connection(p1, intersectionPoint);
 //                    Connection c2 = new Connection(p2, intersectionPoint);
 //                    if (null == c1.existingConnection()) {
-//                        addConnection(new Connection(p1, intersectionPoint));
+//                        createConnection(new Connection(p1, intersectionPoint));
 //                    }
 //                    if (null == c2.existingConnection()) {
-//                        addConnection(new Connection(p2, intersectionPoint));
+//                        createConnection(new Connection(p2, intersectionPoint));
 //                    }
 //                }
 //                if (null == connection.connectsTo(intersectionPoint)) {
@@ -106,17 +104,17 @@ class TraceCreator {
 //                    Connection c1 = new Connection(p1, intersectionPoint);
 //                    Connection c2 = new Connection(p2, intersectionPoint);
 //                    if (null == c1.existingConnection()) {
-//                        addConnection(new Connection(p1, intersectionPoint));
+//                        createConnection(new Connection(p1, intersectionPoint));
 //                    }
 //                    if (null == c2.existingConnection()) {
-//                        addConnection(new Connection(p2, intersectionPoint));
+//                        createConnection(new Connection(p2, intersectionPoint));
 //                    }
 //                }
 //            }
 //        }
 //    }
 
-    boolean removeConnection(Connection connection) {
+    boolean removeConnection(Point p1, Point p2) {
         return false;
     }
 }

@@ -77,8 +77,4 @@ class TracePoint extends Point{
         return baseConnections;
     }
 
-    @Override
-    public String toString() {
-        return "(" + getX() + "," + getY() + ")";
-    }
 }
